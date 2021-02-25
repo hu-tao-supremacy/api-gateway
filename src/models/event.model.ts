@@ -19,14 +19,17 @@ export class Event implements common.Event {
   name: string;
 
   @Field({ nullable: true })
-  coverImage?: string;
+  coverImage: string | undefined;
 
   @Field({ nullable: true })
-  coverImageHash?: string;
+  coverImageHash: string | undefined;
 
   @Field({ nullable: true })
-  posterImage?: string;
+  posterImage: string | undefined;
 
   @Field({ nullable: true })
-  posterImageHash?: string;
+  posterImageHash: string | undefined;
+
+  @Field()
+  contact: string;
 }
