@@ -7,7 +7,12 @@ export class ParticipantResolver {
   constructor(private readonly participantService: ParticipantService) {}
 
   @Query((_) => [Event])
-  async getAllEvents() {
+  async allEvents() {
+    return this.participantService.getAllEvents();
+  }
+
+  @Query((_) => [Event])
+  async suggestedEvents() {
     return this.participantService.getAllEvents();
   }
 }
