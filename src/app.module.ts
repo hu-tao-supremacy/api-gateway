@@ -8,6 +8,7 @@ import { FacilityModule } from './facility/facility.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { EventModule } from './event/event.module';
 import { GlobalModule } from './global/global.module';
+import { EventModule } from './resolvers/event/event.module';
 
 @Module({
   imports: [
