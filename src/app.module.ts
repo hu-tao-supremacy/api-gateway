@@ -9,6 +9,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { EventModule } from './event/event.module';
 import { GlobalModule } from './global/global.module';
 import { EventModule } from './resolvers/event/event.module';
+import { AccountModule } from './resolvers/account/account.module';
 
 @Module({
   imports: [
