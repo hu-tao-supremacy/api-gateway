@@ -13,6 +13,6 @@ export class ParticipantResolver {
 
   @Query((_) => [Event])
   async suggestedEvents() {
-    return this.participantService.getAllEvents();
+    return this.participantService.getSuggestedEvents();
   }
 }

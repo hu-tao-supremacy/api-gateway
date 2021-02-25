@@ -21,9 +21,13 @@ export class ParticipantService implements OnModuleInit {
   }
 
   async getAllEvents(): Promise<common.Event[]> {
-    let ret = await this.participantService
-      .searchEventsByName({ text: '*' })
-      .toPromise();
+    let ret = await this.participantService.getAllEvents({}).toPromise();
+    console.log(ret);
+    return ret.event;
+  }
+
+  async getSuggestedEvents(): Promise<common.Event[]> {
+    let ret = await this.participantService.getSuggestedEvents({}).toPromise();
     console.log(ret);
     return ret.event;
   }
