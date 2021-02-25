@@ -20,3 +20,15 @@ services:
       - POSTGRES_PORT=5432
       - GRPC_HOST=localhost
       - GRPC_PORT=50055
+  hts-svc-participant:
+    image: ghcr.io/hu-tao-supremacy/participant-dev:5cbcd7d
+    ports:
+      - 50056:50056
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_USER=hu-tao-mains
+      - POSTGRES_PASSWORD=hu-tao-mains
+      - POSTGRES_DB=hts
+      - POSTGRES_PORT=5432
+      - GRPC_HOST=localhost
+      - GRPC_PORT=50056
