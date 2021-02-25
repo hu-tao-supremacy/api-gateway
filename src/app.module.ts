@@ -10,6 +10,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 @Module({
   imports: [
     GraphQLModule.forRoot({
+      autoSchemaFile: true,
       debug: process.env.NODE_ENV === 'dev',
       playground: process.env.NODE_ENV === 'dev',
     }),
