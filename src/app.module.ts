@@ -6,6 +6,7 @@ import { OrganizerModule } from './organizer/organizer.module';
 import { ParticipantModule } from './participant/participant.module';
 import { FacilityModule } from './facility/facility.module';
 import { GraphQLModule } from '@nestjs/graphql';
+import { EventModule } from './event/event.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { GraphQLModule } from '@nestjs/graphql';
     OrganizerModule,
     ParticipantModule,
     FacilityModule,
+    EventModule,
   ],
   controllers: [AppController],
   providers: [AppService],
