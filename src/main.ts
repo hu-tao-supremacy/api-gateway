@@ -9,6 +9,6 @@ async function bootstrap() {
   registerEnumType(common.DayOfWeek, { name: 'DayOfWeek' });
   registerEnumType(common.Permission, { name: 'Permission' });
   const app = await NestFactory.create(AppModule);
-  await app.listen(3000);
+  await app.listen(5000);
 }
 bootstrap();

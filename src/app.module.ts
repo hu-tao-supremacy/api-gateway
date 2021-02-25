@@ -7,6 +7,7 @@ import { ParticipantModule } from './participant/participant.module';
 import { FacilityModule } from './facility/facility.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { EventModule } from './event/event.module';
+import { GlobalModule } from './global/global.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { EventModule } from './event/event.module';
     ParticipantModule,
     FacilityModule,
     EventModule,
+    GlobalModule,
   ],
   controllers: [AppController],
   providers: [AppService],
