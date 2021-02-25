@@ -5,9 +5,19 @@ import { AccountModule } from './account/account.module';
 import { OrganizerModule } from './organizer/organizer.module';
 import { ParticipantModule } from './participant/participant.module';
 import { FacilityModule } from './facility/facility.module';
+import { GraphQLModule } from '@nestjs/graphql';
 
 @Module({
-  imports: [AccountModule, OrganizerModule, ParticipantModule, FacilityModule],
+  imports: [
+    GraphQLModule.forRoot({
+      debug: process.env.NODE_ENV === 'dev',
+      playground: process.env.NODE_ENV === 'dev',
+    }),
+    AccountModule,
+    OrganizerModule,
+    ParticipantModule,
+    FacilityModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
