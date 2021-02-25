@@ -12,6 +12,7 @@ import { AccountService } from './account.service';
         name: HTS_ACCOUNT_PACKAGE_NAME,
         transport: Transport.GRPC,
         options: {
+          url: process.env.HTS_SVC_ACCOUNT,
           package: HTS_ACCOUNT_PACKAGE_NAME,
           protoPath: join(
             __dirname,
