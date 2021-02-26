@@ -7,6 +7,8 @@ import { EnvoyAccountModule } from './envoy-account/envoy-account.module';
 import { EnvoyOrganizerModule } from './envoy-organizer/envoy-organizer.module';
 import { EnvoyParticipantModule } from './envoy-participant/envoy-participant.module';
 import { EnvoyFacilityModule } from './envoy-facility/envoy-facility.module';
+import { AccountModule } from './account/account.module';
+import { EventModule } from './event/event.module';
 
 @Module({
   imports: [
@@ -20,6 +22,8 @@ import { EnvoyFacilityModule } from './envoy-facility/envoy-facility.module';
     EnvoyOrganizerModule,
     EnvoyParticipantModule,
     EnvoyFacilityModule,
+    AccountModule,
+    EventModule,
   ],
   controllers: [AppController],
   providers: [AppService],
