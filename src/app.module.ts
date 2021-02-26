@@ -15,15 +15,10 @@ import { EnvoyFacilityModule } from './envoy-facility/envoy-facility.module';
       debug: process.env.NODE_ENV === 'dev',
       playground: process.env.NODE_ENV === 'dev',
     }),
-
     GlobalModule,
-
     EnvoyAccountModule,
-
     EnvoyOrganizerModule,
-
     EnvoyParticipantModule,
-
     EnvoyFacilityModule,
   ],
   controllers: [AppController],
