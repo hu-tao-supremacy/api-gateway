@@ -12,7 +12,7 @@ export class EventResolver {
   ) {}
 
   @Query((_) => [Event])
-  async allEvents() {
+  async events() {
     return await this.envoyParticipantService
       .getAllEvents()
       .pipe(
