@@ -1,5 +1,6 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import * as common from '../apis/hts/common/common';
+import { Organization } from './organization.model';
 
 @ObjectType()
 export class Event implements common.Event {
@@ -32,4 +33,7 @@ export class Event implements common.Event {
 
   @Field()
   contact: string;
+
+  @Field((_) => Organization)
+  organization: Organization;
 }
