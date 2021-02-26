@@ -3,6 +3,10 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { GraphQLModule } from '@nestjs/graphql';
 import { GlobalModule } from './global/global.module';
+import { EnvoyAccountModule } from './envoy-account/envoy-account.module';
+import { EnvoyOrganizerModule } from './envoy-organizer/envoy-organizer.module';
+import { EnvoyParticipantModule } from './envoy-participant/envoy-participant.module';
+import { EnvoyFacilityModule } from './envoy-facility/envoy-facility.module';
 
 @Module({
   imports: [
@@ -13,6 +17,14 @@ import { GlobalModule } from './global/global.module';
     }),
 
     GlobalModule,
+
+    EnvoyAccountModule,
+
+    EnvoyOrganizerModule,
+
+    EnvoyParticipantModule,
+
+    EnvoyFacilityModule,
   ],
   controllers: [AppController],
   providers: [AppService],
