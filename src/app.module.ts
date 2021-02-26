@@ -10,6 +10,10 @@ import { EventModule } from './event/event.module';
 import { GlobalModule } from './global/global.module';
 import { EventModule } from './resolvers/event/event.module';
 import { AccountModule } from './resolvers/account/account.module';
+import { AccountModule } from './proxies/account/account.module';
+import { ParticipantModule } from './proxies/participant/participant.module';
+import { EventModule } from './proxies/event/event.module';
+import { OrganizerModule } from './proxies/organizer/organizer.module';
 
 @Module({
   imports: [
