@@ -20,11 +20,13 @@ export class EventResolver {
       .pipe(
         map((result) => {
           return result.map((event) => {
+            console.log(event);
             event.id = Number(event.id);
             event.organizationId = Number(event.organizationId);
-            if (event.eventLocationId !== undefined) {
-              event.eventLocationId = Number(event.eventLocationId);
-            }
+            // if (event.eventLocationId) {
+            //   event.eventLocationId = Number(event.eventLocationId);
+            // }
+            event.eventLocationId = -1;
             return event;
           });
         }),
@@ -41,5 +43,23 @@ export class EventResolver {
         return result;
       }),
     );
+  }
+
+  @ResolveField()
+  eventLocation(@Parent() event: Event) {
+    const { eventLocationId } = event;
+
+    if (eventLocationId === undefined) {
+      return null;
+    }
+
+    return this.envoyOrganizerService
+      .getEventLocationById(eventLocationId)
+      .pipe(
+        map((result) => {
+          result.id = Number(result.id);
+          return result;
+        }),
+      );
   }
 }

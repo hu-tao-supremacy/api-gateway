@@ -29,4 +29,17 @@ export class EnvoyOrganizerService implements OnModuleInit {
 
     return from([organization]);
   }
+
+  getEventLocationById(
+    eventLocationId: number,
+  ): Observable<common.EventLocation> {
+    let eventLocation: common.EventLocation = {
+      id: eventLocationId,
+      name: 'nh/348320',
+      latitude: 348320,
+      longitude: 348320,
+    };
+
+    return from([eventLocation]);
+  }
 }
