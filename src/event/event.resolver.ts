@@ -23,10 +23,10 @@ export class EventResolver {
             console.log(event);
             event.id = Number(event.id);
             event.organizationId = Number(event.organizationId);
-            // if (event.eventLocationId) {
-            //   event.eventLocationId = Number(event.eventLocationId);
-            // }
-            event.eventLocationId = -1;
+            if (event.eventLocationId !== undefined) {
+              // @ts-ignore
+              event.eventLocationId = Number(event.eventLocationId.value);
+            }
             return event;
           });
         }),
@@ -62,4 +62,7 @@ export class EventResolver {
         }),
       );
   }
+
+  @ResolveField()
+  eventTags(@Parent() event: Event) {}
 }
