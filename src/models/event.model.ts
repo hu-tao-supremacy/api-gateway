@@ -1,6 +1,7 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import * as common from '../apis/hts/common/common';
 import { EventLocation } from './event-location.model';
+import { EventTag } from './event-tag.model';
 import { Organization } from './organization.model';
 
 @ObjectType()
@@ -40,4 +41,7 @@ export class Event implements common.Event {
 
   @Field((_) => EventLocation, { nullable: true })
   eventLocation: EventLocation | undefined;
+
+  @Field((_) => [EventTag])
+  eventTags: EventTag[];
 }
