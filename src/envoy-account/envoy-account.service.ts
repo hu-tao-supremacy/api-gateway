@@ -6,6 +6,7 @@ import {
   HTS_ACCOUNT_PACKAGE_NAME,
 } from 'src/apis/hts/account/service';
 import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class EnvoyAccountService implements OnModuleInit {
