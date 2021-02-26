@@ -2,6 +2,7 @@ import { Global, Module } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { join } from 'path';
 import { HTS_ACCOUNT_PACKAGE_NAME } from 'src/apis/hts/account/service';
+import { HTS_ORGANIZER_PACKAGE_NAME } from 'src/apis/hts/organizer/service';
 import { HTS_PARTICIPANT_PACKAGE_NAME } from 'src/apis/hts/participant/service';
 
 @Global()
@@ -32,6 +33,21 @@ import { HTS_PARTICIPANT_PACKAGE_NAME } from 'src/apis/hts/participant/service';
           protoPath: join(
             __dirname,
             '../../../apis/proto/hts/account/service.proto',
+          ),
+          loader: {
+            includeDirs: [join(__dirname, '../../../apis/proto')],
+          },
+        },
+      },
+      {
+        name: HTS_ORGANIZER_PACKAGE_NAME,
+        transport: Transport.GRPC,
+        options: {
+          url: process.env.HTS_SVC_ORGANIZER,
+          package: HTS_ORGANIZER_PACKAGE_NAME,
+          protoPath: join(
+            __dirname,
+            '../../../apis/proto/hts/organizer/service.proto',
           ),
           loader: {
             includeDirs: [join(__dirname, '../../../apis/proto')],
