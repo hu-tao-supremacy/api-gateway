@@ -9,6 +9,7 @@ import { EnvoyParticipantModule } from './envoy-participant/envoy-participant.mo
 import { EnvoyFacilityModule } from './envoy-facility/envoy-facility.module';
 import { AccountModule } from './account/account.module';
 import { EventModule } from './event/event.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { EventModule } from './event/event.module';
     EnvoyFacilityModule,
     AccountModule,
     EventModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
