@@ -1,8 +1,8 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import * as common from '../apis/hts/common/common';
+import * as common from '../apis/hts/common/common_pb.d';
 
 @ObjectType()
-export class Account implements common.User {
+export class Account implements common.User.AsObject {
   @Field((_) => Int)
   id: number;
 
