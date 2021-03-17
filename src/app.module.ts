@@ -10,6 +10,10 @@ import { EnvoyFacilityModule } from './envoy-facility/envoy-facility.module';
 import { AccountModule } from './account/account.module';
 import { EventModule } from './event/event.module';
 import { AuthModule } from './auth/auth.module';
+import { ProxyAccountModule } from './proxy-account/proxy-account.module';
+import { ProxyFacilityModule } from './proxy-facility/proxy-facility.module';
+import { ProxyOrganizerModule } from './proxy-organizer/proxy-organizer.module';
+import { ProxyParticipantModule } from './proxy-participant/proxy-participant.module';
 
 @Module({
   imports: [
@@ -26,6 +30,10 @@ import { AuthModule } from './auth/auth.module';
     AccountModule,
     EventModule,
     AuthModule,
+    ProxyAccountModule,
+    ProxyFacilityModule,
+    ProxyOrganizerModule,
+    ProxyParticipantModule,
   ],
   controllers: [AppController],
   providers: [AppService],
