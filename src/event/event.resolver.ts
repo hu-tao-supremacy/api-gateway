@@ -1,21 +1,21 @@
 import { Field, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
-import { EnvoyParticipantService } from 'src/envoy-participant/envoy-participant.service';
+import { ProxyParticipantService } from 'src/proxy-participant/proxy-participant.service';
 import { Event } from 'src/models/event.model';
 import { EventService } from './event.service';
 import { map } from 'rxjs/operators';
-import { EnvoyOrganizerService } from 'src/envoy-organizer/envoy-organizer.service';
+import { ProxyOrganizerService } from 'src/proxy-organizer/proxy-organizer.service';
 
 @Resolver((_) => Event)
 export class EventResolver {
   constructor(
-    private readonly envoyParticipantService: EnvoyParticipantService,
-    private readonly envoyOrganizerService: EnvoyOrganizerService,
+    private readonly proxyParticipantService: ProxyParticipantService,
+    private readonly proxyOrganizerService: ProxyOrganizerService,
     private readonly eventService: EventService,
   ) {}
 
   @Query((_) => [Event])
   async events() {
-    return await this.envoyParticipantService
+    return await this.proxyParticipantService
       .getAllEvents()
       .pipe(
         map((result) => {
@@ -37,7 +37,7 @@ export class EventResolver {
   @ResolveField()
   organization(@Parent() event: Event) {
     const { organizationId } = event;
-    return this.envoyOrganizerService.getOrganizationById(organizationId).pipe(
+    return this.proxyOrganizerService.getOrganizationById(organizationId).pipe(
       map((result) => {
         result.id = Number(result.id);
         return result;
@@ -53,7 +53,7 @@ export class EventResolver {
       return null;
     }
 
-    return this.envoyOrganizerService
+    return this.proxyOrganizerService
       .getEventLocationById(eventLocationId)
       .pipe(
         map((result) => {

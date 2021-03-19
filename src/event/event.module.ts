@@ -1,16 +1,16 @@
 import { Module } from '@nestjs/common';
 import { EventService } from './event.service';
 import { EventResolver } from './event.resolver';
-import { EnvoyParticipantModule } from 'src/envoy-participant/envoy-participant.module';
-import { EnvoyParticipantService } from 'src/envoy-participant/envoy-participant.service';
-import { EnvoyOrganizerModule } from 'src/envoy-organizer/envoy-organizer.module';
-import { EnvoyOrganizerService } from 'src/envoy-organizer/envoy-organizer.service';
+import { ProxyParticipantModule } from 'src/proxy-participant/proxy-participant.module';
+import { ProxyParticipantService } from 'src/proxy-participant/proxy-participant.service';
+import { ProxyOrganizerModule } from 'src/proxy-organizer/proxy-organizer.module';
+import { ProxyOrganizerService } from 'src/proxy-organizer/proxy-organizer.service';
 
 @Module({
-  imports: [EnvoyParticipantModule, EnvoyOrganizerModule],
+  imports: [ProxyParticipantModule, ProxyOrganizerModule],
   providers: [
-    EnvoyParticipantService,
-    EnvoyOrganizerService,
+    ProxyParticipantService,
+    ProxyOrganizerService,
     EventService,
     EventResolver,
   ],
