@@ -25,5 +25,5 @@ export class Account implements common.User.AsObject {
   chulaId: string | undefined;
 
   @Field((_) => common.Gender)
-  gender: common.Gender;
+  gender: common.GenderMap[keyof common.GenderMap];
 }
