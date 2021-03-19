@@ -1,20 +1,20 @@
 import { Global, Module } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { join } from 'path';
-import { HTS_ACCOUNT_PACKAGE_NAME } from 'src/apis/hts/account/service';
-import { HTS_ORGANIZER_PACKAGE_NAME } from 'src/apis/hts/organizer/service';
-import { HTS_PARTICIPANT_PACKAGE_NAME } from 'src/apis/hts/participant/service';
+import { ProxyAccountModule } from 'src/proxy-account/proxy-account.module';
+import { ProxyOrganizerModule } from 'src/proxy-organizer/proxy-organizer.module';
+import { ProxyParticipantModule } from 'src/proxy-participant/proxy-participant.module';
 
 @Global()
 @Module({
   imports: [
     ClientsModule.register([
       {
-        name: HTS_PARTICIPANT_PACKAGE_NAME,
+        name: ProxyParticipantModule.name,
         transport: Transport.GRPC,
         options: {
           url: process.env.HTS_SVC_PARTICIPANT,
-          package: HTS_PARTICIPANT_PACKAGE_NAME,
+          package: ProxyParticipantModule.name,
           protoPath: join(
             __dirname,
             '../../../apis/proto/hts/participant/service.proto',
@@ -25,11 +25,11 @@ import { HTS_PARTICIPANT_PACKAGE_NAME } from 'src/apis/hts/participant/service';
         },
       },
       {
-        name: HTS_ACCOUNT_PACKAGE_NAME,
+        name: ProxyAccountModule.name,
         transport: Transport.GRPC,
         options: {
           url: process.env.HTS_SVC_ACCOUNT,
-          package: HTS_ACCOUNT_PACKAGE_NAME,
+          package: ProxyAccountModule.name,
           protoPath: join(
             __dirname,
             '../../../apis/proto/hts/account/service.proto',
@@ -40,11 +40,11 @@ import { HTS_PARTICIPANT_PACKAGE_NAME } from 'src/apis/hts/participant/service';
         },
       },
       {
-        name: HTS_ORGANIZER_PACKAGE_NAME,
+        name: ProxyOrganizerModule.name,
         transport: Transport.GRPC,
         options: {
           url: process.env.HTS_SVC_ORGANIZER,
-          package: HTS_ORGANIZER_PACKAGE_NAME,
+          package: ProxyOrganizerModule.name,
           protoPath: join(
             __dirname,
             '../../../apis/proto/hts/organizer/service.proto',
