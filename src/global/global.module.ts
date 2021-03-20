@@ -1,9 +1,9 @@
 import { Global, Module } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { join } from 'path';
-import { HTS_ACCOUNT_PACKAGE_NAME } from 'src/apis/hts/account/service';
-import { HTS_ORGANIZER_PACKAGE_NAME } from 'src/apis/hts/organizer/service';
-import { HTS_PARTICIPANT_PACKAGE_NAME } from 'src/apis/hts/participant/service';
+import { HTS_ACCOUNT_PACKAGE_NAME } from '@internal/account/service';
+import { HTS_ORGANIZER_PACKAGE_NAME } from '@internal/organizer/service';
+import { HTS_PARTICIPANT_PACKAGE_NAME } from '@internal/participant/service';
 
 @Global()
 @Module({
