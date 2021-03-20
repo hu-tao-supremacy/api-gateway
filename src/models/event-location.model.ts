@@ -1,8 +1,8 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { EventLocation } from '@gql/common/common';
+import { EventLocation as IEventLocation } from '@gql/common/common';
 
 @ObjectType()
-export class EventLocation implements EventLocation {
+export class EventLocation implements IEventLocation {
   @Field((_) => Int)
   id: number;
 
