@@ -1,8 +1,8 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import * as common from '../apis/hts/common/common_pb.d';
+import { User, Gender } from '@gql/common/common';
 
 @ObjectType()
-export class Account implements common.User.AsObject {
+export class Account implements User {
   @Field((_) => Int)
   id: number;
 
@@ -24,6 +24,12 @@ export class Account implements common.User.AsObject {
   @Field({ nullable: true })
   chulaId: string | undefined;
 
-  @Field((_) => common.Gender)
-  gender: common.GenderMap[keyof common.GenderMap];
+  @Field({ nullable: true })
+  address: string | undefined;
+
+  @Field({ nullable: true })
+  profilePicture: string | undefined;
+
+  @Field((_) => Gender)
+  gender: Gender;
 }
