@@ -12,7 +12,8 @@
     "baseUrl": "./",
     "incremental": true,
     "paths": {
-      "@gql/*": ["src/gql/hts/*"]
+      "@gql/*": ["src/gql/hts/*"],
+      "@internal/*": ["src/apis/hts/*"]
     }
   }
 }
