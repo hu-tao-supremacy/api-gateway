@@ -10,7 +10,7 @@ module.exports = {
     '^.+\\.(t|j)s$': 'ts-jest',
   },
   roots: ['<rootDir>'],
-  modulePath: ['<rootDir>'],
+  modulePaths: ['<rootDir>'],
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
     prefix: '<rootDir>/',
   }),
