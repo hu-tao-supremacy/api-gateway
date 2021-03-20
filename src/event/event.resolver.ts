@@ -48,19 +48,7 @@ export class EventResolver {
   @ResolveField()
   eventLocation(@Parent() event: Event) {
     const { eventLocationId } = event;
-
-    if (eventLocationId === undefined) {
-      return null;
-    }
-
-    return this.proxyOrganizerService
-      .getEventLocationById(eventLocationId)
-      .pipe(
-        map((result) => {
-          result.id = Number(result.id);
-          return result;
-        }),
-      );
+    return null;
   }
 
   @ResolveField()
