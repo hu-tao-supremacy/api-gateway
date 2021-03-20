@@ -14,7 +14,7 @@ export class EventResolver {
   ) {}
 
   @Query((_) => [Event])
-  async events() {
+  async upcomingEvents() {
     return await this.proxyParticipantService
       .getAllEvents()
       .pipe(
