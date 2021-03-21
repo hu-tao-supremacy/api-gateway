@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Storage } from '@google-cloud/storage';
-import { Readable } from 'stream';
+import { Readable, Writable } from 'stream';
 
 @Injectable()
 export class FileService {
@@ -14,5 +14,10 @@ export class FileService {
         .on('error', reject)
         .on('finish', resolve),
     );
+  }
+
+  createWriteStream(filePath: string): Writable {
+    const file = this.cloudStorage.file(filePath);
+    return file.createWriteStream();
   }
 }
