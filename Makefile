@@ -1,4 +1,5 @@
 setup:
+	docker-compose up -d
 	yarn
 	@make apis
 
