@@ -10,6 +10,7 @@ import { ProxyAccountModule } from './proxy-account/proxy-account.module';
 import { ProxyFacilityModule } from './proxy-facility/proxy-facility.module';
 import { ProxyOrganizerModule } from './proxy-organizer/proxy-organizer.module';
 import { ProxyParticipantModule } from './proxy-participant/proxy-participant.module';
+import { FileModule } from './file/file.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { ProxyParticipantModule } from './proxy-participant/proxy-participant.mo
     ProxyFacilityModule,
     ProxyOrganizerModule,
     ProxyParticipantModule,
+    FileModule,
   ],
   controllers: [AppController],
   providers: [AppService],
