@@ -24,8 +24,7 @@ export class ProxyOrganizerService implements OnModuleInit {
 
   getOrganizationById(organizationId: number): Observable<Organization> {
     const request: GetByIdRequest = {
-      userId: -1,
-      readId: organizationId,
+      id: organizationId,
     };
 
     return this.organizerService
