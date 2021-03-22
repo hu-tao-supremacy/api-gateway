@@ -1,5 +1,5 @@
 import { Authenticate } from '@mutations/auth.mutation';
-import { Resolver } from '@nestjs/graphql';
+import { Resolver, Mutation, Args } from '@nestjs/graphql';
 import { AuthenticationResponse } from './auth.model';
 import { AuthService } from './auth.service';
 
