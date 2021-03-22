@@ -14,7 +14,8 @@
     "paths": {
       "@gql/*": ["src/gql/hts/*"],
       "@google/*": ["src/gql/google/protobuf/*"],
-      "@internal/*": ["src/apis/hts/*"]
+      "@internal/*": ["src/apis/hts/*"],
+      "@mutations/*": ["src/mutations/*"]
     }
   }
 }
