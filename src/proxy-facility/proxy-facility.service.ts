@@ -21,6 +21,6 @@ export class ProxyFacilityService implements OnModuleInit {
   }
 
   ping(): Observable<Result> {
-    return this.facilityService.ping();
+    return this.facilityService.ping({});
   }
 }
