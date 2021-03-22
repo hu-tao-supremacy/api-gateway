@@ -4,7 +4,9 @@ import { Readable, Writable } from 'stream';
 
 @Injectable()
 export class FileService {
-  private cloudStorage = new Storage().bucket();
+  private cloudStorage = new Storage({
+    credentials: process.env.GCP_CREDENTIALS,
+  }).bucket(process.env.GCP_BUCKET_NAME);
 
   async upload(filePath: string, readableStream: Readable) {
     const file = this.cloudStorage.file(filePath);
