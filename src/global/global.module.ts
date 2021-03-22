@@ -4,7 +4,7 @@ import { join } from 'path';
 import { HTS_ACCOUNT_PACKAGE_NAME } from '@internal/account/service';
 import { HTS_ORGANIZER_PACKAGE_NAME } from '@internal/organizer/service';
 import { HTS_PARTICIPANT_PACKAGE_NAME } from '@internal/participant/service';
-import {HTS_FACILITY_PACKAGE_NAME} from '@internal/facility/service';
+import { HTS_FACILITY_PACKAGE_NAME } from '@internal/facility/service';
 
 @Global()
 @Module({
@@ -59,8 +59,8 @@ import {HTS_FACILITY_PACKAGE_NAME} from '@internal/facility/service';
         name: HTS_FACILITY_PACKAGE_NAME,
         transport: Transport.GRPC,
         options: {
-          url: process.env.HTS_SVC_ORGANIZER,
-          package: HTS_ORGANIZER_PACKAGE_NAME,
+          url: process.env.HTS_SVC_FACILITY,
+          package: HTS_FACILITY_PACKAGE_NAME,
           protoPath: join(
             __dirname,
             '../../../apis/proto/hts/facility/service.proto',
