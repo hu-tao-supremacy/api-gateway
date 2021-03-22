@@ -8,7 +8,7 @@ export class AuthResolver {
   constructor(private readonly service: AuthService) {}
 
   @Mutation(() => AuthenticationResponse)
-  authenticate(@Args('data') credentials: Authenticate) {
-    return this.service.authenticate(credentials.providerAccessToken);
+  authenticate(@Args('providerAccessToken') providerAccessToken: string) {
+    return this.service.authenticate(providerAccessToken);
   }
 }
