@@ -1,3 +1,4 @@
+import { BoolValue } from '@google/wrappers';
 import { Event, Result } from '@internal/common/common';
 import {
   HTS_PARTICIPANT_PACKAGE_NAME,
@@ -23,7 +24,7 @@ export class ProxyParticipantService implements OnModuleInit {
     );
   }
 
-  ping(): Observable<Result> {
+  ping(): Observable<BoolValue> {
     return this.participantService.ping({});
   }
 
