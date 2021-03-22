@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { AccountService } from './account.service';
 import { AccountResolver } from './account.resolver';
-import { EnvoyAccountModule } from 'src/envoy-account/envoy-account.module';
-import { EnvoyAccountService } from 'src/envoy-account/envoy-account.service';
+import { ProxyAccountModule } from 'src/proxy-account/proxy-account.module';
+import { ProxyAccountService } from 'src/proxy-account/proxy-account.service';
 
 @Module({
-  imports: [EnvoyAccountModule],
-  providers: [EnvoyAccountService, AccountService, AccountResolver],
+  imports: [ProxyAccountModule],
+  providers: [ProxyAccountService, AccountService, AccountResolver],
 })
 export class AccountModule {}

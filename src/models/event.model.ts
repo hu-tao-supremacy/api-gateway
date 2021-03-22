@@ -1,11 +1,11 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import * as common from '../apis/hts/common/common_pb.d';
+import { Event as IEvent } from '@gql/common/common';
 import { EventLocation } from './event-location.model';
 import { EventTag } from './event-tag.model';
 import { Organization } from './organization.model';
 
 @ObjectType()
-export class Event implements common.Event.AsObject {
+export class Event implements IEvent {
   @Field((_) => Int)
   id: number;
 

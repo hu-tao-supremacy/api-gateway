@@ -1,8 +1,8 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import * as common from '../apis/hts/common/common_pb.d';
+import { Organization as IOrganization } from '@gql/common/common';
 
 @ObjectType()
-export class Organization implements common.Organization.AsObject {
+export class Organization implements IOrganization {
   @Field((_) => Int)
   id: number;
 

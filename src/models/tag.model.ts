@@ -1,8 +1,8 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import * as common from '../apis/hts/common/common_pb.d';
+import { Tag as ITag } from '@gql/common/common';
 
 @ObjectType()
-export class Tag implements common.Tag.AsObject {
+export class Tag implements ITag {
   @Field((_) => Int)
   id: number;
 
