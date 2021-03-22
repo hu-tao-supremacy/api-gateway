@@ -1,5 +1,7 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { User, Gender } from '@gql/common/common';
+
+registerEnumType(Gender, { name: 'Gender' });
 
 @ObjectType()
 export class Account implements User {
@@ -30,6 +32,6 @@ export class Account implements User {
   @Field({ nullable: true })
   profilePicture: string | undefined;
 
-  @Field((_) => Gender)
+  @Field((type) => Gender)
   gender: Gender;
 }
