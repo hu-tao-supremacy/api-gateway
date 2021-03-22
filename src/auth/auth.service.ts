@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { AuthenticationResponse } from './auth.model';
+import { AuthenticateOutput } from './auth.model';
 
 @Injectable()
 export class AuthService {
@@ -20,9 +20,7 @@ export class AuthService {
     });
   }
 
-  async authenticate(
-    providerAccessToken: string,
-  ): Promise<AuthenticationResponse> {
+  async authenticate(providerAccessToken: string): Promise<AuthenticateOutput> {
     return null;
   }
 }
