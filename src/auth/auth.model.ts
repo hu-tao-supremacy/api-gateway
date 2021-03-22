@@ -2,7 +2,7 @@ import { ObjectType, Field } from '@nestjs/graphql';
 import { Account } from '../models/account.model';
 
 @ObjectType()
-export class AuthenticationResponse {
+export class AuthenticateOutput {
   @Field()
   accessToken: string;
 
