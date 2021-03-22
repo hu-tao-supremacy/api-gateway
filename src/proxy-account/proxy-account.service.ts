@@ -3,10 +3,10 @@ import {
   ACCOUNT_SERVICE_NAME,
   HTS_ACCOUNT_PACKAGE_NAME,
 } from '@internal/account/service';
-import { Result } from '@internal/common/common';
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { Observable } from 'rxjs';
+import { BoolValue } from '@google/wrappers'
 
 @Injectable()
 export class ProxyAccountService implements OnModuleInit {
@@ -20,7 +20,7 @@ export class ProxyAccountService implements OnModuleInit {
     );
   }
 
-  ping(): Observable<Result> {
+  ping(): Observable<BoolValue> {
     return this.accountService.ping({});
   }
 }
