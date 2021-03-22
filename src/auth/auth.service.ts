@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { AuthenticationResponse } from './auth.model';
 
 @Injectable()
 export class AuthService {
@@ -17,6 +18,12 @@ export class AuthService {
         });
       }, 400);
     });
+  }
+
+  async authenticate(
+    providerAccessToken: string,
+  ): Promise<AuthenticationResponse> {
+    return null;
   }
 }
 
