@@ -1,4 +1,4 @@
-import { AuthenticateInput } from '@mutations/auth.mutation';
+import { AuthenticateInput } from '@inputs/auth.input';
 import { Resolver, Mutation, Args } from '@nestjs/graphql';
 import { AuthenticateOutput } from './auth.model';
 import { AuthService } from './auth.service';
