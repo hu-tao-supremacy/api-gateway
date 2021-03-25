@@ -9,7 +9,7 @@ services:
       - POSTGRES_USER=hu-tao-mains
       - POSTGRES_PASSWORD=hu-tao-mains
   hts-svc-account:
-    image: ghcr.io/hu-tao-supremacy/account-prod:7e02d5a
+    image: ghcr.io/hu-tao-supremacy/account-prod:c1ab849
     ports:
       - 50055:50055
     environment:
@@ -21,7 +21,7 @@ services:
       - GRPC_HOST=localhost
       - GRPC_PORT=50055
   hts-svc-participant:
-    image: ghcr.io/hu-tao-supremacy/participant-dev:c85abcb
+    image: ghcr.io/hu-tao-supremacy/participant-dev:29a284c
     ports:
       - 50056:50056
     environment:
