@@ -1,30 +1,11 @@
 import { Module } from '@nestjs/common';
-import { ClientsModule, Transport } from '@nestjs/microservices';
-import { HTS_ACCOUNT_PACKAGE_NAME } from 'apis/gen/nest/hts/account/service';
-import { join } from 'path';
-import { AccountResolver } from './account.resolver';
 import { AccountService } from './account.service';
+import { AccountResolver } from './account.resolver';
+import { ProxyAccountModule } from 'src/proxy-account/proxy-account.module';
+import { ProxyAccountService } from 'src/proxy-account/proxy-account.service';
 
 @Module({
-  imports: [
-    ClientsModule.register([
-      {
-        name: HTS_ACCOUNT_PACKAGE_NAME,
-        transport: Transport.GRPC,
-        options: {
-          url: process.env.HTS_SVC_ACCOUNT,
-          package: HTS_ACCOUNT_PACKAGE_NAME,
-          protoPath: join(
-            __dirname,
-            '../../../apis/proto/hts/account/service.proto',
-          ),
-          loader: {
-            includeDirs: [join(__dirname, '../../../apis/proto')],
-          },
-        },
-      },
-    ]),
-  ],
-  providers: [AccountResolver, AccountService],
+  imports: [ProxyAccountModule],
+  providers: [ProxyAccountService, AccountService, AccountResolver],
 })
 export class AccountModule {}

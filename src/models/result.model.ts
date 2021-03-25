@@ -1,8 +1,8 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import * as common from '../apis/hts/common/common';
+import { Result as IResult } from '@gql/common/common';
 
 @ObjectType()
-export class Result implements common.Result {
+export class Result implements IResult {
   @Field((_) => Boolean)
   isOk: boolean;
 

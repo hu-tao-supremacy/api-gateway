@@ -6,10 +6,9 @@ base = pathlib.Path(__file__).parent.absolute()
 
 os.chdir(base)
 
-def sym():
+def sym(src, dst):
     os.chdir(base)
-    src = "./src/apis"
-    dst = "../apis/gen/nest"
     os.symlink(dst, src)
 
-sym()
+sym("./src/apis", "../apis/gen/nest")
+sym("./src/gql", "../apis/gen/gql")

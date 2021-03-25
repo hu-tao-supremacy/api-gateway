@@ -1,15 +1,16 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { AccountModule } from './account/account.module';
-import { OrganizerModule } from './organizer/organizer.module';
-import { ParticipantModule } from './participant/participant.module';
-import { FacilityModule } from './facility/facility.module';
 import { GraphQLModule } from '@nestjs/graphql';
-import { EventModule } from './event/event.module';
 import { GlobalModule } from './global/global.module';
-import { EventModule } from './resolvers/event/event.module';
-import { AccountModule } from './resolvers/account/account.module';
+import { AccountModule } from './account/account.module';
+import { EventModule } from './event/event.module';
+import { AuthModule } from './auth/auth.module';
+import { ProxyAccountModule } from './proxy-account/proxy-account.module';
+import { ProxyFacilityModule } from './proxy-facility/proxy-facility.module';
+import { ProxyOrganizerModule } from './proxy-organizer/proxy-organizer.module';
+import { ProxyParticipantModule } from './proxy-participant/proxy-participant.module';
+import { FileModule } from './file/file.module';
 
 @Module({
   imports: [
@@ -18,12 +19,15 @@ import { AccountModule } from './resolvers/account/account.module';
       debug: process.env.NODE_ENV === 'dev',
       playground: process.env.NODE_ENV === 'dev',
     }),
-    AccountModule,
-    OrganizerModule,
-    ParticipantModule,
-    FacilityModule,
-    EventModule,
     GlobalModule,
+    AccountModule,
+    EventModule,
+    AuthModule,
+    ProxyAccountModule,
+    ProxyFacilityModule,
+    ProxyOrganizerModule,
+    ProxyParticipantModule,
+    FileModule,
   ],
   controllers: [AppController],
   providers: [AppService],
