@@ -15,23 +15,7 @@ export class EventResolver {
 
   @Query((_) => [Event])
   async upcomingEvents() {
-    return await this.proxyParticipantService
-      .getAllEvents()
-      .pipe(
-        map((result) => {
-          return result.map((event) => {
-            console.log(event);
-            event.id = Number(event.id);
-            event.organizationId = Number(event.organizationId);
-            if (event.eventLocationId !== undefined) {
-              // @ts-ignore
-              event.eventLocationId = Number(event.eventLocationId.value);
-            }
-            return event;
-          });
-        }),
-      )
-      .toPromise();
+    return await this.proxyParticipantService.getAllEvents().toPromise();
   }
 
   @ResolveField()
@@ -46,11 +30,13 @@ export class EventResolver {
   }
 
   @ResolveField()
-  eventLocation(@Parent() event: Event) {
-    const { eventLocationId } = event;
+  location(@Parent() event: Event) {
+    const { locationId } = event;
     return null;
   }
 
   @ResolveField()
-  eventTags(@Parent() event: Event) {}
+  tags(@Parent() event: Event) {
+    return [];
+  }
 }
