@@ -10,6 +10,12 @@
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
-    "incremental": true
+    "incremental": true,
+    "paths": {
+      "@gql/*": ["src/gql/hts/*"],
+      "@google/*": ["src/gql/google/protobuf/*"],
+      "@internal/*": ["src/apis/hts/*"],
+      "@inputs/*": ["src/inputs/*"]
+    }
   }
 }

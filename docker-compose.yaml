@@ -1,0 +1,34 @@
+version: '3'
+services:
+  postgres:
+    image: postgres:latest
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_DB=hts
+      - POSTGRES_USER=hu-tao-mains
+      - POSTGRES_PASSWORD=hu-tao-mains
+  hts-svc-account:
+    image: ghcr.io/hu-tao-supremacy/account-prod:7e02d5a
+    ports:
+      - 50055:50055
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_USER=hu-tao-mains
+      - POSTGRES_PASSWORD=hu-tao-mains
+      - POSTGRES_DB=hts
+      - POSTGRES_PORT=5432
+      - GRPC_HOST=localhost
+      - GRPC_PORT=50055
+  hts-svc-participant:
+    image: ghcr.io/hu-tao-supremacy/participant-dev:c85abcb
+    ports:
+      - 50056:50056
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_USER=hu-tao-mains
+      - POSTGRES_PASSWORD=hu-tao-mains
+      - POSTGRES_DB=hts
+      - POSTGRES_PORT=5432
+      - GRPC_HOST=localhost
+      - GRPC_PORT=50056
