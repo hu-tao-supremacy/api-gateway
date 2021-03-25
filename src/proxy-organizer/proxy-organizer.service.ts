@@ -1,4 +1,4 @@
-import { EventLocation, Organization } from '@internal/common/common';
+import { Location, Organization } from '@internal/common/common';
 import {
   GetByIdRequest,
   HTS_ORGANIZER_PACKAGE_NAME,
