@@ -38,6 +38,7 @@ export class ProxyParticipantService implements OnModuleInit {
       map((events: EventInput[]) => {
         const eventArray: Event[] = events.map((e) => {
           const {
+            id,
             locationId,
             coverImageUrl,
             coverImageHash,
@@ -50,13 +51,14 @@ export class ProxyParticipantService implements OnModuleInit {
 
           const ret: Event = {
             ...a,
-            locationId: locationId.value,
-            coverImageUrl: coverImageUrl.value,
-            coverImageHash: coverImageHash.value,
-            posterImageUrl: posterImageUrl.value,
-            posterImageHash: posterImageHash.value,
-            profileImageUrl: profileImageUrl.value,
-            profileImageHash: profileImageHash.value,
+            id: Number(id.toString()),
+            locationId: locationId?.value ?? Number(locationId.value),
+            coverImageUrl: coverImageUrl?.value,
+            coverImageHash: coverImageHash?.value,
+            posterImageUrl: posterImageUrl?.value,
+            posterImageHash: posterImageHash?.value,
+            profileImageUrl: profileImageUrl?.value,
+            profileImageHash: profileImageHash?.value,
           };
 
           return ret;
