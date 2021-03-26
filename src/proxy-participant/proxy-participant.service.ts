@@ -52,7 +52,7 @@ export class ProxyParticipantService implements OnModuleInit {
           const ret: Event = {
             ...a,
             id: Number(id.toString()),
-            locationId: locationId?.value ?? Number(locationId.value),
+            locationId: locationId?.value ?? Number(locationId?.value),
             coverImageUrl: coverImageUrl?.value,
             coverImageHash: coverImageHash?.value,
             posterImageUrl: posterImageUrl?.value,
