@@ -1,0 +1,4 @@
+export NODE_ENV=dev
+export HTS_SVC_ACCOUNT=localhost:50055
+export HTS_SVC_PARTICIPANT=localhost:50056
+export HTS_SVC_ORGANIZER=localhost:50056
