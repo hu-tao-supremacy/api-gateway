@@ -32,7 +32,8 @@ export class EventResolver {
   @ResolveField()
   location(@Parent() event: Event) {
     const { locationId } = event;
-    return null;
+    if (!locationId) return null;
+    return this.proxyParticipantService.getLocationById(locationId);
   }
 
   @ResolveField()
