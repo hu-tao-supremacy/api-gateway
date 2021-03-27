@@ -57,9 +57,11 @@ export class Event implements IEvent {
 
   static from(_event: EventDTO): Event {
     const event = new Event();
-    event.id = _event.id;
+    event.id = Number(_event.id.toString());
     event.organizationId = _event.organizationId;
-    event.locationId = Number(_event.locationId.toString());
+    event.locationId = _event.locationId
+      ? Number(_event.locationId?.toString())
+      : null;
     event.description = _event.description;
     event.name = _event.name;
     event.coverImageUrl = _event.coverImageUrl?.value;
