@@ -1,9 +1,9 @@
 import { BoolValue } from '@google/wrappers';
 import {
   Event as EventInput,
-  Result as ResultInput,
+  Location as LocationInput,
 } from '@internal/common/common';
-import { Event, Result } from '@gql/common/common';
+import { Event, Location } from '@gql/common/common';
 import {
   HTS_PARTICIPANT_PACKAGE_NAME,
   ParticipantServiceClient,
@@ -52,7 +52,9 @@ export class ProxyParticipantService implements OnModuleInit {
           const ret: Event = {
             ...a,
             id: Number(id.toString()),
-            locationId: locationId?.value ?? Number(locationId?.value),
+            locationId: locationId?.value
+              ? Number(locationId.value.toString())
+              : null,
             coverImageUrl: coverImageUrl?.value,
             coverImageHash: coverImageHash?.value,
             posterImageUrl: posterImageUrl?.value,
@@ -64,6 +66,28 @@ export class ProxyParticipantService implements OnModuleInit {
           return ret;
         });
         return eventArray;
+      }),
+    );
+  }
+
+  getLocationById(locationId: number): Observable<Location> {
+    return this.participantService.getLocationById({ id: locationId }).pipe(
+      map((location) => {
+        const {
+          description,
+          travelInformationImageHash,
+          travelInformationImageUrl,
+          ...a
+        } = location;
+
+        const ret: Location = {
+          ...a,
+          description: description?.value,
+          travelInformationImageHash: travelInformationImageHash?.value,
+          travelInformationImageUrl: travelInformationImageUrl?.value,
+        };
+
+        return ret;
       }),
     );
   }
