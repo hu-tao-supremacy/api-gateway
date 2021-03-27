@@ -55,7 +55,7 @@ export class Organization implements IOrganization {
   @Field({ nullable: true })
   profilePictureHash: string | undefined;
 
-  fromInternal(_org: OrganizationInput): Organization {
+  static fromInternal(_org: OrganizationInput): Organization {
     const org = new Organization();
     org.id = _org.id;
     org.name = _org.name;
