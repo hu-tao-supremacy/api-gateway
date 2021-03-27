@@ -47,12 +47,12 @@ export class ProxyParticipantService implements OnModuleInit {
 
   getUpcomingEvents(startDate: string, endDate: string): Observable<Event[]> {
     const start: Timestamp = {
-      seconds: DateTime.fromISO(startDate).toMillis(),
+      seconds: DateTime.fromISO(startDate).toSeconds(),
       nanos: 0,
     };
 
     const end: Timestamp = {
-      seconds: DateTime.fromISO(endDate).toMillis(),
+      seconds: DateTime.fromISO(endDate).toSeconds(),
       nanos: 0,
     };
 
