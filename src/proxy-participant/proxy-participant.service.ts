@@ -14,6 +14,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Event } from 'src/models/event.model';
 import { Location } from 'src/models/location.model';
+import { Tag } from 'src/models/tag.model';
 import { DateTime } from 'luxon';
 
 @Injectable()
@@ -63,5 +64,12 @@ export class ProxyParticipantService implements OnModuleInit {
     return this.participantService
       .getLocationById({ id: locationId })
       .pipe(map((location) => Location.from(location)));
+  }
+
+  getEventTags(eventId: number): Observable<Tag[]> {
+    return this.participantService.getTagsFromEventId({ id: eventId }).pipe(
+      map((response) => response.tags),
+      map((tags) => tags.map((tag) => Tag.from(tag))),
+    );
   }
 }
