@@ -30,7 +30,7 @@ export class Account implements User {
   address: string | undefined;
 
   @Field({ nullable: true })
-  profilePicture: string | undefined;
+  profilePictureUrl: string | undefined;
 
   @Field((type) => Gender)
   gender: Gender;
