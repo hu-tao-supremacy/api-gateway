@@ -4,6 +4,7 @@ import { Event } from 'src/models/event.model';
 import { EventService } from './event.service';
 import { map } from 'rxjs/operators';
 import { ProxyOrganizerService } from 'src/proxy-organizer/proxy-organizer.service';
+import { DateTime } from 'luxon';
 
 @Resolver((_) => Event)
 export class EventResolver {
@@ -15,7 +16,10 @@ export class EventResolver {
 
   @Query((_) => [Event])
   async upcomingEvents() {
-    return await this.proxyParticipantService.getAllEvents().toPromise();
+    return this.proxyParticipantService.getUpcomingEvents(
+      DateTime.now().startOf('day').toISO(),
+      DateTime.now().plus({ days: 14 }).endOf('day').toISO(),
+    );
   }
 
   @ResolveField()
