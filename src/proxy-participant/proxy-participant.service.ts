@@ -11,7 +11,7 @@ import {
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { Event } from 'src/models/event.model';
 import { Location } from 'src/models/location.model';
 import { Tag } from 'src/models/tag.model';
@@ -68,7 +68,7 @@ export class ProxyParticipantService implements OnModuleInit {
 
   getEventTags(eventId: number): Observable<Tag[]> {
     return this.participantService.getTagsFromEventId({ id: eventId }).pipe(
-      map((response) => response.tags),
+      map((response) => (response.tags ? response.tags : [])),
       map((tags) => tags.map((tag) => Tag.from(tag))),
     );
   }
