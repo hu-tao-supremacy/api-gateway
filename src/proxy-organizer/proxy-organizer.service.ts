@@ -1,4 +1,4 @@
-import { Location, Organization } from '@internal/common/common';
+import { Location } from '@internal/common/common';
 import {
   GetByIdRequest,
   HTS_ORGANIZER_PACKAGE_NAME,
@@ -9,6 +9,7 @@ import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { Organization } from 'src/models/organization.model';
 
 @Injectable()
 export class ProxyOrganizerService implements OnModuleInit {
@@ -27,8 +28,9 @@ export class ProxyOrganizerService implements OnModuleInit {
       id: organizationId,
     };
 
-    return this.organizerService
-      .getOrganizationById(request)
-      .pipe(map((project) => project.organization));
+    return this.organizerService.getOrganizationById(request).pipe(
+      map((project) => project.organization),
+      map((org) => Organization.fromInternal(org)),
+    );
   }
 }
