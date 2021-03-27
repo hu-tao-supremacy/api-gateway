@@ -3,7 +3,7 @@ import {
   Event as EventInput,
   Location as LocationInput,
 } from '@internal/common/common';
-import { Event, Location } from '@gql/common/common';
+import { Location } from '@gql/common/common';
 import {
   HTS_PARTICIPANT_PACKAGE_NAME,
   ParticipantServiceClient,
@@ -13,6 +13,9 @@ import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { Event } from 'src/models/event.model';
+import { DateTime } from 'luxon';
+import { Timestamp } from 'apis/gen/gql/google/protobuf/timestamp';
 
 @Injectable()
 export class ProxyParticipantService implements OnModuleInit {
@@ -36,36 +39,27 @@ export class ProxyParticipantService implements OnModuleInit {
     return this.participantService.getAllEvents({}).pipe(
       map((data) => data.event),
       map((events: EventInput[]) => {
-        const eventArray: Event[] = events.map((e) => {
-          const {
-            id,
-            locationId,
-            coverImageUrl,
-            coverImageHash,
-            posterImageUrl,
-            posterImageHash,
-            profileImageUrl,
-            profileImageHash,
-            ...a
-          } = e;
-
-          const ret: Event = {
-            ...a,
-            id: Number(id.toString()),
-            locationId: locationId?.value
-              ? Number(locationId.value.toString())
-              : null,
-            coverImageUrl: coverImageUrl?.value,
-            coverImageHash: coverImageHash?.value,
-            posterImageUrl: posterImageUrl?.value,
-            posterImageHash: posterImageHash?.value,
-            profileImageUrl: profileImageUrl?.value,
-            profileImageHash: profileImageHash?.value,
-          };
-
-          return ret;
-        });
+        const eventArray: Event[] = events.map((e) => Event.from(e));
         return eventArray;
+      }),
+    );
+  }
+
+  getUpcomingEvents(startDate: string, endDate: string): Observable<Event[]> {
+    const start: Timestamp = {
+      seconds: DateTime.fromISO(startDate).toMillis(),
+      nanos: 0,
+    };
+
+    const end: Timestamp = {
+      seconds: DateTime.fromISO(endDate).toMillis(),
+      nanos: 0,
+    };
+
+    return this.participantService.getUpcomingEvents({ start, end }).pipe(
+      map((project) => project.event),
+      map((events) => {
+        return events.map((event) => Event.from(event));
       }),
     );
   }
