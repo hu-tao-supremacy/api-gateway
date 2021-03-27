@@ -1,6 +1,6 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Organization as IOrganization } from '@gql/common/common';
-import { Organization as OrganizationInput } from '@internal/common/common';
+import { Organization as OrganizationDTO } from '@internal/common/common';
 
 @ObjectType()
 export class Organization implements IOrganization {
@@ -55,7 +55,7 @@ export class Organization implements IOrganization {
   @Field({ nullable: true })
   profilePictureHash: string | undefined;
 
-  static fromInternal(_org: OrganizationInput): Organization {
+  static from(_org: OrganizationDTO): Organization {
     const org = new Organization();
     org.id = _org.id;
     org.name = _org.name;
