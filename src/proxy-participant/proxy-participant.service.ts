@@ -3,7 +3,6 @@ import {
   Event as EventInput,
   Location as LocationInput,
 } from '@internal/common/common';
-import { Location } from '@gql/common/common';
 import {
   HTS_PARTICIPANT_PACKAGE_NAME,
   ParticipantServiceClient,
@@ -14,8 +13,8 @@ import { ClientGrpc } from '@nestjs/microservices';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Event } from 'src/models/event.model';
+import { Location } from 'src/models/location.model';
 import { DateTime } from 'luxon';
-import { Timestamp } from 'apis/gen/gql/google/protobuf/timestamp';
 
 @Injectable()
 export class ProxyParticipantService implements OnModuleInit {
@@ -61,24 +60,8 @@ export class ProxyParticipantService implements OnModuleInit {
   }
 
   getLocationById(locationId: number): Observable<Location> {
-    return this.participantService.getLocationById({ id: locationId }).pipe(
-      map((location) => {
-        const {
-          description,
-          travelInformationImageHash,
-          travelInformationImageUrl,
-          ...a
-        } = location;
-
-        const ret: Location = {
-          ...a,
-          description: description?.value,
-          travelInformationImageHash: travelInformationImageHash?.value,
-          travelInformationImageUrl: travelInformationImageUrl?.value,
-        };
-
-        return ret;
-      }),
-    );
+    return this.participantService
+      .getLocationById({ id: locationId })
+      .pipe(map((location) => Location.from(location)));
   }
 }
