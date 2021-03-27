@@ -38,6 +38,7 @@ export class EventResolver {
 
   @ResolveField()
   tags(@Parent() event: Event) {
-    return [];
+    const { id } = event;
+    return this.proxyParticipantService.getEventTags(id);
   }
 }
