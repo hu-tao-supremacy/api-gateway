@@ -1,6 +1,7 @@
 import { Field, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { ProxyParticipantService } from 'src/proxy-participant/proxy-participant.service';
 import { Event } from 'src/models/event.model';
+import { Organization } from 'src/models/organization.model';
 import { EventService } from './event.service';
 import { map } from 'rxjs/operators';
 import { ProxyOrganizerService } from 'src/proxy-organizer/proxy-organizer.service';
@@ -25,12 +26,7 @@ export class EventResolver {
   @ResolveField()
   organization(@Parent() event: Event) {
     const { organizationId } = event;
-    return this.proxyOrganizerService.getOrganizationById(organizationId).pipe(
-      map((result) => {
-        result.id = Number(result.id);
-        return result;
-      }),
-    );
+    return this.proxyOrganizerService.getOrganizationById(organizationId);
   }
 
   @ResolveField()
