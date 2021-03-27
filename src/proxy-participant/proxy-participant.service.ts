@@ -68,7 +68,7 @@ export class ProxyParticipantService implements OnModuleInit {
 
   getEventTags(eventId: number): Observable<Tag[]> {
     return this.participantService.getTagsFromEventId({ id: eventId }).pipe(
-      map((response) => (response.tags ? response.tags : [])),
+      map((response) => response.tags ?? []),
       map((tags) => tags.map((tag) => Tag.from(tag))),
     );
   }
