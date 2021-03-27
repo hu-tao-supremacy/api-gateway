@@ -60,7 +60,7 @@ export class Event implements IEvent {
     event.id = Number(_event.id.toString());
     event.organizationId = _event.organizationId;
     event.locationId = _event.locationId
-      ? Number(_event.locationId?.toString())
+      ? Number(_event.locationId?.value.toString())
       : null;
     event.description = _event.description;
     event.name = _event.name;
