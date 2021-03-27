@@ -3,6 +3,7 @@ import { Event as IEvent } from '@gql/common/common';
 import { Location } from './location.model';
 import { Tag } from './tag.model';
 import { Organization } from './organization.model';
+import { Event as EventDTO } from '@internal/common/common';
 
 @ObjectType()
 export class Event implements IEvent {
@@ -53,4 +54,22 @@ export class Event implements IEvent {
 
   @Field((_) => [Tag])
   tags: Tag[];
+
+  static from(_event: EventDTO): Event {
+    const event = new Event();
+    event.id = _event.id;
+    event.organizationId = _event.organizationId;
+    event.locationId = Number(_event.locationId.toString());
+    event.description = _event.description;
+    event.name = _event.name;
+    event.coverImageUrl = _event.coverImageUrl?.value;
+    event.coverImageHash = _event.coverImageHash?.value;
+    event.posterImageUrl = _event.posterImageUrl?.value;
+    event.posterImageHash = _event.posterImageHash?.value;
+    event.profileImageUrl = _event.profileImageUrl?.value;
+    event.profileImageHash = _event.profileImageHash?.value;
+    event.contact = _event.contact;
+    event.attendeeLimit = _event.attendeeLimit;
+    return event;
+  }
 }
