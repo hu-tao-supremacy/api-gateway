@@ -38,30 +38,26 @@ export class ProxyParticipantService implements OnModuleInit {
   getAllEvents(): Observable<Event[]> {
     return this.participantService.getAllEvents({}).pipe(
       map((data) => data.event),
-      map((events: EventInput[]) => {
-        const eventArray: Event[] = events.map((e) => Event.from(e));
-        return eventArray;
-      }),
+      map((events) => events.map((event) => Event.from(event))),
     );
   }
 
   getUpcomingEvents(startDate: string, endDate: string): Observable<Event[]> {
-    const start: Timestamp = {
-      seconds: DateTime.fromISO(startDate).toSeconds(),
-      nanos: 0,
-    };
-
-    const end: Timestamp = {
-      seconds: DateTime.fromISO(endDate).toSeconds(),
-      nanos: 0,
-    };
-
-    return this.participantService.getUpcomingEvents({ start, end }).pipe(
-      map((project) => project.event),
-      map((events) => {
-        return events.map((event) => Event.from(event));
-      }),
-    );
+    return this.participantService
+      .getUpcomingEvents({
+        start: {
+          seconds: DateTime.fromISO(startDate).toSeconds(),
+          nanos: 0,
+        },
+        end: {
+          seconds: DateTime.fromISO(endDate).toSeconds(),
+          nanos: 0,
+        },
+      })
+      .pipe(
+        map((project) => project.event),
+        map((events) => events.map((event) => Event.from(event))),
+      );
   }
 
   getLocationById(locationId: number): Observable<Location> {
