@@ -7,6 +7,7 @@ import {
 import { ClientGrpc } from '@nestjs/microservices';
 import { Result } from '@internal/common/common';
 import { Observable } from 'rxjs';
+import { BoolValue } from '@google/wrappers';
 
 @Injectable()
 export class ProxyFacilityService implements OnModuleInit {
@@ -20,7 +21,7 @@ export class ProxyFacilityService implements OnModuleInit {
     );
   }
 
-  ping(): Observable<Result> {
+  ping(): Observable<BoolValue> {
     return this.facilityService.ping({});
   }
 }
