@@ -24,13 +24,10 @@ export class ProxyOrganizerService implements OnModuleInit {
   }
 
   getOrganizationById(organizationId: number): Observable<Organization> {
-    const request: GetByIdRequest = {
-      id: organizationId,
-    };
-
-    return this.organizerService.getOrganizationById(request).pipe(
-      map((project) => project.organization),
-      map((org) => Organization.fromInternal(org)),
-    );
+    return this.organizerService
+      .getOrganizationById({
+        id: organizationId,
+      })
+      .pipe(map((project) => Organization.from(project.organization)));
   }
 }
