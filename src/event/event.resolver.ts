@@ -20,13 +20,7 @@ export class EventResolver {
 
   @ResolveField()
   organization(@Parent() event: Event) {
-    const { organizationId } = event;
-    return this.proxyOrganizerService.getOrganizationById(organizationId).pipe(
-      map((result) => {
-        result.id = Number(result.id);
-        return result;
-      }),
-    );
+    return null;
   }
 
   @ResolveField()
