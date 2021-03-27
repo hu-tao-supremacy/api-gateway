@@ -33,7 +33,7 @@ services:
       - GRPC_HOST=localhost
       - GRPC_PORT=50056
   hts-svc-organizer:
-    image: ghcr.io/hu-tao-supremacy/participant-prod:cea4fde
+    image: ghcr.io/hu-tao-supremacy/organizer-prod:8269746
     ports:
       - 50057:50057
     environment:
