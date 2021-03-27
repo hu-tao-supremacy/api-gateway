@@ -14,5 +14,6 @@ export class Tag implements ITag {
     const tag = new Tag();
     tag.id = Number(_tag.id);
     tag.name = _tag.name;
+    return tag;
   }
 }
