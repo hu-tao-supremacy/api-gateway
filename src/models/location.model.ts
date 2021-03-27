@@ -9,7 +9,7 @@ export class Location implements ILocation {
   @Field()
   name: string;
 
-  @Field()
+  @Field({ nullable: true })
   description: string;
 
   @Field()
