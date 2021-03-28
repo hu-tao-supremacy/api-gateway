@@ -32,7 +32,9 @@ export class ProxyAccountService implements OnModuleInit {
       .pipe(map((user) => Account.from(user)));
   }
 
-  generateAccessToken(): Observable<string> {
-    return this.accountService.generateAccessToken();
+  generateAccessToken(userId: number): Observable<string> {
+    return this.accountService
+      .generateAccessToken({ userId })
+      .pipe(map((project) => project.accessToken));
   }
 }
