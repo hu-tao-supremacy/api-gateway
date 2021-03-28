@@ -29,9 +29,11 @@ export class AuthService {
 
   authenticate(ticket: string): Observable<AuthenticateOutput> {
     return this.serviceValidation(ticket).pipe(
-      switchMap((project) => {
-        return;
-      }),
+      switchMap((project) =>
+        this.proxyAccountService.getUserByChulaId(Number(project.ouid)),
+      ),
+      switchMap((account) => this.proxyAccountService.ping()),
+      map((account) => {}),
     );
   }
 }
