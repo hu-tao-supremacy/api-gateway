@@ -5,7 +5,4 @@ import { Account } from '../models/account.model';
 export class AuthenticateOutput {
   @Field()
   accessToken: string;
-
-  @Field()
-  account: Account;
 }
