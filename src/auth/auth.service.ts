@@ -32,8 +32,10 @@ export class AuthService {
       switchMap((project) =>
         this.proxyAccountService.getUserByChulaId(Number(project.ouid)),
       ),
-      switchMap((account) => this.proxyAccountService.ping()),
-      map((account) => {}),
+      switchMap((account) =>
+        this.proxyAccountService.generateAccessToken(account.id),
+      ),
+      map((accessToken) => ({ accessToken })),
     );
   }
 }
