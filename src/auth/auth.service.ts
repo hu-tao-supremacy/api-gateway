@@ -1,27 +1,38 @@
-import { Injectable } from '@nestjs/common';
+import { HttpService, Injectable } from '@nestjs/common';
+import { Observable } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
+import { ProxyAccountService } from 'src/proxy-account/proxy-account.service';
 import { AuthenticateOutput } from './auth.model';
 
 @Injectable()
 export class AuthService {
-  async serviceValidation(
-    accessToken: string,
-  ): Promise<ChulaSSOSuccessResponse> {
-    return new Promise((resolve, _) => {
-      setTimeout(() => {
-        resolve({
-          uid: '0001',
-          username: 'test',
-          gecos: 'Test Account',
-          email: 'test@onepass.app',
-          roles: ['faculty', 'student'],
-          ouid: '1234567890',
-        });
-      }, 400);
-    });
+  constructor(
+    private readonly httpService: HttpService,
+    private readonly proxyAccountService: ProxyAccountService,
+  ) {}
+
+  serviceValidation(ticket: string): Observable<ChulaSSOSuccessResponse> {
+    return this.httpService
+      .post<ChulaSSOSuccessResponse>(
+        'https://account.it.chula.ac.th/serviceValidation',
+        null,
+        {
+          headers: {
+            DeeAppId: process.env.CHULA_SSO_APP_ID,
+            DeeAppSecret: process.env.CHULA_SSO_APP_SECRET,
+            DeeTicket: ticket,
+          },
+        },
+      )
+      .pipe(map((project) => project.data));
   }
 
-  async authenticate(providerAccessToken: string): Promise<AuthenticateOutput> {
-    return null;
+  authenticate(ticket: string): Observable<AuthenticateOutput> {
+    return this.serviceValidation(ticket).pipe(
+      switchMap((project) => {
+        return;
+      }),
+    );
   }
 }
 
