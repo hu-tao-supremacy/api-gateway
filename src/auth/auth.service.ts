@@ -38,6 +38,10 @@ export class AuthService {
       map((accessToken) => ({ accessToken })),
     );
   }
+
+  isAuthenticated(accessToken: string): Observable<boolean> {
+    return this.proxyAccountService.isAuthenticated(accessToken);
+  }
 }
 
 interface ChulaSSOSuccessResponse {
