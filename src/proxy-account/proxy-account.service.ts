@@ -31,4 +31,8 @@ export class ProxyAccountService implements OnModuleInit {
       .getUserByChulaId({ id })
       .pipe(map((user) => Account.from(user)));
   }
+
+  generateAccessToken(): Observable<string> {
+    return this.accountService.generateAccessToken();
+  }
 }
