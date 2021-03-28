@@ -37,4 +37,10 @@ export class ProxyAccountService implements OnModuleInit {
       .generateAccessToken({ userId })
       .pipe(map((project) => project.accessToken));
   }
+
+  isAuthenticated(accessToken: string): Observable<boolean> {
+    return this.accountService
+      .isAuthenticated({ accessToken })
+      .pipe(map((project) => project.value));
+  }
 }
