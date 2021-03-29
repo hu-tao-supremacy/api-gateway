@@ -19,7 +19,7 @@ export class FileService {
   }
 
   createWriteStream(filePath: string): Writable {
-    const file = this.cloudStorage.file(filePath, { public: true });
+    const file = this.cloudStorage.file(filePath);
     return file.createWriteStream({ resumable: false });
   }
 }
