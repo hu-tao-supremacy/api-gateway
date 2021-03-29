@@ -5,8 +5,8 @@ import { from, Observable } from 'rxjs';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { FileService } from './file.service';
 
-@UseGuards(AuthGuard)
 @Resolver()
+@UseGuards(AuthGuard)
 export class FileResolver {
   constructor(private readonly fileService: FileService) {}
 
