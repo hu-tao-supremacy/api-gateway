@@ -1,8 +1,8 @@
 import { InputType, Field } from '@nestjs/graphql';
-import { GraphQLUpload, FileUpload } from 'graphql-upload';
+import { FileUpload, GraphQLUpload } from 'graphql-upload';
 
 @InputType()
 export class FileUploadInput {
   @Field((_) => GraphQLUpload)
-  file: FileUpload;
+  file: Promise<FileUpload>;
 }
