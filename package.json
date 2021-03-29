@@ -21,6 +21,7 @@
     "test:e2e": "jest --config ./jest.config.js"
   },
   "dependencies": {
+    "@apollo/gateway": "^0.25.0",
     "@google-cloud/storage": "^5.8.1",
     "@grpc/proto-loader": "^0.5.6",
     "@nestjs/common": "^7.5.1",
@@ -66,13 +67,19 @@
     "typescript": "^4.0.5"
   },
   "jest": {
-    "moduleFileExtensions": ["js", "json", "ts"],
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
     "rootDir": "src",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
     },
-    "collectCoverageFrom": ["**/*.(t|j)s"],
+    "collectCoverageFrom": [
+      "**/*.(t|j)s"
+    ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
   }

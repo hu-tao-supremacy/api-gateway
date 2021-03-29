@@ -101,6 +101,25 @@
     make-fetch-happen "^8.0.0"
     pretty-format "^26.0.0"
 
+"@apollo/gateway@^0.25.0":
+  version "0.25.0"
+  resolved "https://registry.yarnpkg.com/@apollo/gateway/-/gateway-0.25.0.tgz#df521b8e5160a6ce20864fc73c0795effaceb545"
+  integrity sha512-PvZk/p8ZEPH8Oy4tNufGKXu/SKpIvRAZZwoQ+EjcXixUZDVaOnRyAqAKueDOJ5Qcex/qPU8zAyhR0nUg1XP1tQ==
+  dependencies:
+    "@apollo/federation" "^0.22.0"
+    "@apollo/query-planner" "^0.0.13"
+    "@types/node-fetch" "2.5.8"
+    apollo-graphql "^0.6.0"
+    apollo-reporting-protobuf "^0.6.0"
+    apollo-server-caching "^0.5.3"
+    apollo-server-core "^2.21.0"
+    apollo-server-env "^3.0.0"
+    apollo-server-errors "^2.4.2"
+    apollo-server-types "^0.6.3"
+    loglevel "^1.6.1"
+    make-fetch-happen "^8.0.0"
+    pretty-format "^26.0.0"
+
 "@apollo/protobufjs@^1.0.3":
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/@apollo/protobufjs/-/protobufjs-1.0.5.tgz#a78b726147efc0795e74c8cb8a11aafc6e02f773"
