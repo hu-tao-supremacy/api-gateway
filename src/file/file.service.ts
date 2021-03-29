@@ -20,6 +20,6 @@ export class FileService {
 
   createWriteStream(filePath: string): Writable {
     const file = this.cloudStorage.file(filePath);
-    return file.createWriteStream();
+    return file.createWriteStream({ resumable: false });
   }
 }
