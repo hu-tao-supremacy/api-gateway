@@ -8,12 +8,15 @@ import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Event } from 'src/models/event.model';
-import { Location } from 'src/models/location.model';
-import { Tag } from 'src/models/tag.model';
 import { DateTime } from 'luxon';
 import { EventDuration } from '@entities/event-duration.entity';
 import { EventDurationAdapter } from '@adapters/event-duration.adapter';
+import { Event } from '@entities/event.entity';
+import { EventAdapter } from '@adapters/event.adapter';
+import { Tag } from '@entities/tag.entity';
+import { TagAdapter } from '@adapters/tag.adapter';
+import { Location } from '@entities/location.entity';
+import { LocationAdapter } from '@adapters/location.adapter';
 
 @Injectable()
 export class ProxyParticipantService implements OnModuleInit {
@@ -36,7 +39,7 @@ export class ProxyParticipantService implements OnModuleInit {
   getAllEvents(): Observable<Event[]> {
     return this.participantService.getAllEvents({}).pipe(
       map((data) => data.event),
-      map((events) => events.map((event) => Event.from(event))),
+      map((events) => events.map((event) => new EventAdapter().toEntity(event)))
     );
   }
 
@@ -54,20 +57,20 @@ export class ProxyParticipantService implements OnModuleInit {
       })
       .pipe(
         map((project) => project.event),
-        map((events) => events.map((event) => Event.from(event))),
+        map((events) => events.map((event) => new EventAdapter().toEntity(event))),
       );
   }
 
   getLocationById(locationId: number): Observable<Location> {
     return this.participantService
       .getLocationById({ id: locationId })
-      .pipe(map((location) => Location.from(location)));
+      .pipe(map((location) => new LocationAdapter().toEntity(location)));
   }
 
   getEventTags(eventId: number): Observable<Tag[]> {
     return this.participantService.getTagsByEventId({ id: eventId }).pipe(
       map((response) => response.tags ?? []),
-      map((tags) => tags.map((tag) => Tag.from(tag))),
+      map((tags) => tags.map((tag) => new TagAdapter().toEntity(tag)))
     );
   }
 
