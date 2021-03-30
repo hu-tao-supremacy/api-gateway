@@ -12,6 +12,7 @@ import { ProxyOrganizerModule } from './proxy-organizer/proxy-organizer.module';
 import { ProxyParticipantModule } from './proxy-participant/proxy-participant.module';
 import { FileModule } from './file/file.module';
 import { graphqlUploadExpress } from 'graphql-upload';
+import { OrganizationModule } from './organization/organization.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { graphqlUploadExpress } from 'graphql-upload';
     ProxyOrganizerModule,
     ProxyParticipantModule,
     FileModule,
+    OrganizationModule,
   ],
   controllers: [AppController],
   providers: [AppService],
