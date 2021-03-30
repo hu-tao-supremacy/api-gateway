@@ -1,5 +1,6 @@
 import { Field, Int, ObjectType } from "@nestjs/graphql";
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Event } from '@entities/event.entity'
 
 @ObjectType()
 @Entity()
@@ -71,4 +72,7 @@ export class Organization {
   @Field({ nullable: true })
   @Column({ nullable: true })
   profilePictureHash?: string;
+
+  @Field((_) => [Event])
+  events: Event[]
 }
