@@ -4,7 +4,7 @@ import { ProxyOrganizerService } from 'src/proxy-organizer/proxy-organizer.servi
 import { EventTag } from '@entities/event-tag.entity';
 
 @Resolver((_) => EventTag)
-export class EventResolver {
+export class EventTagResolver {
   constructor(
     private readonly proxyParticipantService: ProxyParticipantService,
     private readonly proxyOrganizerService: ProxyOrganizerService,
