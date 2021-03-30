@@ -1,3 +1,4 @@
+import { Field, Int } from "@nestjs/graphql";
 import {
   Column,
   Entity,
@@ -11,15 +12,19 @@ import { UserEvent } from "./user-event.entity";
 @Index(["userEventId", "questionId"], { unique: true })
 @Entity()
 export class Answer {
+  @Field((_) => Int)
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Field((_) => Int)
   @Column()
   userEventId: number;
 
+  @Field((_) => Int)
   @Column()
   questionId: number;
 
+  @Field()
   @Column()
   value: string;
 
