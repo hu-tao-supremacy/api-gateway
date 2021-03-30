@@ -1,5 +1,5 @@
 import { mapKeys, mapValues } from 'lodash';
-import long from 'long';
+import { isLong } from 'long';
 
 export class BaseAdapter<IF extends object, E extends object> {
   optionalFields: string[];
@@ -20,7 +20,7 @@ export class BaseAdapter<IF extends object, E extends object> {
         a = this.wrapperToOptional(value);
       }
 
-      if (long.isLong(a)) {
+      if (isLong(a)) {
         // @ts-ignore
         a = Number(a.toString());
       }
