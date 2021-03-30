@@ -19,7 +19,7 @@ export class BaseAdapter<IF extends object, E extends object> {
       }
 
       if (long.isLong(value)) {
-        value = value.toNumber();
+        value = Number(value);
       }
 
       return value;
