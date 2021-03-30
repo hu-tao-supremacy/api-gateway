@@ -14,15 +14,18 @@ export class BaseAdapter<IF extends object, E extends object> {
 
   toEntity(object: IF): E {
     return mapValues(object, (value, key) => {
+      let a = value;
+
       if (this.optionalFields.includes(key)) {
-        value = this.wrapperToOptional(value);
+        a = this.wrapperToOptional(value);
       }
 
-      if (long.isLong(value)) {
-        value = Number(value);
+      if (long.isLong(a)) {
+        // @ts-ignore
+        a = Number(a);
       }
 
-      return value;
+      return a;
     }) as E;
   }
 
