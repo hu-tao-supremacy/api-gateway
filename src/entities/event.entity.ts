@@ -35,7 +35,7 @@ export class Event {
   @Column({ nullable: true })
   locationId?: number;
 
-  @Field((_) => Location)
+  @Field((_) => Location, { nullable: true })
   @ManyToOne(() => Location)
   location?: Location;
 
