@@ -12,11 +12,11 @@ export class OrganizationResolver {
 
     @Query((_) => [Organization])
     organizations() {
-        return []
+        return this.proxyOrganizerService.getOrganizations()
     }
 
     @Query((_) => Organization)
     organization(@Args('id', { type: () => Int }) id: number) {
-        return null;
+        return this.proxyOrganizerService.getOrganizationById(id);
     }
 }
