@@ -21,6 +21,7 @@ export class BaseAdapter<IF extends object, E extends object> {
       }
 
       if (long.isLong(a)) {
+        // @ts-ignore
         a = Number(a.toString());
       }
 
