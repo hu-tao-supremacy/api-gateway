@@ -1,3 +1,5 @@
+import { OrganizationAdapter } from '@adapters/organization.adapter';
+import { Organization } from '@entities/organization.entity';
 import {
   HTS_ORGANIZER_PACKAGE_NAME,
   OrganizerServiceClient,
@@ -7,7 +9,6 @@ import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Organization } from 'src/models/organization.model';
 
 @Injectable()
 export class ProxyOrganizerService implements OnModuleInit {
@@ -26,6 +27,6 @@ export class ProxyOrganizerService implements OnModuleInit {
       .getOrganizationById({
         id: organizationId,
       })
-      .pipe(map((project) => Organization.from(project.organization)));
+      .pipe(map((project) => new OrganizationAdapter().toEntity(project.organization)));
   }
 }
