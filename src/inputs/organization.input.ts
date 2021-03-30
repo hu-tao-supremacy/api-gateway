@@ -1,4 +1,4 @@
-import { InputType } from '@nestjs/microservices';
+import { InputType } from '@nestjs/graphql';
 
 @InputType()
-export class CreateOrganizationInput {}
+export class CreateOrganizationInput { }
