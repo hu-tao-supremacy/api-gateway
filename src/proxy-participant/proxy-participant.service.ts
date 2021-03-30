@@ -1,9 +1,5 @@
 import { BoolValue } from '@google/wrappers';
 import {
-  Event as EventInput,
-  Location as LocationInput,
-} from '@internal/common/common';
-import {
   HTS_PARTICIPANT_PACKAGE_NAME,
   ParticipantServiceClient,
   PARTICIPANT_SERVICE_NAME,
@@ -11,7 +7,7 @@ import {
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { Event } from 'src/models/event.model';
 import { Location } from 'src/models/location.model';
 import { Tag } from 'src/models/tag.model';
@@ -67,7 +63,7 @@ export class ProxyParticipantService implements OnModuleInit {
   }
 
   getEventTags(eventId: number): Observable<Tag[]> {
-    return this.participantService.getTagsFromEventId({ id: eventId }).pipe(
+    return this.participantService.getTagsByEventId({ id: eventId }).pipe(
       map((response) => response.tags ?? []),
       map((tags) => tags.map((tag) => Tag.from(tag))),
     );
