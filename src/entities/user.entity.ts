@@ -1,6 +1,8 @@
 import { Gender } from "@gql/common/common";
-import { Field, Int, ObjectType } from "@nestjs/graphql";
+import { Field, Int, ObjectType, registerEnumType } from "@nestjs/graphql";
 import { PrimaryGeneratedColumn, Column, Entity, Index } from "typeorm";
+
+registerEnumType(Gender, { name: "Gender" })
 
 @ObjectType()
 @Entity()
