@@ -7,8 +7,9 @@ import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { Observable } from 'rxjs';
 import { BoolValue } from '@google/wrappers';
-import { Account } from '../models/account.model';
 import { map } from 'rxjs/operators';
+import { User } from '@entities/user.entity';
+import { UserAdapter } from '@adapters/user.adapter';
 
 @Injectable()
 export class ProxyAccountService implements OnModuleInit {
@@ -26,10 +27,10 @@ export class ProxyAccountService implements OnModuleInit {
     return this.accountService.ping({});
   }
 
-  getUserByChulaId(id: number): Observable<Account> {
+  getUserByChulaId(id: number): Observable<User> {
     return this.accountService
       .getUserByChulaId({ id })
-      .pipe(map((user) => Account.from(user)));
+      .pipe(map((user) => new UserAdapter().toEntity(user)));
   }
 
   generateAccessToken(userId: number): Observable<string> {
