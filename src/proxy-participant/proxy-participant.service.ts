@@ -12,6 +12,8 @@ import { Event } from 'src/models/event.model';
 import { Location } from 'src/models/location.model';
 import { Tag } from 'src/models/tag.model';
 import { DateTime } from 'luxon';
+import { EventDuration } from '@entities/event-duration.entity';
+import { EventDurationAdapter } from '@adapters/event-duration.adapter';
 
 @Injectable()
 export class ProxyParticipantService implements OnModuleInit {
@@ -67,5 +69,18 @@ export class ProxyParticipantService implements OnModuleInit {
       map((response) => response.tags ?? []),
       map((tags) => tags.map((tag) => Tag.from(tag))),
     );
+  }
+
+  getEventDurationsByEventId(eventId: number): Observable<EventDuration[]> {
+    return this.participantService
+      .getEventDurationByEventId({ id: eventId })
+      .pipe(
+        map((project) => project.eventDurations),
+        map((durations) =>
+          durations.map((duration) =>
+            new EventDurationAdapter().toEntity(duration),
+          ),
+        ),
+      );
   }
 }
