@@ -6,7 +6,7 @@ import {
 } from '@internal/participant/service';
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
-import { Observable } from 'rxjs';
+import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { DateTime } from 'luxon';
 import { EventDuration } from '@entities/event-duration.entity';
@@ -17,6 +17,9 @@ import { Tag } from '@entities/tag.entity';
 import { TagAdapter } from '@adapters/tag.adapter';
 import { Location } from '@entities/location.entity';
 import { LocationAdapter } from '@adapters/location.adapter';
+import { QuestionGroupType } from '@gql/common/common';
+import { QuestionGroup } from '@entities/question-group.entity';
+import { Question } from '@entities/question.entity';
 
 @Injectable()
 export class ProxyParticipantService implements OnModuleInit {
@@ -24,7 +27,7 @@ export class ProxyParticipantService implements OnModuleInit {
 
   constructor(
     @Inject(HTS_PARTICIPANT_PACKAGE_NAME) private client: ClientGrpc,
-  ) {}
+  ) { }
 
   onModuleInit() {
     this.participantService = this.client.getService<ParticipantServiceClient>(
@@ -100,5 +103,13 @@ export class ProxyParticipantService implements OnModuleInit {
           events.map((event) => new EventAdapter().toEntity(event)),
         ),
       );
+  }
+
+  getQuestionGroupsByEventId(eventId: number, type: QuestionGroupType): Observable<QuestionGroup[]> {
+    return from([])
+  }
+
+  getQuestionsByQuestionGroupId(questionGroupId: number): Observable<Question[]> {
+    return from([])
   }
 }
