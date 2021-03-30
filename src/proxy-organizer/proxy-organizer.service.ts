@@ -1,6 +1,4 @@
-import { Location } from '@internal/common/common';
 import {
-  GetByIdRequest,
   HTS_ORGANIZER_PACKAGE_NAME,
   OrganizerServiceClient,
   ORGANIZER_SERVICE_NAME,
