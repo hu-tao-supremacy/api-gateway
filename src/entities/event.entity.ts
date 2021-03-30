@@ -9,6 +9,7 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { EventDuration } from './event-duration.entity';
 import { Location } from './location.entity';
 import { Organization } from './organization.entity';
 import { QuestionGroup } from './question-group.entity';
@@ -25,6 +26,7 @@ export class Event {
   @Column()
   organizationId: number;
 
+  @Field((_) => Organization)
   @ManyToOne(() => Organization, { onDelete: 'CASCADE' })
   organization: Organization;
 
@@ -32,6 +34,7 @@ export class Event {
   @Column({ nullable: true })
   locationId?: number;
 
+  @Field((_) => Location)
   @ManyToOne(() => Location)
   location?: Location;
 
@@ -67,12 +70,19 @@ export class Event {
   @Column({ nullable: true })
   profileImageHash?: string;
 
+  @Field((_) => Int)
   @Column()
   attendeeLimit: number;
 
+  @Field({ nullable: true })
   @Column({ nullable: true })
   contact?: string;
 
+  @Field((_) => [QuestionGroup])
   @OneToMany(() => QuestionGroup, (questionGroup) => questionGroup.event)
   questionGroups: QuestionGroup[];
+
+  @Field((_) => [EventDuration])
+  @OneToMany(() => EventDuration, (duration) => duration.event)
+  durations: EventDuration[]
 }
