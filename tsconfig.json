@@ -15,7 +15,15 @@
       "@gql/*": ["src/gql/hts/*"],
       "@google/*": ["src/gql/google/protobuf/*"],
       "@internal/*": ["src/apis/hts/*"],
-      "@inputs/*": ["src/inputs/*"]
+      "@inputs/*": ["src/inputs/*"],
+      "@in-out/*": ["src/in-out/*"],
+      "@interchange-formats/*": ["src/apis/hts/*"],
+      "@entities/*": ["src/entities/*"],
+      "@adapters/*": ["src/adapters/*"],
+      "@hu-tao-supremacy:account/*": ["src/proxy-account/*"],
+      "@hu-tao-supremacy:facility/*": ["src/proxy-facility/*"],
+      "@hu-tao-supremacy:organizer/*": ["src/proxy-organizer/*"],
+      "@hu-tao-supremacy:participant/*": ["src/proxy-participant/*"]
     }
   }
 }
