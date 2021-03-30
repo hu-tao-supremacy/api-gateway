@@ -13,6 +13,7 @@ import { EventDuration } from './event-duration.entity';
 import { Location } from './location.entity';
 import { Organization } from './organization.entity';
 import { QuestionGroup } from './question-group.entity';
+import { Tag } from './tag.entity';
 
 @ObjectType()
 @Index(['organizationId', 'name'], { unique: true })
@@ -85,4 +86,7 @@ export class Event {
   @Field((_) => [EventDuration])
   @OneToMany(() => EventDuration, (duration) => duration.event)
   durations: EventDuration[]
+
+  @Field((_) => [Tag])
+  tags: Tag[]
 }
