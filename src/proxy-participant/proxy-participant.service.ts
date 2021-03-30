@@ -39,7 +39,9 @@ export class ProxyParticipantService implements OnModuleInit {
   getAllEvents(): Observable<Event[]> {
     return this.participantService.getAllEvents({}).pipe(
       map((data) => data.event),
-      map((events) => events.map((event) => new EventAdapter().toEntity(event)))
+      map((events) =>
+        events.map((event) => new EventAdapter().toEntity(event)),
+      ),
     );
   }
 
@@ -57,7 +59,9 @@ export class ProxyParticipantService implements OnModuleInit {
       })
       .pipe(
         map((project) => project.event),
-        map((events) => events.map((event) => new EventAdapter().toEntity(event))),
+        map((events) =>
+          events.map((event) => new EventAdapter().toEntity(event)),
+        ),
       );
   }
 
@@ -70,7 +74,7 @@ export class ProxyParticipantService implements OnModuleInit {
   getEventTags(eventId: number): Observable<Tag[]> {
     return this.participantService.getTagsByEventId({ id: eventId }).pipe(
       map((response) => response.tags ?? []),
-      map((tags) => tags.map((tag) => new TagAdapter().toEntity(tag)))
+      map((tags) => tags.map((tag) => new TagAdapter().toEntity(tag))),
     );
   }
 
@@ -83,6 +87,17 @@ export class ProxyParticipantService implements OnModuleInit {
           durations.map((duration) =>
             new EventDurationAdapter().toEntity(duration),
           ),
+        ),
+      );
+  }
+
+  getEventsByOrganizationId(organizationId: number): Observable<Event[]> {
+    return this.participantService
+      .getEventsByOrganizationId({ id: organizationId })
+      .pipe(
+        map((project) => project.event),
+        map((events) =>
+          events.map((event) => new EventAdapter().toEntity(event)),
         ),
       );
   }
