@@ -13,6 +13,7 @@ import { ProxyParticipantModule } from './proxy-participant/proxy-participant.mo
 import { FileModule } from './file/file.module';
 import { graphqlUploadExpress } from 'graphql-upload';
 import { OrganizationModule } from './organization/organization.module';
+import { AuthMiddleware } from './middlewares/auth.middleware';
 
 @Module({
   imports: [
@@ -39,5 +40,6 @@ import { OrganizationModule } from './organization/organization.module';
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(graphqlUploadExpress()).forRoutes('graphql');
+    consumer.apply(AuthMiddleware)
   }
 }
