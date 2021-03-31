@@ -15,7 +15,7 @@ import { Organization } from './organization.entity';
 import { QuestionGroup } from './question-group.entity';
 import { Tag } from './tag.entity';
 
-@InputType()
+@InputType('EventInput')
 @ObjectType()
 @Index(['organizationId', 'name'], { unique: true })
 @Entity()

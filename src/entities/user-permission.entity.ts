@@ -8,7 +8,7 @@ import {
 } from "typeorm";
 import { UserOrganization } from "./user-organization.entity";
 
-@InputType()
+@InputType('UserPermissionInput')
 @ObjectType()
 @Index(["userOrganizationId", "permissionName"], { unique: true })
 @Entity()

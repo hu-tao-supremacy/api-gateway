@@ -9,7 +9,7 @@ import {
 import { Event } from "./event.entity";
 import { Tag } from "./tag.entity";
 
-@InputType()
+@InputType('EventTagInput')
 @ObjectType()
 @Index(["eventId", "tagId"], { unique: true })
 @Entity()

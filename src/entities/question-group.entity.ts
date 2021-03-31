@@ -13,7 +13,7 @@ import { Question } from "./question.entity";
 
 registerEnumType(QuestionGroupType, { name: "QuestionGroupType" })
 
-@InputType()
+@InputType('QuestionGroupInput')
 @ObjectType()
 @Index(["eventId", "type", "seq"], { unique: true })
 @Entity()

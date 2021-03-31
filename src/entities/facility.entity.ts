@@ -2,7 +2,7 @@ import { Field, Float, InputType, Int, ObjectType } from "@nestjs/graphql";
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Organization } from "./organization.entity";
 
-@InputType()
+@InputType('FacilityInput')
 @ObjectType()
 @Entity()
 export class Facility {

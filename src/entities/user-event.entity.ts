@@ -10,7 +10,7 @@ import {
 import { Event } from "./event.entity";
 import { User } from "./user.entity";
 
-@InputType()
+@InputType('UserEventInput')
 @ObjectType()
 @Index(["userId", "eventId"], { unique: true })
 @Index(["eventId", "ticket"], { unique: true })

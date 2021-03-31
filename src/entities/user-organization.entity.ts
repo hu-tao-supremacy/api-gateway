@@ -9,7 +9,7 @@ import {
 import { Organization } from "./organization.entity";
 import { User } from "./user.entity";
 
-@InputType()
+@InputType('UserOrganizationInput')
 @ObjectType()
 @Index(["userId", "organizationId"], { unique: true })
 @Entity()

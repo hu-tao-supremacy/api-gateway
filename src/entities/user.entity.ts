@@ -4,7 +4,7 @@ import { PrimaryGeneratedColumn, Column, Entity, Index } from "typeorm";
 
 registerEnumType(Gender, { name: "Gender" })
 
-@InputType()
+@InputType('UserInput')
 @ObjectType()
 @Entity()
 export class User {

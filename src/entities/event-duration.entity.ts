@@ -8,7 +8,7 @@ import {
 } from "typeorm";
 import { Event } from "./event.entity";
 
-@InputType()
+@InputType('EventDurationInput')
 @ObjectType()
 @Index(["eventId", "start", "finish"], { unique: true })
 @Entity()

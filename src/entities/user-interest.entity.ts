@@ -9,7 +9,7 @@ import {
 import { Tag } from "./tag.entity";
 import { User } from "./user.entity";
 
-@InputType()
+@InputType('UserInterestInput')
 @ObjectType()
 @Index(["userId", "tagId"], { unique: true })
 @Entity()

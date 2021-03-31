@@ -6,7 +6,7 @@ import { Facility } from "./facility.entity";
 
 registerEnumType(Status, { name: "Status" })
 
-@InputType()
+@InputType('FacilityRequestInput')
 @ObjectType()
 @Entity()
 export class FacilityRequest {

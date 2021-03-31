@@ -1,7 +1,7 @@
 import { Field, InputType, Int, ObjectType } from "@nestjs/graphql";
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-@InputType()
+@InputType('LocationInput')
 @ObjectType()
 @Entity()
 export class Location {

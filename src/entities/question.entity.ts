@@ -11,7 +11,7 @@ import { QuestionGroup } from "./question-group.entity";
 
 registerEnumType(AnswerType, { name: "AnswerType" })
 
-@InputType()
+@InputType('QuestionInput')
 @ObjectType()
 @Index(["questionGroupId", "seq"], { unique: true })
 @Entity()

@@ -9,7 +9,7 @@ import {
 import { Question } from "./question.entity";
 import { UserEvent } from "./user-event.entity";
 
-@InputType()
+@InputType('AnswerInput')
 @ObjectType()
 @Index(["userEventId", "questionId"], { unique: true })
 @Entity()
