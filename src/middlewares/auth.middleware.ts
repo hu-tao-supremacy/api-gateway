@@ -26,12 +26,9 @@ export class AuthMiddleware implements NestMiddleware {
         console.log(isAuthenticated)
         if (isAuthenticated) {
           const encodedPayload = accessToken.split('.')[1]
-          console.log(encodedPayload)
           const decodedPayload = decode(encodedPayload)
           const payload = JSON.parse(decodedPayload) as AccessTokenPayload
-          console.log(decodedPayload)
           const user = await this.proxyAccountService.getUserById(payload.userId).toPromise();
-          console.log(user)
           req.user = user
         }
       }
