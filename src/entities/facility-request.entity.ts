@@ -1,4 +1,4 @@
-import { Field, Int, ObjectType, registerEnumType } from "@nestjs/graphql";
+import { Field, InputType, Int, ObjectType, registerEnumType } from "@nestjs/graphql";
 import { Status } from "@gql/common/common";
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Event } from "./event.entity";
@@ -6,6 +6,7 @@ import { Facility } from "./facility.entity";
 
 registerEnumType(Status, { name: "Status" })
 
+@InputType()
 @ObjectType()
 @Entity()
 export class FacilityRequest {

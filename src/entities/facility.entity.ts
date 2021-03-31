@@ -1,7 +1,8 @@
-import { Field, Float, Int, ObjectType } from "@nestjs/graphql";
+import { Field, Float, InputType, Int, ObjectType } from "@nestjs/graphql";
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Organization } from "./organization.entity";
 
+@InputType()
 @ObjectType()
 @Entity()
 export class Facility {
@@ -29,11 +30,11 @@ export class Facility {
   @Column()
   longitude: number;
 
-  @Field() 
+  @Field()
   @Column("json")
   operatingHours: string;
 
-  @Field() 
+  @Field()
   @Column()
   description: string;
 }

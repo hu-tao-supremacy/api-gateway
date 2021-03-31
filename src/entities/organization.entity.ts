@@ -1,7 +1,8 @@
-import { Field, Int, ObjectType } from "@nestjs/graphql";
+import { Field, InputType, Int, ObjectType } from "@nestjs/graphql";
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 import { Event } from '@entities/event.entity'
 
+@InputType()
 @ObjectType()
 @Entity()
 export class Organization {

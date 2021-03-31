@@ -1,5 +1,5 @@
 import { Status } from "@gql/common/common";
-import { Field, Int, ObjectType } from "@nestjs/graphql";
+import { Field, InputType, Int, ObjectType } from "@nestjs/graphql";
 import {
   Column,
   Entity,
@@ -10,6 +10,7 @@ import {
 import { Event } from "./event.entity";
 import { User } from "./user.entity";
 
+@InputType()
 @ObjectType()
 @Index(["userId", "eventId"], { unique: true })
 @Index(["eventId", "ticket"], { unique: true })
@@ -27,7 +28,7 @@ export class UserEvent {
   @ManyToOne(() => User, { onDelete: "CASCADE" })
   user: User;
 
-  @Field(_ => Int) 
+  @Field(_ => Int)
   @Column()
   eventId: number;
 
@@ -35,7 +36,7 @@ export class UserEvent {
   @ManyToOne(() => Event, { onDelete: "CASCADE" })
   event: Event;
 
-  @Field(_ => Int, { nullable: true }) 
+  @Field(_ => Int, { nullable: true })
   @Column({ nullable: true })
   rating?: number;
 

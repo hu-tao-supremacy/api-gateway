@@ -1,4 +1,4 @@
-import { Field, Int, ObjectType, registerEnumType } from "@nestjs/graphql";
+import { Field, InputType, Int, ObjectType, registerEnumType } from "@nestjs/graphql";
 import { QuestionGroupType } from "@gql/common/common";
 import {
   Column,
@@ -13,6 +13,7 @@ import { Question } from "./question.entity";
 
 registerEnumType(QuestionGroupType, { name: "QuestionGroupType" })
 
+@InputType()
 @ObjectType()
 @Index(["eventId", "type", "seq"], { unique: true })
 @Entity()

@@ -1,4 +1,4 @@
-import { Field, Int, ObjectType } from "@nestjs/graphql";
+import { Field, InputType, Int, ObjectType } from "@nestjs/graphql";
 import {
   Column,
   Entity,
@@ -8,6 +8,7 @@ import {
 } from "typeorm";
 import { UserOrganization } from "./user-organization.entity";
 
+@InputType()
 @ObjectType()
 @Index(["userOrganizationId", "permissionName"], { unique: true })
 @Entity()
