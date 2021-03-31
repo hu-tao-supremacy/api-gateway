@@ -20,6 +20,7 @@ services:
       - POSTGRES_PORT=5432
       - GRPC_HOST=localhost
       - GRPC_PORT=50055
+      - JWT_SECRET=hu-tao-mains
   hts-svc-participant:
     image: ghcr.io/hu-tao-supremacy/participant-prod:latest
     ports:
