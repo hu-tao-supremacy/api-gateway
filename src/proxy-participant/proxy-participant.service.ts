@@ -68,6 +68,10 @@ export class ProxyParticipantService implements OnModuleInit {
       );
   }
 
+  getEventById(id: number): Observable<Event> {
+    return this.participantService.getEventById({ eventId: id }).pipe(map(event => new EventAdapter().toEntity(event)))
+  }
+
   getLocationById(locationId: number): Observable<Location> {
     return this.participantService
       .getLocationById({ id: locationId })
