@@ -17,9 +17,7 @@ export class ProxyOrganizerService implements OnModuleInit {
   constructor(@Inject(HTS_ORGANIZER_PACKAGE_NAME) private client: ClientGrpc) {}
 
   onModuleInit() {
-    this.organizerService = this.client.getService<OrganizerServiceClient>(
-      ORGANIZER_SERVICE_NAME,
-    );
+    this.organizerService = this.client.getService<OrganizerServiceClient>(ORGANIZER_SERVICE_NAME);
   }
 
   getOrganizationById(organizationId: number): Observable<Organization> {
@@ -27,11 +25,7 @@ export class ProxyOrganizerService implements OnModuleInit {
       .getOrganizationById({
         id: organizationId,
       })
-      .pipe(
-        map((project) =>
-          new OrganizationAdapter().toEntity(project.organization),
-        ),
-      );
+      .pipe(map((project) => new OrganizationAdapter().toEntity(project.organization)));
   }
 
   getOrganizations(): Observable<Organization[]> {
@@ -39,5 +33,11 @@ export class ProxyOrganizerService implements OnModuleInit {
       map((project) => project.organizations),
       map((orgs) => orgs.map((org) => new OrganizationAdapter().toEntity(org))),
     );
+  }
+
+  createOrganization(userId: number, organization: Organization): Observable<Boolean> {
+    return this.organizerService
+      .createOrganization({ userId, organization: new OrganizationAdapter().toInterchangeFormat(organization) })
+      .pipe(map((_) => true));
   }
 }
