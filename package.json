@@ -37,6 +37,7 @@
     "graphql-tools": "^7.0.4",
     "graphql-upload": "^11.0.0",
     "grpc": "^1.24.5",
+    "js-base64": "^3.6.0",
     "lodash": "^4.17.21",
     "long": "^4.0.0",
     "luxon": "^1.26.0",
