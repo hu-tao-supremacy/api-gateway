@@ -87,7 +87,7 @@ export class ProxyParticipantService implements OnModuleInit {
 
   getEventDurationsByEventId(eventId: number): Observable<EventDuration[]> {
     return this.participantService
-      .getEventDurationByEventId({ id: eventId })
+      .getEventDurationsByEventId({ id: eventId })
       .pipe(
         map((project) => project.eventDurations),
         map((durations) =>
