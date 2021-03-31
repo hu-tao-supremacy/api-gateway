@@ -3,7 +3,7 @@ import { ProxyAccountService } from '@hu-tao-supremacy:account/proxy-account.ser
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { AuthService } from 'src/auth/auth.service';
 import { Request } from 'express'
-import Base64 from 'crypto-js/enc-base64'
+import { decode } from 'js-base64'
 import { AccessTokenPayload } from '@gql/account/service';
 
 declare global {
@@ -23,10 +23,15 @@ export class AuthMiddleware implements NestMiddleware {
       const accessToken = req.headers.authorization?.split('Bearer ')[1];
       if (accessToken) {
         const isAuthenticated = await this.authService.isAuthenticated(accessToken).toPromise();
+        console.log(isAuthenticated)
         if (isAuthenticated) {
           const encodedPayload = accessToken.split('.')[1]
-          const payload = JSON.parse(Base64.parse(encodedPayload).toString()) as AccessTokenPayload
+          console.log(encodedPayload)
+          const decodedPayload = decode(encodedPayload)
+          const payload = JSON.parse(decodedPayload) as AccessTokenPayload
+          console.log(decodedPayload)
           const user = await this.proxyAccountService.getUserById(payload.userId).toPromise();
+          console.log(user)
           req.user = user
         }
       }
