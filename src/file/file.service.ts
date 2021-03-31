@@ -3,7 +3,7 @@ import { Storage } from '@google-cloud/storage';
 import { Readable, Writable } from 'stream';
 import { DateTime } from 'luxon';
 import { from, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 
 @Injectable()
 export class FileService {
@@ -14,10 +14,7 @@ export class FileService {
   async upload(filePath: string, readableStream: Readable) {
     const file = this.cloudStorage.file(filePath);
     await new Promise((resolve, reject) =>
-      readableStream
-        .pipe(file.createWriteStream())
-        .on('error', reject)
-        .on('finish', resolve),
+      readableStream.pipe(file.createWriteStream()).on('error', reject).on('finish', resolve),
     );
   }
 
@@ -29,11 +26,22 @@ export class FileService {
   // Generate a URL that allows temporary access to download file in GCS.
   getSignedUrl(file: string): Observable<string> {
     // gsutil URI.
-    const now = DateTime.now()
-    return from(this.cloudStorage.file(file).getSignedUrl({
-      action: 'read',
-      expires: now.plus({ day: 1 }).toJSDate(),
-      accessibleAt: now.minus({ minutes: 30 }).toJSDate()
-    })).pipe(map(data => data[0]))
+    const now = DateTime.now();
+    const object = this.cloudStorage.file(file);
+
+    return from(object.isPublic()).pipe(
+      map((isPublicResponse) => isPublicResponse[0]),
+      switchMap((isPublic) => {
+        return isPublic
+          ? from(object.publicUrl())
+          : from(
+            object.getSignedUrl({
+              action: 'read',
+              expires: now.plus({ day: 1 }).toJSDate(),
+              accessibleAt: now.minus({ minutes: 30 }).toJSDate(),
+            }),
+          ).pipe(map((data) => data[0]));
+      }),
+    );
   }
 }
