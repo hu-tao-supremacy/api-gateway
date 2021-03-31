@@ -6,7 +6,7 @@ export class OrganizationAdapter extends BaseAdapter<
   OrganizationIF,
   Organization
 > {
-  optionalFields: [
+  optionalFields = [
     'abbreviation',
     'advisor',
     'associatedFaculty',
