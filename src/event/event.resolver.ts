@@ -1,4 +1,4 @@
-import { Field, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
+import { Args, Field, Int, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { ProxyParticipantService } from 'src/proxy-participant/proxy-participant.service';
 import { Event } from '@entities/event.entity';
 import { EventService } from './event.service';
@@ -12,7 +12,7 @@ export class EventResolver {
     private readonly proxyParticipantService: ProxyParticipantService,
     private readonly proxyOrganizerService: ProxyOrganizerService,
     private readonly eventService: EventService,
-  ) {}
+  ) { }
 
   @Query((_) => [Event])
   async upcomingEvents() {
@@ -20,6 +20,11 @@ export class EventResolver {
       DateTime.now().startOf('day').toISO(),
       DateTime.now().plus({ days: 14 }).endOf('day').toISO(),
     );
+  }
+
+  @Query((_) => Event)
+  event(@Args('id', { type: () => Int }) id: number) {
+    return this.proxyParticipantService.getEventById(id)
   }
 
   @ResolveField()
