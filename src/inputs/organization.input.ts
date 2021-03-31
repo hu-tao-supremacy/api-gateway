@@ -4,6 +4,6 @@ import { FileUpload, GraphQLUpload } from 'graphql-upload'
 
 @InputType()
 export class CreateOrganizationInput extends OmitType(Organization, ['id', 'events', 'profilePictureUrl', 'profilePictureHash'] as const) {
-    @Field((_) => GraphQLUpload)
+    @Field((_) => GraphQLUpload, { nullable: true })
     profilePicture: Promise<FileUpload>;
 }
