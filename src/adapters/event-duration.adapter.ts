@@ -6,5 +6,5 @@ export class EventDurationAdapter extends BaseAdapter<
   EventDurationIF,
   EventDuration
 > {
-  optionalFields: [];
+  optionalFields = [];
 }
