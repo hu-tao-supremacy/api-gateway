@@ -40,6 +40,6 @@ import { AuthMiddleware } from './middlewares/auth.middleware';
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(graphqlUploadExpress()).forRoutes('graphql');
-    consumer.apply(AuthMiddleware)
+    consumer.apply(AuthMiddleware).forRoutes('graphql');
   }
 }
