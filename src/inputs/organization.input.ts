@@ -1,5 +1,9 @@
 import { Organization } from '@entities/organization.entity';
-import { InputType } from '@nestjs/graphql';
+import { Field, InputType, OmitType } from '@nestjs/graphql';
+import { FileUpload, GraphQLUpload } from 'graphql-upload'
 
 @InputType()
-export class CreateOrganizationInput extends Organization { }
+export class CreateOrganizationInput extends OmitType(Organization, ['id', 'events', 'profilePictureUrl', 'profilePictureHash'] as const) {
+    @Field((_) => GraphQLUpload)
+    profilePicture: Promise<FileUpload>;
+}
