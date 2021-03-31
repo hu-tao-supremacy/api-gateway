@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { Storage } from '@google-cloud/storage';
 import { Readable, Writable } from 'stream';
+import { DateTime } from 'luxon';
+import { from, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class FileService {
@@ -18,8 +21,19 @@ export class FileService {
     );
   }
 
-  createWriteStream(filePath: string): Writable {
+  createWriteStream(filePath: string, publicRead: boolean = false): Writable {
     const file = this.cloudStorage.file(filePath);
-    return file.createWriteStream({ resumable: false });
+    return file.createWriteStream({ resumable: false, public: publicRead });
+  }
+
+  // Generate a URL that allows temporary access to download file in GCS.
+  getSignedUrl(file: string): Observable<string> {
+    // gsutil URI.
+    const now = DateTime.now()
+    return from(this.cloudStorage.file(file).getSignedUrl({
+      action: 'read',
+      expires: now.plus({ day: 1 }).toJSDate(),
+      accessibleAt: now.minus({ minutes: 30 }).toJSDate()
+    })).pipe(map(data => data[0]))
   }
 }
