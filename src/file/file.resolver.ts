@@ -2,7 +2,7 @@ import { User } from '@entities/user.entity';
 import { FileUploadInput } from '@inputs/file.input';
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
-import { from, Observable } from 'rxjs';
+import { nanoid } from 'nanoid'
 import { CurrentUser } from 'src/decorators/user.decorator';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { FileService } from './file.service';
@@ -16,10 +16,10 @@ export class FileResolver {
   async upload(@CurrentUser() currentUser: User, @Args('input') input: FileUploadInput): Promise<boolean> {
     console.log(currentUser.id)
     const { filename, createReadStream } = await input.file;
-    console.log(filename);
+    const ext = filename.split('.').reverse()[0]
     return new Promise<boolean>(async (resolve, reject) =>
       createReadStream()
-        .pipe(this.fileService.createWriteStream(filename))
+        .pipe(this.fileService.createWriteStream(nanoid(16) + `.${ext}`))
         .on('finish', () => resolve(true))
         .on('error', () => reject(false)),
     );
