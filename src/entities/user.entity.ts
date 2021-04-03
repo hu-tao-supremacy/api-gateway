@@ -1,14 +1,14 @@
-import { Gender } from "@gql/common/common";
-import { Field, InputType, Int, ObjectType, registerEnumType } from "@nestjs/graphql";
-import { PrimaryGeneratedColumn, Column, Entity, Index } from "typeorm";
+import { Gender } from '@gql/common/common';
+import { Field, InputType, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
+import { PrimaryGeneratedColumn, Column, Entity, Index } from 'typeorm';
 
-registerEnumType(Gender, { name: "Gender" })
+registerEnumType(Gender, { name: 'Gender' });
 
 @InputType('UserInput')
 @ObjectType()
 @Entity()
 export class User {
-  @Field(_ => Int)
+  @Field((_) => Int)
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -29,7 +29,7 @@ export class User {
   nickname?: string;
 
   @Field({ nullable: true })
-  @Index({ unique: true, where: "chula_id IS NOT NULL" })
+  @Index({ unique: true, where: 'chula_id IS NOT NULL' })
   @Column({ nullable: true })
   chulaId?: string;
 
@@ -41,11 +41,15 @@ export class User {
   @Column({ nullable: true })
   profilePictureUrl?: string;
 
-  @Field(_ => Boolean)
+  @Field((_) => Boolean)
   @Column()
   isChulaStudent: boolean;
 
-  @Field(_ => Gender)
-  @Column("enum", { enum: ["M", "F", "NS"] })
+  @Field((_) => Boolean)
+  @Column()
+  didSetup: boolean;
+
+  @Field((_) => Gender)
+  @Column('enum', { enum: ['M', 'F', 'NS'] })
   gender: string;
 }
