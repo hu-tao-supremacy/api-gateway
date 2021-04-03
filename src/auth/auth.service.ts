@@ -1,6 +1,6 @@
-import { HttpService, Injectable } from '@nestjs/common';
+import { HttpService, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { catchError, map, switchMap } from 'rxjs/operators';
 import { ProxyAccountService } from 'src/proxy-account/proxy-account.service';
 import { AuthenticateOutput } from './auth.model';
 
@@ -9,7 +9,7 @@ export class AuthService {
   constructor(
     private readonly httpService: HttpService,
     private readonly proxyAccountService: ProxyAccountService,
-  ) {}
+  ) { }
 
   serviceValidation(ticket: string): Observable<ChulaSSOSuccessResponse> {
     return this.httpService
@@ -27,16 +27,24 @@ export class AuthService {
       .pipe(map((project) => project.data));
   }
 
-  authenticate(ticket: string): Observable<AuthenticateOutput> {
-    return this.serviceValidation(ticket).pipe(
-      switchMap((project) =>
-        this.proxyAccountService.getUserByChulaId(Number(project.ouid)),
-      ),
-      switchMap((account) =>
-        this.proxyAccountService.generateAccessToken(account.id),
-      ),
-      map((accessToken) => ({ accessToken })),
-    );
+  async authenticate(ticket: string): Promise<AuthenticateOutput> {
+    const serviceAccount = await this.serviceValidation(ticket).toPromise();
+
+    if (serviceAccount) {
+      try {
+        const user = await this.proxyAccountService.getUserByChulaId(Number(serviceAccount.ouid)).pipe(catchError(error => {
+          console.log(error)
+          const firstName = serviceAccount.gecos.split(' ')[0]
+          const lastName = serviceAccount.gecos.split(' ')[1]
+          return this.proxyAccountService.createUser(firstName, lastName, serviceAccount.ouid)
+        })).toPromise()
+        const accessToken = await this.proxyAccountService.generateAccessToken(user.id).toPromise();
+        return { accessToken }
+      } catch (e) {
+        console.log(e)
+        throw new InternalServerErrorException;
+      }
+    }
   }
 
   isAuthenticated(accessToken: string): Observable<boolean> {
