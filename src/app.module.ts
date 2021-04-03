@@ -14,6 +14,7 @@ import { FileModule } from './file/file.module';
 import { graphqlUploadExpress } from 'graphql-upload';
 import { OrganizationModule } from './organization/organization.module';
 import { AuthMiddleware } from './middlewares/auth.middleware';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { AuthMiddleware } from './middlewares/auth.middleware';
     ProxyParticipantModule,
     FileModule,
     OrganizationModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
