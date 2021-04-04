@@ -25,7 +25,7 @@ export class ProxyOrganizerService implements OnModuleInit {
       .getOrganizationById({
         id: organizationId,
       })
-      .pipe(map((project) => new OrganizationAdapter().toEntity(project.organization)));
+      .pipe(map((org) => new OrganizationAdapter().toEntity(org)));
   }
 
   getOrganizations(): Observable<Organization[]> {
