@@ -1,5 +1,5 @@
-import { Status } from "@gql/common/common";
-import { Field, InputType, Int, ObjectType } from "@nestjs/graphql";
+import { UserEvent_Status as Status } from "@gql/common/common";
+import { Field, InputType, Int, ObjectType, registerEnumType } from "@nestjs/graphql";
 import {
   Column,
   Entity,
@@ -9,6 +9,8 @@ import {
 } from "typeorm";
 import { Event } from "./event.entity";
 import { User } from "./user.entity";
+
+registerEnumType(Status, { name: "UserEventStatus" })
 
 @InputType('UserEventInput')
 @ObjectType()
