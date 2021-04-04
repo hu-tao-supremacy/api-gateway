@@ -1,4 +1,4 @@
-import { HttpService, Injectable, InternalServerErrorException } from '@nestjs/common';
+import { HttpService, Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { ProxyAccountService } from 'src/proxy-account/proxy-account.service';
@@ -42,9 +42,11 @@ export class AuthService {
         return { accessToken }
       } catch (e) {
         console.log(e)
-        throw new InternalServerErrorException;
+        throw new InternalServerErrorException();
       }
     }
+
+    throw new UnauthorizedException()
   }
 
   isAuthenticated(accessToken: string): Observable<boolean> {
