@@ -48,4 +48,10 @@ export class ProxyAccountService implements OnModuleInit {
       .createUser({ firstName, lastName, chulaId, email, isChulaStudent })
       .pipe(map((user) => new UserAdapter().toEntity(user)));
   }
+
+  updateAccountInfo(user: User): Observable<User> {
+    return this.accountService
+      .updateAccountInfo(new UserAdapter().toInterchangeFormat(user))
+      .pipe(map((project) => new UserAdapter().toEntity(project)));
+  }
 }
