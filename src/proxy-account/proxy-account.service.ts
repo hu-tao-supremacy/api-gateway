@@ -21,7 +21,7 @@ export class ProxyAccountService implements OnModuleInit {
     return this.accountService.ping({});
   }
 
-  getUserByChulaId(id: number): Observable<User> {
+  getUserByChulaId(id: string): Observable<User> {
     return this.accountService.getUserByChulaId({ id }).pipe(map((user) => new UserAdapter().toEntity(user)));
   }
 
@@ -37,9 +37,15 @@ export class ProxyAccountService implements OnModuleInit {
     return this.accountService.isAuthenticated({ accessToken }).pipe(map((project) => project.value));
   }
 
-  createUser(firstName: string, lastName: string, chulaId: string): Observable<User> {
+  createUser(
+    firstName: string,
+    lastName: string,
+    chulaId: string,
+    email: string,
+    isChulaStudent: boolean,
+  ): Observable<User> {
     return this.accountService
-      .createUser({ firstName, lastName, chulaId })
+      .createUser({ firstName, lastName, chulaId, email, isChulaStudent })
       .pipe(map((user) => new UserAdapter().toEntity(user)));
   }
 }
