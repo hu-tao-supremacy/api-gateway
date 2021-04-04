@@ -22,11 +22,7 @@ export class UserResolver {
   updateUser(@CurrentUser() currentUser: User, @Args('input') input: UpdateUserInput) {
     const user = new User()
     merge(user, input)
-
-    if (user.id !== currentUser.id) {
-      throw new ForbiddenException();
-    }
-
+    user.id = currentUser.id
     return this.proxyAccountService.updateAccountInfo(user)
   }
 }
