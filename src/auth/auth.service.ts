@@ -29,6 +29,7 @@ export class AuthService {
 
   async authenticate(ticket: string): Promise<AuthenticateOutput> {
     const serviceAccount = await this.serviceValidation(ticket).toPromise();
+    console.log(serviceAccount)
 
     if (serviceAccount) {
       try {
