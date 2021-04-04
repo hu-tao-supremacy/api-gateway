@@ -8,9 +8,9 @@ import { AuthenticateOutput } from './auth.model';
 export class AuthService {
   constructor(private readonly httpService: HttpService, private readonly proxyAccountService: ProxyAccountService) {}
 
-  serviceValidation(ticket: string): Observable<ChulaSSOSuccessResponse> {
+  serviceValidation(ticket: string): Observable<ChulaSSOServiceAccount> {
     return this.httpService
-      .post<ChulaSSOSuccessResponse>('https://account.it.chula.ac.th/serviceValidation', null, {
+      .post<ChulaSSOServiceAccount>('https://account.it.chula.ac.th/serviceValidation', null, {
         headers: {
           DeeAppId: process.env.CHULA_SSO_APP_ID,
           DeeAppSecret: process.env.CHULA_SSO_APP_SECRET,
@@ -25,27 +25,33 @@ export class AuthService {
     console.log(serviceAccount);
 
     if (serviceAccount.uid !== '') {
-      try {
-        const user = await this.proxyAccountService
-          .getUserByChulaId(Number(serviceAccount.ouid))
-          .pipe(
-            catchError((error) => {
-              console.log(error);
-              const firstName = serviceAccount.firstname;
-              const lastName = serviceAccount.lastname;
-              return this.proxyAccountService.createUser(firstName, lastName, serviceAccount.ouid);
-            }),
-          )
-          .toPromise();
-        const accessToken = await this.proxyAccountService.generateAccessToken(user.id).toPromise();
-        return { accessToken };
-      } catch (e) {
-        console.log(e);
-        throw new InternalServerErrorException();
-      }
+      await this.signInWithServiceAccount(serviceAccount);
     }
 
     throw new UnauthorizedException();
+  }
+
+  async signInWithServiceAccount(serviceAccount: ChulaSSOServiceAccount) {
+    try {
+      const user = await this.proxyAccountService
+        .getUserByChulaId(serviceAccount.ouid)
+        .pipe(
+          catchError((error) => {
+            console.log(error);
+            const firstName = serviceAccount.firstname;
+            const lastName = serviceAccount.lastname;
+            const email = serviceAccount.email;
+            const isChulaStudent = serviceAccount.roles.includes('student');
+            return this.proxyAccountService.createUser(firstName, lastName, serviceAccount.ouid, email, isChulaStudent);
+          }),
+        )
+        .toPromise();
+      const accessToken = await this.proxyAccountService.generateAccessToken(user.id).toPromise();
+      return { accessToken };
+    } catch (e) {
+      console.log(e);
+      throw new InternalServerErrorException();
+    }
   }
 
   isAuthenticated(accessToken: string): Observable<boolean> {
@@ -53,7 +59,7 @@ export class AuthService {
   }
 }
 
-interface ChulaSSOSuccessResponse {
+interface ChulaSSOServiceAccount {
   uid: string;
   username: string;
   gecos: string;
