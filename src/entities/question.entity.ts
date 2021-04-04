@@ -8,8 +8,10 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { QuestionGroup } from "./question-group.entity";
+import { pick } from "lodash";
 
-registerEnumType(AnswerType, { name: "AnswerType" })
+const PickedAnswerType = pick(AnswerType, ["SCALE", "TEXT"])
+registerEnumType(PickedAnswerType, { name: "AnswerType" })
 
 @InputType('QuestionInput')
 @ObjectType()
@@ -31,7 +33,7 @@ export class Question {
   @Column()
   seq: number;
 
-  @Field(_ => AnswerType)
+  @Field(_ => PickedAnswerType)
   @Column("enum", { enum: ["SCALE", "TEXT"] })
   answerType: string;
 

@@ -10,8 +10,10 @@ import {
 } from "typeorm";
 import { Event } from "./event.entity";
 import { Question } from "./question.entity";
+import { pick } from "lodash";
 
-registerEnumType(QuestionGroupType, { name: "QuestionGroupType" })
+const PickedQuestionGroupType = pick(QuestionGroupType, ["PRE_EVENT", "POST_EVENT"])
+registerEnumType(PickedQuestionGroupType, { name: "QuestionGroupType" })
 
 @InputType('QuestionGroupInput')
 @ObjectType()
@@ -30,7 +32,7 @@ export class QuestionGroup {
   @ManyToOne(() => Event, { onDelete: "CASCADE" })
   event: Event;
 
-  @Field(_ => QuestionGroupType)
+  @Field(_ => PickedQuestionGroupType)
   @Column("enum", { enum: ["PRE_EVENT", "POST_EVENT"] })
   type: string;
 

@@ -1,8 +1,10 @@
 import { Gender } from '@gql/common/common';
 import { Field, InputType, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
+import { pick } from 'lodash';
 import { PrimaryGeneratedColumn, Column, Entity, Index } from 'typeorm';
 
-registerEnumType(Gender, { name: 'Gender' });
+const PickedGender = pick(Gender, ['M', 'F', 'NS'])
+registerEnumType(PickedGender, { name: 'Gender' });
 
 @InputType('UserInput')
 @ObjectType()
@@ -49,7 +51,7 @@ export class User {
   @Column()
   didSetup: boolean;
 
-  @Field((_) => Gender)
+  @Field((_) => PickedGender)
   @Column('enum', { enum: ['M', 'F', 'NS'] })
   gender: string;
 }
