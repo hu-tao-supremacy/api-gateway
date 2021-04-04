@@ -25,13 +25,13 @@ export class AuthService {
     console.log(serviceAccount);
 
     if (serviceAccount.uid !== '') {
-      await this.signInWithServiceAccount(serviceAccount);
+      return this.signInWithServiceAccount(serviceAccount);
     }
 
     throw new UnauthorizedException();
   }
 
-  async signInWithServiceAccount(serviceAccount: ChulaSSOServiceAccount) {
+  async signInWithServiceAccount(serviceAccount: ChulaSSOServiceAccount): Promise<AuthenticateOutput> {
     try {
       const user = await this.proxyAccountService
         .getUserByChulaId(serviceAccount.ouid)
