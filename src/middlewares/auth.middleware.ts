@@ -23,7 +23,6 @@ export class AuthMiddleware implements NestMiddleware {
       const accessToken = req.headers.authorization?.split('Bearer ')[1];
       if (accessToken) {
         const isAuthenticated = await this.authService.isAuthenticated(accessToken).toPromise();
-        console.log(isAuthenticated)
         if (isAuthenticated) {
           const encodedPayload = accessToken.split('.')[1]
           const decodedPayload = decode(encodedPayload)
