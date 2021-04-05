@@ -5,14 +5,14 @@ import {
   HTS_FACILITY_PACKAGE_NAME,
 } from '@internal/facility/service';
 import { ClientGrpc } from '@nestjs/microservices';
-import { Result } from '@internal/common/common';
 import { Observable } from 'rxjs';
+import { BoolValue } from '@google/wrappers';
 
 @Injectable()
 export class ProxyFacilityService implements OnModuleInit {
   private facilityService: FacilityServiceClient;
 
-  constructor(@Inject(HTS_FACILITY_PACKAGE_NAME) private client: ClientGrpc) {}
+  constructor(@Inject(HTS_FACILITY_PACKAGE_NAME) private client: ClientGrpc) { }
 
   onModuleInit() {
     this.facilityService = this.client.getService<FacilityServiceClient>(
@@ -20,7 +20,7 @@ export class ProxyFacilityService implements OnModuleInit {
     );
   }
 
-  ping(): Observable<Result> {
+  ping(): Observable<BoolValue> {
     return this.facilityService.ping({});
   }
 }

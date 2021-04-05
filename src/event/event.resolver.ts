@@ -1,9 +1,10 @@
-import { Field, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
-import { ProxyParticipantService } from 'src/proxy-participant/proxy-participant.service';
-import { Event } from 'src/models/event.model';
+import { Args, Field, Int, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
+import { Event } from '@entities/event.entity';
 import { EventService } from './event.service';
 import { map } from 'rxjs/operators';
-import { ProxyOrganizerService } from 'src/proxy-organizer/proxy-organizer.service';
+import { ProxyOrganizerService } from '@onepass/organizer';
+import { ProxyParticipantService } from '@onepass/participant';
+import { DateTime } from 'luxon';
 
 @Resolver((_) => Event)
 export class EventResolver {
@@ -15,28 +16,39 @@ export class EventResolver {
 
   @Query((_) => [Event])
   async upcomingEvents() {
-    return await this.proxyParticipantService.getAllEvents().toPromise();
+    return this.proxyParticipantService.getUpcomingEvents(
+      DateTime.now().startOf('day').toISO(),
+      DateTime.now().plus({ days: 14 }).endOf('day').toISO(),
+    );
+  }
+
+  @Query((_) => Event)
+  event(@Args('id', { type: () => Int }) id: number) {
+    return this.proxyParticipantService.getEventById(id);
   }
 
   @ResolveField()
   organization(@Parent() event: Event) {
     const { organizationId } = event;
-    return this.proxyOrganizerService.getOrganizationById(organizationId).pipe(
-      map((result) => {
-        result.id = Number(result.id);
-        return result;
-      }),
-    );
+    return this.proxyOrganizerService.getOrganizationById(organizationId);
   }
 
   @ResolveField()
   location(@Parent() event: Event) {
     const { locationId } = event;
-    return null;
+    if (!locationId) return null;
+    return this.proxyParticipantService.getLocationById(locationId);
   }
 
   @ResolveField()
   tags(@Parent() event: Event) {
-    return [];
+    const { id } = event;
+    return this.proxyParticipantService.getEventTags(id);
+  }
+
+  @ResolveField()
+  durations(@Parent() event: Event) {
+    const { id } = event;
+    return this.proxyParticipantService.getEventDurationsByEventId(id);
   }
 }

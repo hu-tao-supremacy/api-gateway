@@ -11,5 +11,7 @@ declare namespace NodeJS {
     HTS_SVC_FACILITY: string;
     GCP_CREDENTIALS: string;
     GCP_BUCKET_NAME: string;
+    CHULA_SSO_APP_ID: string;
+    CHULA_SSO_APP_SECRET: string;
   }
 }

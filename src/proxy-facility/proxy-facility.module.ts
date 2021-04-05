@@ -1,7 +1,8 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { ProxyFacilityService } from './proxy-facility.service';
 
+@Global()
 @Module({
   providers: [ProxyFacilityService]
 })
-export class ProxyFacilityModule {}
+export class ProxyFacilityModule { }

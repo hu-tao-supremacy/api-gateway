@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { GraphQLModule } from '@nestjs/graphql';
@@ -11,13 +11,19 @@ import { ProxyFacilityModule } from './proxy-facility/proxy-facility.module';
 import { ProxyOrganizerModule } from './proxy-organizer/proxy-organizer.module';
 import { ProxyParticipantModule } from './proxy-participant/proxy-participant.module';
 import { FileModule } from './file/file.module';
+import { graphqlUploadExpress } from 'graphql-upload';
+import { OrganizationModule } from './organization/organization.module';
+import { AuthMiddleware } from './middlewares/auth.middleware';
+import { UserModule } from './user/user.module';
+import { ProxyModule } from './proxy/proxy.module';
 
 @Module({
   imports: [
     GraphQLModule.forRoot({
       autoSchemaFile: true,
       debug: process.env.NODE_ENV === 'dev',
-      playground: true
+      playground: true,
+      uploads: false, // Disable built-in graphql-upload
     }),
     GlobalModule,
     AccountModule,
@@ -28,8 +34,16 @@ import { FileModule } from './file/file.module';
     ProxyOrganizerModule,
     ProxyParticipantModule,
     FileModule,
+    OrganizationModule,
+    UserModule,
+    ProxyModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(graphqlUploadExpress()).forRoutes('graphql');
+    consumer.apply(AuthMiddleware).forRoutes('graphql');
+  }
+}

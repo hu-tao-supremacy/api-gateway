@@ -1,8 +1,8 @@
-import { Query, Resolver } from '@nestjs/graphql';
+import { User } from '@entities/user.entity';
+import { Resolver } from '@nestjs/graphql';
 import { ProxyAccountService } from 'src/proxy-account/proxy-account.service';
-import { Account } from 'src/models/account.model';
 
-@Resolver((_) => Account)
+@Resolver((_) => User)
 export class AccountResolver {
-  constructor(private readonly proxyAccountService: ProxyAccountService) {}
+  constructor(private readonly proxyAccountService: ProxyAccountService) { }
 }
