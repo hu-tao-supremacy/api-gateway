@@ -29,7 +29,9 @@
       "@onepass/organizer": ["src/proxy-organizer/proxy-organizer.service.ts"],
       "@onepass/participant": ["src/proxy-participant/proxy-participant.service.ts"],
       "@onepass/gateway": ["src/gql/hts/*"],
-      "@onepass/internal": ["src/apis/hts/*"]
+      "@onepass/api": ["src/apis/hts/*"],
+      "@onepass/entities": ["src/entities"],
+      "@onepass/adapters": ["src/adapters"]
     }
   }
 }
