@@ -5,7 +5,7 @@ import { ProxyAccountService } from '@hu-tao-supremacy:account/proxy-account.ser
 import { ProxyOrganizerService } from '@hu-tao-supremacy:organizer/proxy-organizer.service';
 import { ProxyParticipantService } from '@hu-tao-supremacy:participant/proxy-participant.service';
 import { CreateOrganizationInput, AddMembersToOrganizationInput } from '@inputs/organization.input';
-import { BadRequestException, UseGuards } from '@nestjs/common';
+import { BadRequestException, HttpException, UseGuards } from '@nestjs/common';
 import { Args, Int, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { merge } from 'lodash';
 import { from, forkJoin } from 'rxjs';
@@ -48,7 +48,8 @@ export class OrganizationResolver {
     @Mutation((_) => Organization)
     addMembersToOrganization(@CurrentUser() currentUser: User, @Args('input') input: AddMembersToOrganizationInput) {
         return forkJoin(input.emails.map((email) => this.proxyAccountService.getUserByEmail(email))).pipe(
-            catchError(_ => {
+            catchError((error: HttpException) => {
+                console.log(error.getStatus(), error)
                 throw new BadRequestException();
             }),
             map((users) => users.map((user) => user.id)),
