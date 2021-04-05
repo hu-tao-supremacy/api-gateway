@@ -1,9 +1,9 @@
 import { Args, Field, Int, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
-import { ProxyParticipantService } from 'src/proxy-participant/proxy-participant.service';
 import { Event } from '@entities/event.entity';
 import { EventService } from './event.service';
 import { map } from 'rxjs/operators';
-import { ProxyOrganizerService } from 'src/proxy-organizer/proxy-organizer.service';
+import { ProxyOrganizerService } from '@onepass/organizer';
+import { ProxyParticipantService } from '@onepass/participant';
 import { DateTime } from 'luxon';
 
 @Resolver((_) => Event)
@@ -12,7 +12,7 @@ export class EventResolver {
     private readonly proxyParticipantService: ProxyParticipantService,
     private readonly proxyOrganizerService: ProxyOrganizerService,
     private readonly eventService: EventService,
-  ) { }
+  ) {}
 
   @Query((_) => [Event])
   async upcomingEvents() {
@@ -24,7 +24,7 @@ export class EventResolver {
 
   @Query((_) => Event)
   event(@Args('id', { type: () => Int }) id: number) {
-    return this.proxyParticipantService.getEventById(id)
+    return this.proxyParticipantService.getEventById(id);
   }
 
   @ResolveField()
