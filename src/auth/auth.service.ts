@@ -6,7 +6,7 @@ import { AuthenticateOutput } from './auth.model';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly httpService: HttpService, private readonly proxyAccountService: ProxyAccountService) {}
+  constructor(private readonly httpService: HttpService, private readonly proxyAccountService: ProxyAccountService) { }
 
   serviceValidation(ticket: string): Observable<ChulaSSOServiceAccount> {
     return this.httpService
@@ -20,39 +20,66 @@ export class AuthService {
       .pipe(map((project) => project.data));
   }
 
-  async authenticate(ticket: string): Promise<AuthenticateOutput> {
-    const serviceAccount = await this.serviceValidation(ticket).toPromise();
-    console.log(serviceAccount);
-
-    if (serviceAccount.uid !== '') {
-      return this.signInWithServiceAccount(serviceAccount);
-    }
-
-    throw new UnauthorizedException();
+  authenticate(ticket: string): Observable<AuthenticateOutput> {
+    return this.serviceValidation(ticket).pipe(
+      catchError((_) => {
+        throw new UnauthorizedException();
+      }),
+      switchMap((serviceAccount) => this.signInWithServiceAccount(serviceAccount)),
+    );
   }
 
-  async signInWithServiceAccount(serviceAccount: ChulaSSOServiceAccount): Promise<AuthenticateOutput> {
-    try {
-      const user = await this.proxyAccountService
-        .getUserByChulaId(serviceAccount.ouid)
-        .pipe(
-          catchError((error) => {
-            console.log(error);
-            const firstName = serviceAccount.firstname;
-            const lastName = serviceAccount.lastname;
-            const email = serviceAccount.email;
-            const isChulaStudent = serviceAccount.roles.includes('student');
-            return this.proxyAccountService.createUser(firstName, lastName, serviceAccount.ouid, email, isChulaStudent);
-          }),
-        )
-        .toPromise();
-      const accessToken = await this.proxyAccountService.generateAccessToken(user.id).toPromise();
-      return { accessToken };
-    } catch (e) {
-      console.log(e);
-      throw new InternalServerErrorException();
-    }
+  signInWithServiceAccount(serviceAccount: ChulaSSOServiceAccount): Observable<AuthenticateOutput> {
+    return this.proxyAccountService.getUserByChulaId(serviceAccount.ouid).pipe(
+      catchError((error) => {
+        console.log(error)
+        const firstName = serviceAccount.firstname;
+        const lastName = serviceAccount.lastname;
+        const email = serviceAccount.email;
+        const isChulaStudent = serviceAccount.roles.includes('student');
+        return this.proxyAccountService.createUser(firstName, lastName, serviceAccount.ouid, email, isChulaStudent)
+      }),
+      switchMap(user => this.proxyAccountService.generateAccessToken(user.id)),
+      catchError(_ => {
+        throw new InternalServerErrorException()
+      }),
+      map(accessToken => ({ accessToken }))
+    )
   }
+
+  // async authenticate(ticket: string): Promise<AuthenticateOutput> {
+  //   const serviceAccount = await this.serviceValidation(ticket).toPromise();
+  //   console.log(serviceAccount);
+
+  //   if (serviceAccount.uid !== '') {
+  //     return this.signInWithServiceAccount(serviceAccount);
+  //   }
+
+  //   throw new UnauthorizedException();
+  // }
+
+  // async signInWithServiceAccount(serviceAccount: ChulaSSOServiceAccount): Promise<AuthenticateOutput> {
+  //   try {
+  //     const user = await this.proxyAccountService
+  //       .getUserByChulaId(serviceAccount.ouid)
+  //       .pipe(
+  //         catchError((error) => {
+  //           console.log(error);
+  //           const firstName = serviceAccount.firstname;
+  //           const lastName = serviceAccount.lastname;
+  //           const email = serviceAccount.email;
+  //           const isChulaStudent = serviceAccount.roles.includes('student');
+  //           return this.proxyAccountService.createUser(firstName, lastName, serviceAccount.ouid, email, isChulaStudent);
+  //         }),
+  //       )
+  //       .toPromise();
+  //     const accessToken = await this.proxyAccountService.generateAccessToken(user.id).toPromise();
+  //     return { accessToken };
+  //   } catch (e) {
+  //     console.log(e);
+  //     throw new InternalServerErrorException();
+  //   }
+  // }
 
   isAuthenticated(accessToken: string): Observable<boolean> {
     return this.proxyAccountService.isAuthenticated(accessToken);
