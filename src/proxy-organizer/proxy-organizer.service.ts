@@ -4,6 +4,7 @@ import {
   HTS_ORGANIZER_PACKAGE_NAME,
   OrganizerServiceClient,
   ORGANIZER_SERVICE_NAME,
+  UpdateUsersInOrganizationRequest,
 } from '@internal/organizer/service';
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
@@ -14,7 +15,7 @@ import { map } from 'rxjs/operators';
 export class ProxyOrganizerService implements OnModuleInit {
   private organizerService: OrganizerServiceClient;
 
-  constructor(@Inject(HTS_ORGANIZER_PACKAGE_NAME) private client: ClientGrpc) {}
+  constructor(@Inject(HTS_ORGANIZER_PACKAGE_NAME) private client: ClientGrpc) { }
 
   onModuleInit() {
     this.organizerService = this.client.getService<OrganizerServiceClient>(ORGANIZER_SERVICE_NAME);
@@ -39,5 +40,14 @@ export class ProxyOrganizerService implements OnModuleInit {
     return this.organizerService
       .createOrganization({ userId, organization: new OrganizationAdapter().toInterchangeFormat(organization) })
       .pipe(map((_) => true));
+  }
+
+  addMembersToOrganization(currentUserId: number, organizationId: number, userIds: number[]): Observable<boolean> {
+    const request: UpdateUsersInOrganizationRequest = {
+      userId: currentUserId,
+      organizationId,
+      userIds
+    }
+    return this.organizerService.addUsersToOrganization(request).pipe(map(_ => true))
   }
 }
