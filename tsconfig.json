@@ -23,7 +23,13 @@
       "@hu-tao-supremacy:account/*": ["src/proxy-account/*"],
       "@hu-tao-supremacy:facility/*": ["src/proxy-facility/*"],
       "@hu-tao-supremacy:organizer/*": ["src/proxy-organizer/*"],
-      "@hu-tao-supremacy:participant/*": ["src/proxy-participant/*"]
+      "@hu-tao-supremacy:participant/*": ["src/proxy-participant/*"],
+      "@onepass/account": ["src/proxy-account/proxy-account.service.ts"],
+      "@onepass/facility": ["src/proxy-facility/proxy-facility.service.ts"],
+      "@onepass/organizer": ["src/proxy-organizer/proxy-organizer.service.ts"],
+      "@onepass/participant": ["src/proxy-participant/proxy-participant.service.ts"],
+      "@onepass/gateway": ["src/gql/hts/*"],
+      "@onepass/internal": ["src/apis/hts/*"]
     }
   }
 }
