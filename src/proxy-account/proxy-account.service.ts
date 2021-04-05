@@ -11,7 +11,7 @@ import { UserAdapter } from '@adapters/user.adapter';
 export class ProxyAccountService implements OnModuleInit {
   private accountService: AccountServiceClient;
 
-  constructor(@Inject(HTS_ACCOUNT_PACKAGE_NAME) private client: ClientGrpc) {}
+  constructor(@Inject(HTS_ACCOUNT_PACKAGE_NAME) private client: ClientGrpc) { }
 
   onModuleInit() {
     this.accountService = this.client.getService<AccountServiceClient>(ACCOUNT_SERVICE_NAME);
@@ -23,6 +23,10 @@ export class ProxyAccountService implements OnModuleInit {
 
   getUserByChulaId(id: string): Observable<User> {
     return this.accountService.getUserByChulaId({ id }).pipe(map((user) => new UserAdapter().toEntity(user)));
+  }
+
+  getUserByEmail(email: string): Observable<User> {
+    return this.accountService.getUserByEmail({ email }).pipe(map((user) => new UserAdapter().toEntity(user)));
   }
 
   getUserById(id: number): Observable<User> {
