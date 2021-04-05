@@ -1,10 +1,7 @@
-import { BaseAdapter } from '@adapters/base.adapter';
-import { EventDuration as EventDurationIF } from '@interchange-formats/common/common';
-import { EventDuration } from '@entities/event-duration.entity';
+import { BaseAdapter } from '@onepass/adapters';
+import { EventDuration as EventDurationIF } from '@onepass/api/common/common';
+import { EventDuration } from '@onepass/entities';
 
-export class EventDurationAdapter extends BaseAdapter<
-  EventDurationIF,
-  EventDuration
-> {
+export class EventDurationAdapter extends BaseAdapter<EventDurationIF, EventDuration> {
   optionalFields = [];
 }

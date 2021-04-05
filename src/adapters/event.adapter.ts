@@ -1,6 +1,6 @@
-import { BaseAdapter } from '@adapters/base.adapter';
-import { Event as EventIF } from '@interchange-formats/common/common';
-import { Event } from '@entities/event.entity';
+import { BaseAdapter } from '@onepass/adapters';
+import { Event as EventIF } from '@onepass/api/common/common';
+import { Event } from '@onepass/entities';
 
 export class EventAdapter extends BaseAdapter<EventIF, Event> {
   optionalFields = [

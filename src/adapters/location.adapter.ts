@@ -1,11 +1,7 @@
-import { BaseAdapter } from '@adapters/base.adapter';
-import { Location as LocationIF } from '@interchange-formats/common/common';
-import { Location } from '@entities/location.entity';
+import { BaseAdapter } from '@onepass/adapters';
+import { Location as LocationIF } from '@onepass/api/common/common';
+import { Location } from '@onepass/entities';
 
 export class LocationAdapter extends BaseAdapter<LocationIF, Location> {
-  optionalFields = [
-    'description',
-    'travelInformationImageUrl',
-    'travelInformationImageHash',
-  ];
+  optionalFields = ['description', 'travelInformationImageUrl', 'travelInformationImageHash'];
 }

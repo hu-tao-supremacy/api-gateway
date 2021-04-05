@@ -1,6 +1,6 @@
-import { BaseAdapter } from '@adapters/base.adapter';
-import { Tag as TagIF } from '@interchange-formats/common/common';
-import { Tag } from '@entities/tag.entity';
+import { BaseAdapter } from '@onepass/adapters';
+import { Tag as TagIF } from '@onepass/api/common/common';
+import { Tag } from '@onepass/entities';
 
 export class TagAdapter extends BaseAdapter<TagIF, Tag> {
   optionalFields = [];
