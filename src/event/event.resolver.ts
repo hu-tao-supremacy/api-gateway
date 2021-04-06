@@ -1,5 +1,5 @@
 import { Args, Field, Int, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
-import { Event } from '@entities/event.entity';
+import { Event } from '@onepass/entities';
 import { EventService } from './event.service';
 import { OrganizerService } from '@onepass/organizer';
 import { ParticipantService } from '@onepass/participant';
