@@ -1,4 +1,4 @@
-import { User } from '@entities/user.entity';
+import { User } from '@onepass/entities';
 import { InputType, Field, OmitType, PartialType } from '@nestjs/graphql';
 import { FileUpload, GraphQLUpload } from 'graphql-upload';
 

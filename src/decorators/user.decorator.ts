@@ -1,5 +1,5 @@
 import { createParamDecorator } from '@nestjs/common'
-import { User } from '@entities/user.entity'
+import { User } from '@onepass/entities'
 import { Request } from 'express'
 import { GqlExecutionContext } from '@nestjs/graphql';
 

@@ -1,4 +1,4 @@
-import { Gender } from '@gql/common/common';
+import { Gender } from '@onepass/graphql/common/common';
 import { Field, InputType, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { pick } from 'lodash';
 import { PrimaryGeneratedColumn, Column, Entity, Index } from 'typeorm';

@@ -1,5 +1,5 @@
-import { User } from '@entities/user.entity';
-import { FileUploadInput } from '@inputs/file.input';
+import { User } from '@onepass/entities';
+import { FileUploadInput } from '@onepass/inputs/file.input';
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { nanoid } from 'nanoid'

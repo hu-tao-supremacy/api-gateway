@@ -1,13 +1,13 @@
-import { Field, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
-import { ProxyParticipantService } from 'src/proxy-participant/proxy-participant.service';
-import { ProxyOrganizerService } from 'src/proxy-organizer/proxy-organizer.service';
-import { EventTag } from '@entities/event-tag.entity';
+import { Parent, ResolveField, Resolver } from '@nestjs/graphql';
+import { ParticipantService } from '@onepass/participant/participant.service';
+import { OrganizerService } from '@onepass/organizer/organizer.service'
+import { EventTag } from '@onepass/entities';
 
 @Resolver((_) => EventTag)
 export class EventTagResolver {
   constructor(
-    private readonly proxyParticipantService: ProxyParticipantService,
-    private readonly proxyOrganizerService: ProxyOrganizerService,
+    private readonly participantService: ParticipantService,
+    private readonly organizerService: OrganizerService,
   ) { }
 
   @ResolveField()

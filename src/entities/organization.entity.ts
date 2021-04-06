@@ -1,6 +1,6 @@
 import { Field, InputType, Int, ObjectType } from "@nestjs/graphql";
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-import { Event } from '@entities/event.entity'
+import { Event } from './event.entity'
 
 @InputType('OrganizationInput')
 @ObjectType()

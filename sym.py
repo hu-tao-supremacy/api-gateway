@@ -11,4 +11,4 @@ def sym(src, dst):
     os.symlink(dst, src)
 
 sym("./src/apis", "../apis/gen/nest")
-sym("./src/gql", "../apis/gen/gql")
+sym("./src/graphql", "../apis/gen/gql")

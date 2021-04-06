@@ -1,12 +1,12 @@
 import { HttpService, Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
-import { ProxyAccountService } from 'src/proxy-account/proxy-account.service';
+import { AccountService } from '@onepass/account/account.service'
 import { AuthenticateOutput } from './auth.model';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly httpService: HttpService, private readonly proxyAccountService: ProxyAccountService) { }
+  constructor(private readonly httpService: HttpService, private readonly accountService: AccountService) { }
 
   serviceValidation(ticket: string): Observable<ChulaSSOServiceAccount> {
     return this.httpService
@@ -30,16 +30,16 @@ export class AuthService {
   }
 
   signInWithServiceAccount(serviceAccount: ChulaSSOServiceAccount): Observable<AuthenticateOutput> {
-    return this.proxyAccountService.getUserByChulaId(serviceAccount.ouid).pipe(
+    return this.accountService.getUserByChulaId(serviceAccount.ouid).pipe(
       catchError((error) => {
         console.log(error)
         const firstName = serviceAccount.firstname;
         const lastName = serviceAccount.lastname;
         const email = serviceAccount.email;
         const isChulaStudent = serviceAccount.roles.includes('student');
-        return this.proxyAccountService.createUser(firstName, lastName, serviceAccount.ouid, email, isChulaStudent)
+        return this.accountService.createUser(firstName, lastName, serviceAccount.ouid, email, isChulaStudent)
       }),
-      switchMap(user => this.proxyAccountService.generateAccessToken(user.id)),
+      switchMap(user => this.accountService.generateAccessToken(user.id)),
       catchError(_ => {
         throw new InternalServerErrorException()
       }),
@@ -60,7 +60,7 @@ export class AuthService {
 
   // async signInWithServiceAccount(serviceAccount: ChulaSSOServiceAccount): Promise<AuthenticateOutput> {
   //   try {
-  //     const user = await this.proxyAccountService
+  //     const user = await this.accountService
   //       .getUserByChulaId(serviceAccount.ouid)
   //       .pipe(
   //         catchError((error) => {
@@ -69,11 +69,11 @@ export class AuthService {
   //           const lastName = serviceAccount.lastname;
   //           const email = serviceAccount.email;
   //           const isChulaStudent = serviceAccount.roles.includes('student');
-  //           return this.proxyAccountService.createUser(firstName, lastName, serviceAccount.ouid, email, isChulaStudent);
+  //           return this.accountService.createUser(firstName, lastName, serviceAccount.ouid, email, isChulaStudent);
   //         }),
   //       )
   //       .toPromise();
-  //     const accessToken = await this.proxyAccountService.generateAccessToken(user.id).toPromise();
+  //     const accessToken = await this.accountService.generateAccessToken(user.id).toPromise();
   //     return { accessToken };
   //   } catch (e) {
   //     console.log(e);
@@ -82,7 +82,7 @@ export class AuthService {
   // }
 
   isAuthenticated(accessToken: string): Observable<boolean> {
-    return this.proxyAccountService.isAuthenticated(accessToken);
+    return this.accountService.isAuthenticated(accessToken);
   }
 }
 

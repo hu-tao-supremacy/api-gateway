@@ -173,3 +173,4 @@ $RECYCLE.BIN/
 apis/
 src/apis
 src/gql
+src/graphql
