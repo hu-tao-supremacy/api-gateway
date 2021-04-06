@@ -1,10 +1,10 @@
-import { User } from '@entities/user.entity';
-import { ProxyAccountService } from '@hu-tao-supremacy:account/proxy-account.service';
+import { User } from '@onepass/entities';
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { AuthService } from 'src/auth/auth.service';
 import { Request } from 'express'
 import { decode } from 'js-base64'
-import { AccessTokenPayload } from '@gql/account/service';
+import { AccessTokenPayload } from '@onepass/graphql/account/service';
+import { AccountService } from '@onepass/account'
 
 declare global {
   namespace Express {
@@ -16,7 +16,7 @@ declare global {
 
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {
-  constructor(private readonly authService: AuthService, private readonly proxyAccountService: ProxyAccountService) { }
+  constructor(private readonly authService: AuthService, private readonly accountService: AccountService) { }
 
   async use(req: Request, res: any, next: () => void) {
     try {
@@ -27,7 +27,7 @@ export class AuthMiddleware implements NestMiddleware {
           const encodedPayload = accessToken.split('.')[1]
           const decodedPayload = decode(encodedPayload)
           const payload = JSON.parse(decodedPayload) as AccessTokenPayload
-          const user = await this.proxyAccountService.getUserById(payload.userId).toPromise();
+          const user = await this.accountService.getUserById(payload.userId).toPromise();
           req.user = user
         }
       }
