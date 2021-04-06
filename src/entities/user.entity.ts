@@ -5,6 +5,7 @@ import { PrimaryGeneratedColumn, Column, Entity, Index } from 'typeorm';
 import { Event } from './event.entity';
 import { Organization } from './organization.entity';
 import { Tag } from './tag.entity';
+import { UserPermission } from './user-permission.entity';
 
 const PickedGender = pick(Gender, ['M', 'F', 'NS'])
 registerEnumType(PickedGender, { name: 'Gender' });
@@ -61,8 +62,7 @@ export class User {
   @Field(_ => [Organization])
   organizations: Organization[];
 
-  @Field(_ => [Permission])
-  permissions: Permission[];
+  permissions: UserPermission[];
 
   @Field(_ => [Event])
   events: Event[];
