@@ -11,6 +11,7 @@ import { AuthMiddleware } from './middlewares/auth.middleware';
 import { UserModule } from './user/user.module';
 import { ProxyModule } from './proxy/proxy.module';
 import { QuestionModule } from './question/question.module';
+import { QuestionGroupModule } from './question-group/question-group.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { QuestionModule } from './question/question.module';
     UserModule,
     ProxyModule,
     QuestionModule,
+    QuestionGroupModule,
   ],
   controllers: [AppController],
   providers: [AppService],
