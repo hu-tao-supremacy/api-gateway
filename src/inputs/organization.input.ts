@@ -1,4 +1,4 @@
-import { Organization } from '@entities/organization.entity';
+import { Organization } from '@onepass/entities';
 import { Field, InputType, Int, OmitType } from '@nestjs/graphql';
 import { FileUpload, GraphQLUpload } from 'graphql-upload';
 
