@@ -13,7 +13,7 @@
     "incremental": true,
     "paths": {
       "@google/*": [
-        "src/gql/google/protobuf/*"
+        "src/graphql/google/protobuf/*"
       ],
       "@onepass/inputs/*": [
         "src/inputs/*"
