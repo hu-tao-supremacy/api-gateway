@@ -1,10 +1,8 @@
-import { Event } from '@entities/event.entity';
-import { Organization } from '@entities/organization.entity';
-import { User } from '@entities/user.entity';
-import { ProxyAccountService } from '@hu-tao-supremacy:account/proxy-account.service';
-import { ProxyOrganizerService } from '@hu-tao-supremacy:organizer/proxy-organizer.service';
-import { ProxyParticipantService } from '@hu-tao-supremacy:participant/proxy-participant.service';
-import { CreateOrganizationInput, AddMembersToOrganizationInput } from '@inputs/organization.input';
+import { Event, Organization, User } from '@onepass/entities'
+import { AccountService } from '@onepass/account'
+import { OrganizerService } from '@onepass/organizer'
+import { ParticipantService } from '@onepass/participant'
+import { CreateOrganizationInput, AddMembersToOrganizationInput } from '@onepass/inputs/organization.input';
 import { BadRequestException, HttpException, UseGuards } from '@nestjs/common';
 import { Args, Int, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { merge } from 'lodash';
@@ -16,24 +14,24 @@ import { AuthGuard } from 'src/guards/auth.guard';
 @Resolver((_) => Organization)
 export class OrganizationResolver {
     constructor(
-        private readonly proxyAccountService: ProxyAccountService,
-        private readonly proxyOrganizerService: ProxyOrganizerService,
-        private readonly proxyParticipantService: ProxyParticipantService,
+        private readonly accountService: AccountService,
+        private readonly organizerService: OrganizerService,
+        private readonly participantService: ParticipantService,
     ) { }
 
     @Query((_) => [Organization])
     organizations() {
-        return this.proxyOrganizerService.getOrganizations();
+        return this.organizerService.getOrganizations();
     }
 
     @Query((_) => Organization)
     organization(@Args('id', { type: () => Int }) id: number) {
-        return this.proxyOrganizerService.getOrganizationById(id);
+        return this.organizerService.getOrganizationById(id);
     }
 
     @ResolveField((_) => [Event])
     events(@Parent() org: Organization) {
-        return this.proxyParticipantService.getEventsByOrganizationId(org.id);
+        return this.participantService.getEventsByOrganizationId(org.id);
     }
 
     @UseGuards(AuthGuard)
@@ -41,20 +39,20 @@ export class OrganizationResolver {
     createOrganization(@CurrentUser() currentUser: User, @Args('input') input: CreateOrganizationInput) {
         const org = new Organization();
         merge(org, input);
-        return this.proxyOrganizerService.createOrganization(currentUser.id, org);
+        return this.organizerService.createOrganization(currentUser.id, org);
     }
 
     @UseGuards(AuthGuard)
     @Mutation((_) => Organization)
     addMembersToOrganization(@CurrentUser() currentUser: User, @Args('input') input: AddMembersToOrganizationInput) {
-        return forkJoin(input.emails.map((email) => this.proxyAccountService.getUserByEmail(email))).pipe(
+        return forkJoin(input.emails.map((email) => this.accountService.getUserByEmail(email))).pipe(
             catchError((error: HttpException) => {
                 console.log(error.getStatus(), error)
                 throw new BadRequestException();
             }),
             map((users) => users.map((user) => user.id)),
             switchMap((ids) =>
-                this.proxyOrganizerService.addMembersToOrganization(currentUser.id, input.organizationId, ids),
+                this.organizerService.addMembersToOrganization(currentUser.id, input.organizationId, ids),
             ),
         );
     }
