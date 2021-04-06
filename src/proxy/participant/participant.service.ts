@@ -9,8 +9,15 @@ import { from, Observable } from 'rxjs';
 import { BoolValue } from '@google/wrappers';
 import { DateTime } from 'luxon';
 import { map } from 'rxjs/operators';
-import { EventAdapter, EventDurationAdapter, TagAdapter, LocationAdapter } from '@onepass/adapters';
+import {
+  EventAdapter,
+  EventDurationAdapter,
+  TagAdapter,
+  LocationAdapter,
+  QuestionGroupAdapter,
+} from '@onepass/adapters';
 import { Event, EventDuration, Tag, Location, QuestionGroup, Question } from '@onepass/entities';
+import { QuestionAdapter } from 'src/adapters/question.adapter';
 
 @Injectable()
 export class ParticipantService implements OnModuleInit {
@@ -85,10 +92,16 @@ export class ParticipantService implements OnModuleInit {
   }
 
   getQuestionGroupsByEventId(eventId: number): Observable<QuestionGroup[]> {
-    return from([]);
+    return this.participantService.getQuestionGroupsByEventId({ id: eventId }).pipe(
+      map((project) => project.questionGroups),
+      map((questionGroups) => questionGroups.map((group) => new QuestionGroupAdapter().toEntity(group))),
+    );
   }
 
   getQuestionsByQuestionGroupId(questionGroupId: number): Observable<Question[]> {
-    return from([]);
+    return this.participantService.getQuestionsByQuestionGroupId({ id: questionGroupId }).pipe(
+      map((project) => project.questions),
+      map((questions) => questions.map((question) => new QuestionAdapter().toEntity(question))),
+    );
   }
 }
