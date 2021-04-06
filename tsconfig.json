@@ -12,26 +12,66 @@
     "baseUrl": "./",
     "incremental": true,
     "paths": {
-      "@gql/*": ["src/gql/hts/*"],
-      "@google/*": ["src/gql/google/protobuf/*"],
-      "@internal/*": ["src/apis/hts/*"],
-      "@inputs/*": ["src/inputs/*"],
-      "@in-out/*": ["src/in-out/*"],
-      "@interchange-formats/*": ["src/apis/hts/*"],
-      "@entities/*": ["src/entities/*"],
-      "@adapters/*": ["src/adapters/*"],
-      "@hu-tao-supremacy:account/*": ["src/proxy-account/*"],
-      "@hu-tao-supremacy:facility/*": ["src/proxy-facility/*"],
-      "@hu-tao-supremacy:organizer/*": ["src/proxy-organizer/*"],
-      "@hu-tao-supremacy:participant/*": ["src/proxy-participant/*"],
-      "@onepass/account": ["src/proxy/account/account.service.ts"],
-      "@onepass/facility": ["src/proxy/facility/facility.service.ts"],
-      "@onepass/organizer": ["src/proxy/organizer/organizer.service.ts"],
-      "@onepass/participant": ["src/proxy/participant/participant.service.ts"],
-      "@onepass/graphql/*": ["src/gql/hts/*"],
-      "@onepass/api/*": ["src/apis/hts/*"],
-      "@onepass/entities": ["src/entities"],
-      "@onepass/adapters": ["src/adapters"]
+      "@gql/*": [
+        "src/gql/hts/*"
+      ],
+      "@google/*": [
+        "src/gql/google/protobuf/*"
+      ],
+      "@internal/*": [
+        "src/apis/hts/*"
+      ],
+      "@inputs/*": [
+        "src/inputs/*"
+      ],
+      "@in-out/*": [
+        "src/in-out/*"
+      ],
+      "@interchange-formats/*": [
+        "src/apis/hts/*"
+      ],
+      "@entities/*": [
+        "src/entities/*"
+      ],
+      "@adapters/*": [
+        "src/adapters/*"
+      ],
+      "@hu-tao-supremacy:account/*": [
+        "src/proxy-account/*"
+      ],
+      "@hu-tao-supremacy:facility/*": [
+        "src/proxy-facility/*"
+      ],
+      "@hu-tao-supremacy:organizer/*": [
+        "src/proxy-organizer/*"
+      ],
+      "@hu-tao-supremacy:participant/*": [
+        "src/proxy-participant/*"
+      ],
+      "@onepass/account": [
+        "src/proxy/account/account.service.ts"
+      ],
+      "@onepass/facility": [
+        "src/proxy/facility/facility.service.ts"
+      ],
+      "@onepass/organizer": [
+        "src/proxy/organizer/organizer.service.ts"
+      ],
+      "@onepass/participant": [
+        "src/proxy/participant/participant.service.ts"
+      ],
+      "@onepass/graphql/*": [
+        "src/graphql/hts/*"
+      ],
+      "@onepass/api/*": [
+        "src/apis/hts/*"
+      ],
+      "@onepass/entities": [
+        "src/entities"
+      ],
+      "@onepass/adapters": [
+        "src/adapters"
+      ]
     }
   }
 }
