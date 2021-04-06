@@ -1,17 +1,18 @@
 import { AccountServiceClient, HTS_ACCOUNT_PACKAGE_NAME, ACCOUNT_SERVICE_NAME } from '@onepass/api/account/service';
 import { ClientGrpc } from '@nestjs/microservices';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { User } from '@onepass/entities';
 import { UserAdapter } from '@onepass/adapters';
 import { BoolValue } from '@google/wrappers';
-import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
+import { HttpException, Inject, Injectable, OnModuleInit, UnauthorizedException } from '@nestjs/common';
+import { Permission } from '@onepass/api/common/common';
 
 @Injectable()
 export class AccountService implements OnModuleInit {
   private accountService: AccountServiceClient;
 
-  constructor(@Inject(HTS_ACCOUNT_PACKAGE_NAME) private client: ClientGrpc) {}
+  constructor(@Inject(HTS_ACCOUNT_PACKAGE_NAME) private client: ClientGrpc) { }
 
   onModuleInit() {
     this.accountService = this.client.getService<AccountServiceClient>(ACCOUNT_SERVICE_NAME);
@@ -57,5 +58,14 @@ export class AccountService implements OnModuleInit {
     return this.accountService
       .updateAccountInfo(new UserAdapter().toInterchangeFormat(user))
       .pipe(map((project) => new UserAdapter().toEntity(project)));
+  }
+
+  hasPermission(userId: Permission, organizationId: number, permission: Permission) {
+    return this.accountService.hasPermission({ userId, organizationId, permissionName: permission }).pipe(
+      catchError((error: HttpException) => {
+        throw new UnauthorizedException(error)
+      }),
+      map(data => data.value)
+    )
   }
 }
