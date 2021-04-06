@@ -4,7 +4,7 @@ import { AuthService } from 'src/auth/auth.service';
 import { Request } from 'express'
 import { decode } from 'js-base64'
 import { AccessTokenPayload } from '@onepass/graphql/account/service';
-import { AccountService } from '@onepass/account'
+import { AccountService } from '@onepass/account/account.service'
 
 declare global {
   namespace Express {

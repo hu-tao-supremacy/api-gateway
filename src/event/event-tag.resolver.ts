@@ -1,6 +1,6 @@
 import { Parent, ResolveField, Resolver } from '@nestjs/graphql';
-import { ParticipantService } from '@onepass/participant';
-import { OrganizerService } from '@onepass/organizer'
+import { ParticipantService } from '@onepass/participant/participant.service';
+import { OrganizerService } from '@onepass/organizer/organizer.service'
 import { EventTag } from '@onepass/entities';
 
 @Resolver((_) => EventTag)

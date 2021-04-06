@@ -1,8 +1,8 @@
 import { Args, Field, Int, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { Event } from '@onepass/entities';
 import { EventService } from './event.service';
-import { OrganizerService } from '@onepass/organizer';
-import { ParticipantService } from '@onepass/participant';
+import { OrganizerService } from '@onepass/organizer/organizer.service';
+import { ParticipantService } from '@onepass/participant/participant.service';
 import { DateTime } from 'luxon';
 
 @Resolver((_) => Event)

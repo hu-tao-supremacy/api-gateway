@@ -3,7 +3,7 @@ import { User } from '@onepass/entities';
 import { UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { CurrentUser } from 'src/decorators/user.decorator';
-import { AccountService } from '@onepass/account';
+import { AccountService } from '@onepass/account/account.service';
 import { UpdateUserInput } from '@onepass/inputs/user.input';
 import { merge } from 'lodash';
 

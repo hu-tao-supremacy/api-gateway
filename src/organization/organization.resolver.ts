@@ -1,7 +1,7 @@
 import { Event, Organization, User } from '@onepass/entities'
-import { AccountService } from '@onepass/account'
-import { OrganizerService } from '@onepass/organizer'
-import { ParticipantService } from '@onepass/participant'
+import { AccountService } from '@onepass/account/account.service'
+import { OrganizerService } from '@onepass/organizer/organizer.service'
+import { ParticipantService } from '@onepass/participant/participant.service'
 import { CreateOrganizationInput, AddMembersToOrganizationInput } from '@onepass/inputs/organization.input';
 import { BadRequestException, HttpException, UseGuards } from '@nestjs/common';
 import { Args, Int, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';

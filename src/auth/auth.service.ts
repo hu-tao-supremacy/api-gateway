@@ -1,7 +1,7 @@
 import { HttpService, Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
-import { AccountService } from '@onepass/account'
+import { AccountService } from '@onepass/account/account.service'
 import { AuthenticateOutput } from './auth.model';
 
 @Injectable()
