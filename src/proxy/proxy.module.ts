@@ -77,6 +77,6 @@ import { join } from 'path'
     ]),
   ],
   providers: [AccountService, FacilityService, OrganizerService, ParticipantService],
-  exports: [AccountService, FacilityService, OrganizerService, ParticipantService],
+  exports: [ClientsModule, AccountService, FacilityService, OrganizerService, ParticipantService],
 })
 export class ProxyModule { }
