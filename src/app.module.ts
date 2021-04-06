@@ -10,6 +10,7 @@ import { OrganizationModule } from './organization/organization.module';
 import { AuthMiddleware } from './middlewares/auth.middleware';
 import { UserModule } from './user/user.module';
 import { ProxyModule } from './proxy/proxy.module';
+import { QuestionModule } from './question/question.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { ProxyModule } from './proxy/proxy.module';
     OrganizationModule,
     UserModule,
     ProxyModule,
+    QuestionModule,
   ],
   controllers: [AppController],
   providers: [AppService],
