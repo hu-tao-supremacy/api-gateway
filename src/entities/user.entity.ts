@@ -1,7 +1,10 @@
-import { Gender } from '@onepass/graphql/common/common';
+import { Gender, Permission } from '@onepass/graphql/common/common';
 import { Field, InputType, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { pick } from 'lodash';
 import { PrimaryGeneratedColumn, Column, Entity, Index } from 'typeorm';
+import { Event } from './event.entity';
+import { Organization } from './organization.entity';
+import { Tag } from './tag.entity';
 
 const PickedGender = pick(Gender, ['M', 'F', 'NS'])
 registerEnumType(PickedGender, { name: 'Gender' });
@@ -54,4 +57,16 @@ export class User {
   @Field((_) => PickedGender)
   @Column('enum', { enum: ['M', 'F', 'NS'] })
   gender: string;
+
+  @Field(_ => [Organization])
+  organizations: Organization[];
+
+  @Field(_ => [Permission])
+  permissions: Permission[];
+
+  @Field(_ => [Event])
+  events: Event[];
+
+  @Field(_ => [Tag])
+  interests: Tag[]
 }
