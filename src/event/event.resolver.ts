@@ -50,4 +50,10 @@ export class EventResolver {
     const { id } = event;
     return this.participantService.getEventDurationsByEventId(id);
   }
+
+  @ResolveField()
+  questionGroups(@Parent() event: Event) {
+    const { id } = event;
+    return this.participantService.getQuestionGroupsByEventId(id);
+  }
 }
