@@ -1,5 +1,5 @@
 import { Field, InputType, Int, ObjectType, registerEnumType } from "@nestjs/graphql";
-import { FacilityRequest_Status as Status } from "@gql/common/common";
+import { FacilityRequest_Status as Status } from "@onepass/graphql/common/common";
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Event } from "./event.entity";
 import { Facility } from "./facility.entity";

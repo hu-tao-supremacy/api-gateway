@@ -1,5 +1,5 @@
 import { Field, InputType, Int, ObjectType, registerEnumType } from "@nestjs/graphql";
-import { AnswerType } from "@gql/common/common";
+import { AnswerType } from "@onepass/graphql/common/common";
 import {
   Column,
   Entity,

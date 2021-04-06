@@ -1,5 +1,5 @@
 import { Field, InputType, Int, ObjectType, registerEnumType } from "@nestjs/graphql";
-import { QuestionGroupType } from "@gql/common/common";
+import { QuestionGroupType } from "@onepass/graphql/common/common";
 import {
   Column,
   Entity,
