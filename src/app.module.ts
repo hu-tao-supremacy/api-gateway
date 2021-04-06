@@ -12,6 +12,7 @@ import { UserModule } from './user/user.module';
 import { ProxyModule } from './proxy/proxy.module';
 import { QuestionModule } from './question/question.module';
 import { QuestionGroupModule } from './question-group/question-group.module';
+import { TagModule } from './tag/tag.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { QuestionGroupModule } from './question-group/question-group.module';
     ProxyModule,
     QuestionModule,
     QuestionGroupModule,
+    TagModule,
   ],
   controllers: [AppController],
   providers: [AppService],
