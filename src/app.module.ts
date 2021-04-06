@@ -2,14 +2,8 @@ import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { GraphQLModule } from '@nestjs/graphql';
-import { GlobalModule } from './global/global.module';
-import { AccountModule } from './account/account.module';
 import { EventModule } from './event/event.module';
 import { AuthModule } from './auth/auth.module';
-import { ProxyAccountModule } from './proxy-account/proxy-account.module';
-import { ProxyFacilityModule } from './proxy-facility/proxy-facility.module';
-import { ProxyOrganizerModule } from './proxy-organizer/proxy-organizer.module';
-import { ProxyParticipantModule } from './proxy-participant/proxy-participant.module';
 import { FileModule } from './file/file.module';
 import { graphqlUploadExpress } from 'graphql-upload';
 import { OrganizationModule } from './organization/organization.module';
@@ -25,14 +19,8 @@ import { ProxyModule } from './proxy/proxy.module';
       playground: true,
       uploads: false, // Disable built-in graphql-upload
     }),
-    GlobalModule,
-    AccountModule,
     EventModule,
     AuthModule,
-    ProxyAccountModule,
-    ProxyFacilityModule,
-    ProxyOrganizerModule,
-    ProxyParticipantModule,
     FileModule,
     OrganizationModule,
     UserModule,
