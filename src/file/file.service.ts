@@ -23,12 +23,13 @@ export class FileService {
   upload(objectPath: string, fileUpload?: Promise<FileUpload>): Observable<string | null> {
     return fileUpload ? from(fileUpload).pipe(switchMap(({ filename, createReadStream }) => {
       const extension = filename.split('.').reverse()[0]
+      const path = `${objectPath}.${extension}`
       return from(new Promise<boolean>((resolve, reject) => {
         createReadStream()
-          .pipe(this.createWriteStream(objectPath))
+          .pipe(this.createWriteStream(path))
           .on('finish', () => resolve(true))
           .on('error', () => reject(false))
-      })).pipe(map(_ => `gs://${process.env.GCP_BUCKET_NAME}/${objectPath}.${extension}`))
+      })).pipe(map(_ => `gs://${process.env.GCP_BUCKET_NAME}/${path}`))
     })) : of(null)
   }
 
