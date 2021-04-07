@@ -8,6 +8,9 @@ import { UpdateUserInput } from '@onepass/inputs/user.input';
 import { merge } from 'lodash';
 import { ParticipantService } from '@onepass/participant/participant.service';
 import { FileService } from 'src/file/file.service';
+import { encode } from 'js-base64';
+import { nanoid } from 'nanoid';
+import { switchMap } from 'rxjs/operators';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -26,10 +29,17 @@ export class UserResolver {
   @UseGuards(AuthGuard)
   @Mutation((_) => User)
   updateUser(@CurrentUser() currentUser: User, @Args('input') input: UpdateUserInput) {
-    const user = new User();
-    merge(user, input);
-    user.id = currentUser.id;
-    return this.accountService.updateAccountInfo(user);
+    const profilePictureUrl = currentUser.profilePictureUrl;
+    // const user = new User();
+    // merge(user, input);
+    // user.id = currentUser.id;
+    // return this.accountService.updateAccountInfo(user);
+    return this.fileService.upload(`users/${encode(`${currentUser.id}`)}/${nanoid()}`).pipe(switchMap(uri => {
+      const user = new User();
+      user.id = currentUser.id;
+      user.profilePictureUrl = uri;
+      return this.accountService.updateAccountInfo(user)
+    }))
   }
 
   @UseGuards(AuthGuard)
