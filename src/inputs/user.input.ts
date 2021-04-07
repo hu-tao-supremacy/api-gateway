@@ -15,6 +15,6 @@ export class SubmitEventJoinRequestInput {
   @Field(_ => Int)
   eventId: number;
 
-  @Field(_ => [OmitType(Answer, ['userEvent', 'question'])])
+  @Field(_ => [Answer])
   answers: Omit<Answer, 'userEvent' | 'question'>[]
 }
