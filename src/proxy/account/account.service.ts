@@ -1,4 +1,4 @@
-import { AccountServiceClient, HTS_ACCOUNT_PACKAGE_NAME, ACCOUNT_SERVICE_NAME } from '@onepass/api/account/service';
+import { AccountServiceClient, HTS_ACCOUNT_PACKAGE_NAME, ACCOUNT_SERVICE_NAME, Role } from '@onepass/api/account/service';
 import { ClientGrpc } from '@nestjs/microservices';
 import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -67,5 +67,9 @@ export class AccountService implements OnModuleInit {
       }),
       map(data => data.value)
     )
+  }
+
+  assignRole(userId: number, organizationId: number, role: Role): Observable<boolean> {
+    return this.accountService.assignRole({ userId, organizationId, role }).pipe(map(data => data.value))
   }
 }
