@@ -1,12 +1,12 @@
-import { Field, InputType, Int, ObjectType } from "@nestjs/graphql";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-import { Event } from './event.entity'
+import { Field, InputType, Int, ObjectType } from '@nestjs/graphql';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Event } from './event.entity';
 
 @InputType('OrganizationInput')
 @ObjectType()
 @Entity()
 export class Organization {
-  @Field(_ => Int)
+  @Field((_) => Int)
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -14,7 +14,7 @@ export class Organization {
   @Column({ unique: true })
   name: string;
 
-  @Field(_ => Boolean)
+  @Field((_) => Boolean)
   @Column()
   isVerified: boolean;
 
@@ -75,5 +75,5 @@ export class Organization {
   profilePictureHash?: string;
 
   @Field((_) => [Event])
-  events: Event[]
+  events: Event[];
 }

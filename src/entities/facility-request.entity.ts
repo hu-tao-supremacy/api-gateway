@@ -1,37 +1,37 @@
-import { Field, InputType, Int, ObjectType, registerEnumType } from "@nestjs/graphql";
-import { FacilityRequest_Status as Status } from "@onepass/graphql/common/common";
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Event } from "./event.entity";
-import { Facility } from "./facility.entity";
+import { Field, InputType, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
+import { FacilityRequest_Status as Status } from '@onepass/graphql/common/common';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Event } from './event.entity';
+import { Facility } from './facility.entity';
 
-registerEnumType(Status, { name: "FacilityRequestStatus" })
+registerEnumType(Status, { name: 'FacilityRequestStatus' });
 
 @InputType('FacilityRequestInput')
 @ObjectType()
 @Entity()
 export class FacilityRequest {
-  @Field(_ => Int)
+  @Field((_) => Int)
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Field(_ => Int)
+  @Field((_) => Int)
   @Column()
   eventId: number;
 
-  @Field(_ => Event)
+  @Field((_) => Event)
   @ManyToOne(() => Event)
   event: Event;
 
-  @Field(_ => Int)
+  @Field((_) => Int)
   @Column()
   facilityId: number;
 
-  @Field(_ => Facility)
-  @ManyToOne(() => Facility, { onDelete: "CASCADE" })
+  @Field((_) => Facility)
+  @ManyToOne(() => Facility, { onDelete: 'CASCADE' })
   facility: Facility;
 
-  @Field(_ => Status)
-  @Column("enum", { enum: ["PENDING", "APPROVED", "REJECTED"] })
+  @Field((_) => Status)
+  @Column('enum', { enum: ['PENDING', 'APPROVED', 'REJECTED'] })
   status: string;
 
   @Field({ nullable: true })
@@ -39,10 +39,10 @@ export class FacilityRequest {
   rejectReason?: string;
 
   @Field({ nullable: true })
-  @Column("timestamptz", { nullable: true })
+  @Column('timestamptz', { nullable: true })
   start: string;
 
   @Field({ nullable: true })
-  @Column("timestamptz", { nullable: true })
+  @Column('timestamptz', { nullable: true })
   finish: string;
 }

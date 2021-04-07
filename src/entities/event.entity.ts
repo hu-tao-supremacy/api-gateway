@@ -1,12 +1,5 @@
 import { ObjectType, Field, Int, InputType } from '@nestjs/graphql';
-import {
-  Column,
-  Entity,
-  Index,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, Index, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { EventDuration } from './event-duration.entity';
 import { Location } from './location.entity';
 import { Organization } from './organization.entity';
@@ -84,8 +77,8 @@ export class Event {
 
   @Field((_) => [EventDuration])
   @OneToMany(() => EventDuration, (duration) => duration.event)
-  durations: EventDuration[]
+  durations: EventDuration[];
 
   @Field((_) => [Tag])
-  tags: Tag[]
+  tags: Tag[];
 }
