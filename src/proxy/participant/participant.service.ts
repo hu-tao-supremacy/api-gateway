@@ -1,4 +1,4 @@
-import { Injectable, Inject, OnModuleInit } from '@nestjs/common';
+import { Injectable, Inject, OnModuleInit, NotFoundException } from '@nestjs/common';
 import {
   ParticipantServiceClient,
   HTS_PARTICIPANT_PACKAGE_NAME,
@@ -8,7 +8,7 @@ import { ClientGrpc } from '@nestjs/microservices';
 import { from, Observable } from 'rxjs';
 import { BoolValue } from '@google/wrappers';
 import { DateTime } from 'luxon';
-import { tap, map } from 'rxjs/operators';
+import { tap, map, catchError } from 'rxjs/operators';
 import {
   EventAdapter,
   EventDurationAdapter,
@@ -131,5 +131,14 @@ export class ParticipantService implements OnModuleInit {
     return this.participantService
       .cancelEvent({ userId, eventId })
       .pipe(map((event) => new EventAdapter().toEntity(event)));
+  }
+
+  getUserAnswerByQuestionId(userId: number, questionId: number): Observable<Answer> {
+    return this.participantService.getUserAnswerByQuestionId({ userId, questionId }).pipe(
+      map(data => new AnswerAdapter().toEntity(data)),
+      catchError((error) => {
+        throw new NotFoundException()
+      }),
+    )
   }
 }
