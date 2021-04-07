@@ -1,16 +1,16 @@
 import { Args, Mutation, Query, Resolver, ResolveField, Parent } from '@nestjs/graphql';
-import { User } from '@onepass/entities';
-import { UnauthorizedException, UseGuards } from '@nestjs/common';
+import { User, UserEvent } from '@onepass/entities';
+import { BadRequestException, InternalServerErrorException, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { CurrentUser } from 'src/decorators/user.decorator';
 import { AccountService } from '@onepass/account/account.service';
-import { UpdateUserInput } from '@onepass/inputs/user.input';
+import { SubmitEventJoinRequestInput, UpdateUserInput } from '@onepass/inputs/user.input';
 import { merge } from 'lodash';
 import { ParticipantService } from '@onepass/participant/participant.service';
 import { FileService } from 'src/file/file.service';
 import { encode } from 'js-base64';
 import { nanoid } from 'nanoid';
-import { switchMap, tap } from 'rxjs/operators';
+import { catchError, switchMap, tap, map } from 'rxjs/operators';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -60,5 +60,23 @@ export class UserResolver {
     if (user.profilePictureUrl) {
       return this.fileService.getSignedUrl(user.profilePictureUrl)
     }
+  }
+
+  @UseGuards(AuthGuard)
+  @Mutation(() => Boolean)
+  submitEventJoinRequest(@CurrentUser() currentUser: User, @Args('input') input: SubmitEventJoinRequestInput) {
+    return this.participantService.createEventJoinRequest(currentUser.id, input.eventId).pipe(
+      catchError((error) => {
+        console.log(error)
+        throw new BadRequestException();
+      }),
+      map(userEvent => userEvent.id),
+      switchMap(userEventId => this.participantService.submitAnswers(userEventId, input.answers)),
+      catchError((error) => {
+        console.log(error)
+        throw new InternalServerErrorException();
+      }),
+      map(_ => true)
+    )
   }
 }
