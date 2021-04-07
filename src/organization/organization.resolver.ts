@@ -41,7 +41,7 @@ export class OrganizationResolver {
         const org = new Organization();
         merge(org, input);
         return this.organizerService.createOrganization(currentUser.id, org).pipe(
-            tap((org) => this.accountService.assignRole(currentUser.id, org.id, Role.ORGANIZATION_OWNER))
+            tap((createdOrg) => this.accountService.assignRole(currentUser.id, createdOrg.id, Role.ORGANIZATION_OWNER))
         );
     }
 
