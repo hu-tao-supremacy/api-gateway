@@ -35,12 +35,12 @@ export class FileService {
         return isPublic
           ? from(object.publicUrl())
           : from(
-            object.getSignedUrl({
-              action: 'read',
-              expires: now.plus({ day: 1 }).toJSDate(),
-              accessibleAt: now.minus({ minutes: 30 }).toJSDate(),
-            }),
-          ).pipe(map((data) => data[0]));
+              object.getSignedUrl({
+                action: 'read',
+                expires: now.plus({ day: 1 }).toJSDate(),
+                accessibleAt: now.minus({ minutes: 30 }).toJSDate(),
+              }),
+            ).pipe(map((data) => data[0]));
       }),
     );
   }
