@@ -34,7 +34,7 @@ export class UserResolver {
     // merge(user, input);
     // user.id = currentUser.id;
     // return this.accountService.updateAccountInfo(user);
-    return this.fileService.upload(`users/${encode(`${currentUser.id}`)}/${nanoid()}`).pipe(switchMap(uri => {
+    return this.fileService.upload(`users/${encode(`${currentUser.id}`)}/${nanoid()}`, input.profilePicture).pipe(switchMap(uri => {
       const user = new User();
       merge(user, input)
       user.id = currentUser.id;
