@@ -16,9 +16,9 @@ export class CreateOrganizationInput extends OmitType(Organization, [
 
 @InputType()
 export class AddMembersToOrganizationInput {
-  @Field(_ => Int)
+  @Field((_) => Int)
   organizationId: number;
 
-  @Field(_ => [String])
-  emails: string[]
+  @Field((_) => [String])
+  emails: string[];
 }
