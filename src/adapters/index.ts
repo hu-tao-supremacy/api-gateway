@@ -1,5 +1,5 @@
-export * from './answer.adapter'
 export * from './base.adapter'
+export * from './answer.adapter'
 export * from './event-duration.adapter'
 export * from './event.adapter'
 export * from './location.adapter'
