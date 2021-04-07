@@ -1,9 +1,10 @@
 import { Args, Field, Int, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
-import { Event } from '@onepass/entities';
+import { Event, PickedQuestionGroupType } from '@onepass/entities';
 import { EventService } from './event.service';
 import { OrganizerService } from '@onepass/organizer/organizer.service';
 import { ParticipantService } from '@onepass/participant/participant.service';
 import { DateTime } from 'luxon';
+import { map } from 'rxjs/operators';
 
 @Resolver((_) => Event)
 export class EventResolver {
@@ -11,7 +12,7 @@ export class EventResolver {
     private readonly participantService: ParticipantService,
     private readonly organizerService: OrganizerService,
     private readonly eventService: EventService,
-  ) {}
+  ) { }
 
   @Query((_) => [Event])
   async upcomingEvents() {
@@ -52,8 +53,10 @@ export class EventResolver {
   }
 
   @ResolveField()
-  questionGroups(@Parent() event: Event) {
+  questionGroups(@Parent() event: Event, @Args('type', { type: () => PickedQuestionGroupType }) type: number) {
     const { id } = event;
-    return this.participantService.getQuestionGroupsByEventId(id);
+    return this.participantService.getQuestionGroupsByEventId(id).pipe(map(questionGroups => {
+      return questionGroups.filter(group => group.type === type).sort((a, b) => a.seq - b.seq)
+    }))
   }
 }

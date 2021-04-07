@@ -5,7 +5,7 @@ import { Event } from './event.entity';
 import { Question } from './question.entity';
 import { pick } from 'lodash';
 
-const PickedQuestionGroupType = pick(QuestionGroupType, ['PRE_EVENT', 'POST_EVENT']);
+export const PickedQuestionGroupType = pick(QuestionGroupType, ['PRE_EVENT', 'POST_EVENT']);
 registerEnumType(PickedQuestionGroupType, { name: 'QuestionGroupType' });
 
 @InputType('QuestionGroupInput')
@@ -27,7 +27,7 @@ export class QuestionGroup {
 
   @Field((_) => PickedQuestionGroupType)
   @Column('enum', { enum: ['PRE_EVENT', 'POST_EVENT'] })
-  type: string;
+  type: QuestionGroupType;
 
   @Field((_) => Int)
   @Column()
