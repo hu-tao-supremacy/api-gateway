@@ -10,30 +10,33 @@ import { ParticipantService } from '@onepass/participant/participant.service';
 
 @Resolver(() => User)
 export class UserResolver {
-  constructor(private readonly accountService: AccountService, private readonly participantService: ParticipantService) { }
+  constructor(
+    private readonly accountService: AccountService,
+    private readonly participantService: ParticipantService,
+  ) {}
 
   @UseGuards(AuthGuard)
   @Query(() => User)
   currentUser(@CurrentUser() user: User) {
-    return this.accountService.getUserById(user.id)
+    return this.accountService.getUserById(user.id);
   }
 
   @UseGuards(AuthGuard)
-  @Mutation(_ => User)
+  @Mutation((_) => User)
   updateUser(@CurrentUser() currentUser: User, @Args('input') input: UpdateUserInput) {
-    const user = new User()
-    merge(user, input)
-    user.id = currentUser.id
-    return this.accountService.updateAccountInfo(user)
+    const user = new User();
+    merge(user, input);
+    user.id = currentUser.id;
+    return this.accountService.updateAccountInfo(user);
   }
 
   @UseGuards(AuthGuard)
   @ResolveField()
   events(@CurrentUser() currentUser: User, @Parent() user: User) {
     if (currentUser.id !== user.id) {
-      throw new UnauthorizedException()
+      throw new UnauthorizedException();
     }
 
-    return this.participantService.getEventsByUserId(currentUser.id)
+    return this.participantService.getEventsByUserId(currentUser.id);
   }
 }
