@@ -2,8 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { Storage } from '@google-cloud/storage';
 import { Readable, Writable } from 'stream';
 import { DateTime } from 'luxon';
-import { from, Observable } from 'rxjs';
+import { from, Observable, of } from 'rxjs';
 import { map, tap, switchMap } from 'rxjs/operators';
+import { ReadStream } from 'node:fs';
+import { FileUpload } from 'graphql-upload';
 
 @Injectable()
 export class FileService {
@@ -11,11 +13,24 @@ export class FileService {
     credentials: JSON.parse(process.env.GCP_CREDENTIALS),
   }).bucket(process.env.GCP_BUCKET_NAME);
 
-  async upload(filePath: string, readableStream: Readable) {
-    const file = this.cloudStorage.file(filePath);
-    await new Promise((resolve, reject) =>
-      readableStream.pipe(file.createWriteStream()).on('error', reject).on('finish', resolve),
-    );
+  // async upload(filePath: string, readableStream: Readable) {
+  //   const file = this.cloudStorage.file(filePath);
+  //   await new Promise((resolve, reject) =>
+  //     readableStream.pipe(file.createWriteStream()).on('error', reject).on('finish', resolve),
+  //   );
+  // }
+
+  upload(objectPath: string, fileUpload?: Promise<FileUpload>): Observable<string | null> {
+    return fileUpload ? from(fileUpload).pipe(switchMap(({ filename, createReadStream }) => {
+      const extension = filename.split('.').reverse()[0]
+      const path = `${objectPath}.${extension}`
+      return from(new Promise<boolean>((resolve, reject) => {
+        createReadStream()
+          .pipe(this.createWriteStream(path))
+          .on('finish', () => resolve(true))
+          .on('error', () => reject(false))
+      })).pipe(map(_ => `gs://${process.env.GCP_BUCKET_NAME}/${path}`))
+    })) : of(null)
   }
 
   createWriteStream(filePath: string, publicRead: boolean = false): Writable {
