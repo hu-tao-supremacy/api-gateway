@@ -17,6 +17,7 @@ import { TagModule } from './tag/tag.module';
 @Module({
   imports: [
     GraphQLModule.forRoot({
+      fieldResolverEnhancers: ['interceptors', 'guards'],
       autoSchemaFile: true,
       debug: process.env.NODE_ENV === 'dev',
       playground: true,
