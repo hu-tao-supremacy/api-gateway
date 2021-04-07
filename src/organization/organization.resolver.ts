@@ -7,9 +7,10 @@ import { BadRequestException, HttpException, UseGuards } from '@nestjs/common';
 import { Args, Int, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { merge } from 'lodash';
 import { from, forkJoin } from 'rxjs';
-import { catchError, map, switchMap } from 'rxjs/operators';
+import { catchError, map, tap, switchMap } from 'rxjs/operators';
 import { CurrentUser } from 'src/decorators/user.decorator';
 import { AuthGuard } from 'src/guards/auth.guard';
+import { Role } from '@onepass/graphql/account/service';
 
 @Resolver((_) => Organization)
 export class OrganizationResolver {
@@ -39,7 +40,9 @@ export class OrganizationResolver {
     createOrganization(@CurrentUser() currentUser: User, @Args('input') input: CreateOrganizationInput) {
         const org = new Organization();
         merge(org, input);
-        return this.organizerService.createOrganization(currentUser.id, org);
+        return this.organizerService.createOrganization(currentUser.id, org).pipe(
+            tap((org) => this.accountService.assignRole(currentUser.id, org.id, Role.ORGANIZATION_OWNER))
+        );
     }
 
     @UseGuards(AuthGuard)
