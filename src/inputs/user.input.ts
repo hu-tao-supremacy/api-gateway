@@ -21,3 +21,9 @@ export class SubmitEventJoinRequestInput {
   @Field(_ => [CreateAnswerInput])
   answers: Omit<Answer, 'userEvent' | 'question'>[]
 }
+
+@InputType()
+export class DeleteEventJoinRequestInput {
+  @Field(_ => Int)
+  eventId: number;
+}

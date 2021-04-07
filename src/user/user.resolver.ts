@@ -4,7 +4,7 @@ import { BadRequestException, InternalServerErrorException, UnauthorizedExceptio
 import { AuthGuard } from 'src/guards/auth.guard';
 import { CurrentUser } from 'src/decorators/user.decorator';
 import { AccountService } from '@onepass/account/account.service';
-import { SubmitEventJoinRequestInput, UpdateUserInput } from '@onepass/inputs/user.input';
+import { DeleteEventJoinRequestInput, SubmitEventJoinRequestInput, UpdateUserInput } from '@onepass/inputs/user.input';
 import { merge } from 'lodash';
 import { ParticipantService } from '@onepass/participant/participant.service';
 import { FileService } from 'src/file/file.service';
@@ -78,5 +78,11 @@ export class UserResolver {
       }),
       map(_ => true)
     )
+  }
+
+  @UseGuards(AuthGuard)
+  @Mutation(() => Boolean)
+  deleteEventJoinRequest(@CurrentUser() currentUser: User, @Args('input') input: DeleteEventJoinRequestInput) {
+    return this.participantService.cancelEventJoinRequest(currentUser.id, input.eventId).pipe(map(_ => true))
   }
 }
