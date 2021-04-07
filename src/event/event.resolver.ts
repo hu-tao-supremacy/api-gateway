@@ -1,10 +1,13 @@
 import { Args, Field, Int, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
-import { Event, PickedQuestionGroupType } from '@onepass/entities';
+import { Event, PickedQuestionGroupType, User } from '@onepass/entities';
 import { EventService } from './event.service';
 import { OrganizerService } from '@onepass/organizer/organizer.service';
 import { ParticipantService } from '@onepass/participant/participant.service';
 import { DateTime } from 'luxon';
 import { map } from 'rxjs/operators';
+import { UseGuards } from '@nestjs/common';
+import { AuthGuard } from 'src/guards/auth.guard';
+import { CurrentUser } from 'src/decorators/user.decorator';
 
 @Resolver((_) => Event)
 export class EventResolver {
@@ -38,6 +41,13 @@ export class EventResolver {
     const { locationId } = event;
     if (!locationId) return null;
     return this.participantService.getLocationById(locationId);
+  }
+
+  @UseGuards(AuthGuard)
+  @ResolveField()
+  userData(@CurrentUser() currentUser: User, @Parent() event: Event) {
+    const { id } = event;
+    return null;
   }
 
   @ResolveField()
