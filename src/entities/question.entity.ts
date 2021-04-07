@@ -3,6 +3,7 @@ import { AnswerType } from '@onepass/graphql/common/common';
 import { Column, Entity, Index, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { QuestionGroup } from './question-group.entity';
 import { pick } from 'lodash';
+import { Answer } from './answer.entity';
 
 const PickedAnswerType = pick(AnswerType, ['SCALE', 'TEXT']);
 registerEnumType(PickedAnswerType, { name: 'AnswerType' });
@@ -42,4 +43,7 @@ export class Question {
   @Field()
   @Column()
   subtitle: string;
+
+  @Field(() => Answer)
+  answer: Answer
 }
