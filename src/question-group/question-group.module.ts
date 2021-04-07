@@ -2,6 +2,6 @@ import { Module } from '@nestjs/common';
 import { QuestionGroupResolver } from './question-group.resolver';
 
 @Module({
-  providers: [QuestionGroupResolver]
+  providers: [QuestionGroupResolver],
 })
 export class QuestionGroupModule {}
