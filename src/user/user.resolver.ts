@@ -40,7 +40,9 @@ export class UserResolver {
       user.id = currentUser.id;
       user.profilePictureUrl = uri;
       return this.accountService.updateAccountInfo(user)
-    })).pipe(tap(_ => previousProfilePictureUrl ?? this.fileService.delete(previousProfilePictureUrl)))
+    })).pipe(tap(_ => {
+      if (previousProfilePictureUrl) this.fileService.delete(previousProfilePictureUrl)
+    }))
   }
 
   @UseGuards(AuthGuard)
