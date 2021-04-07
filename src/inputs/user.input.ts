@@ -11,10 +11,13 @@ export class UpdateUserInput extends PartialType(
 }
 
 @InputType()
+class CreateAnswerInput extends OmitType(Answer, ['id', 'userEventId', 'userEvent', 'question']) { }
+
+@InputType()
 export class SubmitEventJoinRequestInput {
   @Field(_ => Int)
   eventId: number;
 
-  @Field(_ => [Answer])
+  @Field(_ => [CreateAnswerInput])
   answers: Omit<Answer, 'userEvent' | 'question'>[]
 }
