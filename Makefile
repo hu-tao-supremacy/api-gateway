@@ -2,6 +2,7 @@ setup:
 	docker-compose up -d
 	yarn
 	@make apis
+	git checkout develop
 
 apis:
 	@cd $(dirname $0)
