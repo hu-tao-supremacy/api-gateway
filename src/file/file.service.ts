@@ -3,7 +3,7 @@ import { Storage } from '@google-cloud/storage';
 import { Readable, Writable } from 'stream';
 import { DateTime } from 'luxon';
 import { from, Observable } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { map, tap, switchMap } from 'rxjs/operators';
 
 @Injectable()
 export class FileService {
@@ -26,8 +26,10 @@ export class FileService {
   // Generate a URL that allows temporary access to download file in GCS.
   getSignedUrl(file: string): Observable<string> {
     // gsutil URI.
-    const now = DateTime.now();
-    const object = this.cloudStorage.file(file);
+    const prefix = `gs://${process.env.GCP_BUCKET_NAME}/`
+    const fileName = file.includes(prefix) ? file.split(prefix)[1] : file;
+    const now = DateTime.now().setZone("Asia/Bangkok")
+    const object = this.cloudStorage.file(fileName);
 
     return from(object.isPublic()).pipe(
       map((isPublicResponse) => isPublicResponse[0]),
@@ -35,12 +37,13 @@ export class FileService {
         return isPublic
           ? from(object.publicUrl())
           : from(
-              object.getSignedUrl({
-                action: 'read',
-                expires: now.plus({ day: 1 }).toJSDate(),
-                accessibleAt: now.minus({ minutes: 30 }).toJSDate(),
-              }),
-            ).pipe(map((data) => data[0]));
+            object.getSignedUrl({
+              version: "v4",
+              action: 'read',
+              expires: now.plus({ day: 1 }).toJSDate(),
+              accessibleAt: now.minus({ minutes: 30 }).toJSDate(),
+            }),
+          ).pipe(map((data) => data[0]));
       }),
     );
   }
