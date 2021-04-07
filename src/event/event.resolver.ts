@@ -11,7 +11,7 @@ export class EventResolver {
     private readonly participantService: ParticipantService,
     private readonly organizerService: OrganizerService,
     private readonly eventService: EventService,
-  ) { }
+  ) {}
 
   @Query((_) => [Event])
   async upcomingEvents() {
