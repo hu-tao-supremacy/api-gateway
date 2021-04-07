@@ -15,7 +15,7 @@ import {
   TagAdapter,
   LocationAdapter,
   QuestionGroupAdapter,
-  QuestionAdapter
+  QuestionAdapter,
 } from '@onepass/adapters';
 import { Event, EventDuration, Tag, Location, QuestionGroup, Question } from '@onepass/entities';
 
@@ -23,7 +23,7 @@ import { Event, EventDuration, Tag, Location, QuestionGroup, Question } from '@o
 export class ParticipantService implements OnModuleInit {
   private participantService: ParticipantServiceClient;
 
-  constructor(@Inject(HTS_PARTICIPANT_PACKAGE_NAME) private client: ClientGrpc) { }
+  constructor(@Inject(HTS_PARTICIPANT_PACKAGE_NAME) private client: ClientGrpc) {}
 
   onModuleInit() {
     this.participantService = this.client.getService<ParticipantServiceClient>(PARTICIPANT_SERVICE_NAME);
@@ -108,7 +108,7 @@ export class ParticipantService implements OnModuleInit {
   getEventsByUserId(userId: number): Observable<Event[]> {
     return this.participantService.getEventsByUserId({ userId }).pipe(
       map((project) => project.event ?? []),
-      map((events) => events.map(event => new EventAdapter().toEntity(event)))
-    )
+      map((events) => events.map((event) => new EventAdapter().toEntity(event))),
+    );
   }
 }

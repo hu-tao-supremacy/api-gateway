@@ -7,8 +7,8 @@ import { HTS_ACCOUNT_PACKAGE_NAME } from '@onepass/api/account/service';
 import { HTS_FACILITY_PACKAGE_NAME } from '@onepass/api/facility/service';
 import { HTS_ORGANIZER_PACKAGE_NAME } from '@onepass/api/organizer/service';
 import { HTS_PARTICIPANT_PACKAGE_NAME } from '@onepass/api/participant/service';
-import { ClientsModule, Transport } from '@nestjs/microservices'
-import { join } from 'path'
+import { ClientsModule, Transport } from '@nestjs/microservices';
+import { join } from 'path';
 
 @Global()
 @Module({
@@ -20,10 +20,7 @@ import { join } from 'path'
         options: {
           url: process.env.HTS_SVC_PARTICIPANT,
           package: HTS_PARTICIPANT_PACKAGE_NAME,
-          protoPath: join(
-            __dirname,
-            '../../../apis/proto/hts/participant/service.proto',
-          ),
+          protoPath: join(__dirname, '../../../apis/proto/hts/participant/service.proto'),
           loader: {
             includeDirs: [join(__dirname, '../../../apis/proto')],
           },
@@ -35,10 +32,7 @@ import { join } from 'path'
         options: {
           url: process.env.HTS_SVC_ACCOUNT,
           package: HTS_ACCOUNT_PACKAGE_NAME,
-          protoPath: join(
-            __dirname,
-            '../../../apis/proto/hts/account/service.proto',
-          ),
+          protoPath: join(__dirname, '../../../apis/proto/hts/account/service.proto'),
           loader: {
             includeDirs: [join(__dirname, '../../../apis/proto')],
           },
@@ -50,10 +44,7 @@ import { join } from 'path'
         options: {
           url: process.env.HTS_SVC_ORGANIZER,
           package: HTS_ORGANIZER_PACKAGE_NAME,
-          protoPath: join(
-            __dirname,
-            '../../../apis/proto/hts/organizer/service.proto',
-          ),
+          protoPath: join(__dirname, '../../../apis/proto/hts/organizer/service.proto'),
           loader: {
             includeDirs: [join(__dirname, '../../../apis/proto')],
           },
@@ -65,10 +56,7 @@ import { join } from 'path'
         options: {
           url: process.env.HTS_SVC_FACILITY,
           package: HTS_FACILITY_PACKAGE_NAME,
-          protoPath: join(
-            __dirname,
-            '../../../apis/proto/hts/facility/service.proto',
-          ),
+          protoPath: join(__dirname, '../../../apis/proto/hts/facility/service.proto'),
           loader: {
             includeDirs: [join(__dirname, '../../../apis/proto')],
           },
@@ -79,4 +67,4 @@ import { join } from 'path'
   providers: [AccountService, FacilityService, OrganizerService, ParticipantService],
   exports: [ClientsModule, AccountService, FacilityService, OrganizerService, ParticipantService],
 })
-export class ProxyModule { }
+export class ProxyModule {}

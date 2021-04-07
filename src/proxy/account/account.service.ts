@@ -1,4 +1,9 @@
-import { AccountServiceClient, HTS_ACCOUNT_PACKAGE_NAME, ACCOUNT_SERVICE_NAME, Role } from '@onepass/api/account/service';
+import {
+  AccountServiceClient,
+  HTS_ACCOUNT_PACKAGE_NAME,
+  ACCOUNT_SERVICE_NAME,
+  Role,
+} from '@onepass/api/account/service';
 import { ClientGrpc } from '@nestjs/microservices';
 import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -12,7 +17,7 @@ import { Permission } from '@onepass/api/common/common';
 export class AccountService implements OnModuleInit {
   private accountService: AccountServiceClient;
 
-  constructor(@Inject(HTS_ACCOUNT_PACKAGE_NAME) private client: ClientGrpc) { }
+  constructor(@Inject(HTS_ACCOUNT_PACKAGE_NAME) private client: ClientGrpc) {}
 
   onModuleInit() {
     this.accountService = this.client.getService<AccountServiceClient>(ACCOUNT_SERVICE_NAME);
@@ -63,13 +68,13 @@ export class AccountService implements OnModuleInit {
   hasPermission(userId: Permission, organizationId: number, permission: Permission) {
     return this.accountService.hasPermission({ userId, organizationId, permissionName: permission }).pipe(
       catchError((error: HttpException) => {
-        throw new UnauthorizedException(error)
+        throw new UnauthorizedException(error);
       }),
-      map(data => data.value)
-    )
+      map((data) => data.value),
+    );
   }
 
   assignRole(userId: number, organizationId: number, role: Role): Observable<boolean> {
-    return this.accountService.assignRole({ userId, organizationId, role }).pipe(map(data => data.value))
+    return this.accountService.assignRole({ userId, organizationId, role }).pipe(map((data) => data.value));
   }
 }

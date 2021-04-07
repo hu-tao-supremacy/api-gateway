@@ -15,7 +15,7 @@ import { OrganizationAdapter } from '@onepass/adapters';
 export class OrganizerService implements OnModuleInit {
   private organizerService: OrganizerServiceClient;
 
-  constructor(@Inject(HTS_ORGANIZER_PACKAGE_NAME) private client: ClientGrpc) { }
+  constructor(@Inject(HTS_ORGANIZER_PACKAGE_NAME) private client: ClientGrpc) {}
 
   onModuleInit() {
     this.organizerService = this.client.getService<OrganizerServiceClient>(ORGANIZER_SERVICE_NAME);
@@ -39,7 +39,7 @@ export class OrganizerService implements OnModuleInit {
   createOrganization(userId: number, organization: Organization): Observable<Organization> {
     return this.organizerService
       .createOrganization({ userId, organization: new OrganizationAdapter().toInterchangeFormat(organization) })
-      .pipe(map(org => new OrganizationAdapter().toEntity(org)));
+      .pipe(map((org) => new OrganizationAdapter().toEntity(org)));
   }
 
   addMembersToOrganization(currentUserId: number, organizationId: number, userIds: number[]): Observable<boolean> {
