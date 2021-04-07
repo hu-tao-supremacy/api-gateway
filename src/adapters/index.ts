@@ -1,3 +1,4 @@
+export * from './answer.adapter'
 export * from './base.adapter'
 export * from './event-duration.adapter'
 export * from './event.adapter'
