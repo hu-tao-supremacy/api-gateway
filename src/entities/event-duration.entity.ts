@@ -1,35 +1,29 @@
-import { Field, InputType, Int, ObjectType } from "@nestjs/graphql";
-import {
-  Column,
-  Entity,
-  Index,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from "typeorm";
-import { Event } from "./event.entity";
+import { Field, InputType, Int, ObjectType } from '@nestjs/graphql';
+import { Column, Entity, Index, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Event } from './event.entity';
 
 @InputType('EventDurationInput')
 @ObjectType()
-@Index(["eventId", "start", "finish"], { unique: true })
+@Index(['eventId', 'start', 'finish'], { unique: true })
 @Entity()
 export class EventDuration {
-  @Field(_ => Int)
+  @Field((_) => Int)
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Field(_ => Int)
+  @Field((_) => Int)
   @Column()
   eventId: number;
 
   @Field()
-  @Column("timestamptz")
+  @Column('timestamptz')
   start: string;
 
   @Field()
-  @Column("timestamptz")
+  @Column('timestamptz')
   finish: string;
 
-  @Field(_ => Event)
-  @ManyToOne(() => Event, { onDelete: "CASCADE" })
+  @Field((_) => Event)
+  @ManyToOne(() => Event, { onDelete: 'CASCADE' })
   event: Event;
 }

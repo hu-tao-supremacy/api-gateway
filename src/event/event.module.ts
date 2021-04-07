@@ -4,9 +4,6 @@ import { EventResolver } from './event.resolver';
 
 @Module({
   imports: [],
-  providers: [
-    EventService,
-    EventResolver,
-  ],
+  providers: [EventService, EventResolver],
 })
-export class EventModule { }
+export class EventModule {}

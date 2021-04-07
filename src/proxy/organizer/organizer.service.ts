@@ -36,10 +36,10 @@ export class OrganizerService implements OnModuleInit {
     );
   }
 
-  createOrganization(userId: number, organization: Organization): Observable<Boolean> {
+  createOrganization(userId: number, organization: Organization): Observable<Organization> {
     return this.organizerService
       .createOrganization({ userId, organization: new OrganizationAdapter().toInterchangeFormat(organization) })
-      .pipe(map((_) => true));
+      .pipe(map((org) => new OrganizationAdapter().toEntity(org)));
   }
 
   addMembersToOrganization(currentUserId: number, organizationId: number, userIds: number[]): Observable<boolean> {

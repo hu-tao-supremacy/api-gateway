@@ -11,7 +11,7 @@ export class EventResolver {
     private readonly participantService: ParticipantService,
     private readonly organizerService: OrganizerService,
     private readonly eventService: EventService,
-  ) { }
+  ) {}
 
   @Query((_) => [Event])
   async upcomingEvents() {
@@ -49,5 +49,11 @@ export class EventResolver {
   durations(@Parent() event: Event) {
     const { id } = event;
     return this.participantService.getEventDurationsByEventId(id);
+  }
+
+  @ResolveField()
+  questionGroups(@Parent() event: Event) {
+    const { id } = event;
+    return this.participantService.getQuestionGroupsByEventId(id);
   }
 }
