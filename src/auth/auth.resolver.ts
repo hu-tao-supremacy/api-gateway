@@ -6,7 +6,7 @@ import { decode } from 'js-base64';
 
 @Resolver()
 export class AuthResolver {
-  constructor(private readonly service: AuthService) { }
+  constructor(private readonly service: AuthService) {}
 
   @Mutation(() => AuthenticateOutput)
   authenticate(@Args('input') input: AuthenticateInput) {

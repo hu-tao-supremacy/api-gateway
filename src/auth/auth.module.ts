@@ -8,4 +8,4 @@ import { AuthResolver } from './auth.resolver';
   providers: [AuthService, AuthResolver],
   exports: [AuthService],
 })
-export class AuthModule { }
+export class AuthModule {}
