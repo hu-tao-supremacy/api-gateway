@@ -7,13 +7,15 @@ import { AccountService } from '@onepass/account/account.service';
 import { UpdateUserInput } from '@onepass/inputs/user.input';
 import { merge } from 'lodash';
 import { ParticipantService } from '@onepass/participant/participant.service';
+import { FileService } from 'src/file/file.service';
 
 @Resolver(() => User)
 export class UserResolver {
   constructor(
     private readonly accountService: AccountService,
     private readonly participantService: ParticipantService,
-  ) {}
+    private readonly fileService: FileService
+  ) { }
 
   @UseGuards(AuthGuard)
   @Query(() => User)
@@ -38,5 +40,12 @@ export class UserResolver {
     }
 
     return this.participantService.getEventsByUserId(currentUser.id);
+  }
+
+  @ResolveField()
+  profilePictureUrl(@Parent() user: User) {
+    if (user.profilePictureUrl) {
+      return this.fileService.getSignedUrl(user.profilePictureUrl)
+    }
   }
 }
