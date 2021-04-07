@@ -16,14 +16,16 @@ import {
   LocationAdapter,
   QuestionGroupAdapter,
   QuestionAdapter,
+  UserEventAdapter,
+  AnswerAdapter,
 } from '@onepass/adapters';
-import { Event, EventDuration, Tag, Location, QuestionGroup, Question } from '@onepass/entities';
+import { Event, EventDuration, Tag, Location, QuestionGroup, Question, UserEvent, Answer } from '@onepass/entities';
 
 @Injectable()
 export class ParticipantService implements OnModuleInit {
   private participantService: ParticipantServiceClient;
 
-  constructor(@Inject(HTS_PARTICIPANT_PACKAGE_NAME) private client: ClientGrpc) {}
+  constructor(@Inject(HTS_PARTICIPANT_PACKAGE_NAME) private client: ClientGrpc) { }
 
   onModuleInit() {
     this.participantService = this.client.getService<ParticipantServiceClient>(PARTICIPANT_SERVICE_NAME);
@@ -110,5 +112,24 @@ export class ParticipantService implements OnModuleInit {
       map((project) => project.event ?? []),
       map((events) => events.map((event) => new EventAdapter().toEntity(event))),
     );
+  }
+
+  createEventJoinRequest(userId: number, eventId: number): Observable<UserEvent> {
+    return this.participantService
+      .joinEvent({ userId, eventId })
+      .pipe(map((userEvent) => new UserEventAdapter().toEntity(userEvent)));
+  }
+
+  submitAnswers(userEventId: number, answers: Omit<Answer, 'userEvent' | 'question'>[]): Observable<Answer[]> {
+    return this.participantService.submitAnswerForPostEventQuestion({ userEventId, answers }).pipe(
+      map((project) => project.answers ?? []),
+      map((answers) => answers.map((answer) => new AnswerAdapter().toEntity(answer))),
+    );
+  }
+
+  cancelEventJoinRequest(userId: number, eventId: number): Observable<Event> {
+    return this.participantService
+      .cancelEvent({ userId, eventId })
+      .pipe(map((event) => new EventAdapter().toEntity(event)));
   }
 }
