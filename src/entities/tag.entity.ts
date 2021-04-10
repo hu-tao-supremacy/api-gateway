@@ -12,4 +12,7 @@ export class Tag {
   @Field()
   @Column({ unique: true })
   name: string;
+
+  @Field(() => [Event])
+  events: Event[]
 }
