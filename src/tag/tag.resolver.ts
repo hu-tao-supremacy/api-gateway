@@ -1,4 +1,4 @@
-import { Args, Int, Query, Resolver } from '@nestjs/graphql';
+import { Args, Int, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { Tag } from '@onepass/entities';
 import { ParticipantService } from '@onepass/participant/participant.service';
 import { Observable } from 'rxjs';
@@ -17,5 +17,10 @@ export class TagResolver {
         @Args('id', { type: () => Int }) id: number
     ): Observable<Tag> {
         return this.participantService.getTagById(id)
+    }
+
+    @ResolveField(() => [Event])
+    events(@Parent() tag: Tag) {
+        return this.participantService.getEventsByTagId(tag.id);
     }
 }
