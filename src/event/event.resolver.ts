@@ -45,7 +45,7 @@ export class EventResolver {
 
   @UseGuards(AuthGuard)
   @ResolveField()
-  userData(@CurrentUser() currentUser: User, @Parent() event: Event) {
+  attendance(@CurrentUser() currentUser: User, @Parent() event: Event) {
     const { id } = event;
     return null;
   }
