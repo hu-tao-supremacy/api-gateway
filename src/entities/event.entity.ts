@@ -5,7 +5,7 @@ import { Location } from './location.entity';
 import { Organization } from './organization.entity';
 import { QuestionGroup } from './question-group.entity';
 import { Tag } from './tag.entity';
-import { UserEvent } from './user-event.entity';
+import { Attendance, UserEvent } from './user-event.entity';
 
 @InputType('EventInput')
 @ObjectType()
@@ -83,6 +83,6 @@ export class Event {
   @Field((_) => [Tag])
   tags: Tag[];
 
-  @Field(() => UserEvent, { nullable: true })
-  userData?: UserEvent
+  @Field(() => Attendance, { nullable: true })
+  attendance?: Attendance
 }
