@@ -51,6 +51,15 @@ export class OrganizerService implements OnModuleInit {
     return this.organizerService.addUsersToOrganization(request).pipe(map((_) => true));
   }
 
+  removeMembersFromOrganization(currentUserId: number, organizationId: number, userIds: number[]): Observable<boolean> {
+    const request: UpdateUsersInOrganizationRequest = {
+      userId: currentUserId,
+      organizationId,
+      userIds,
+    };
+    return this.organizerService.removeUsersFromOrganization(request).pipe(map((_) => true));
+  }
+
   updateOrganization(userId: number, organization: Organization): Observable<Organization> {
     return this.organizerService.updateOrganization({ userId, organization: new OrganizationAdapter().toInterchangeFormat(organization) }).pipe(map(org => new OrganizationAdapter().toEntity(org)))
   }
