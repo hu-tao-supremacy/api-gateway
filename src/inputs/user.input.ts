@@ -14,7 +14,7 @@ export class UpdateUserInput extends PartialType(
 class CreateAnswerInput extends OmitType(Answer, ['id', 'userEventId', 'userEvent', 'question']) { }
 
 @InputType()
-export class SubmitEventJoinRequestInput {
+export class CreateJoinRequestInput {
   @Field(_ => Int)
   eventId: number;
 
@@ -23,7 +23,7 @@ export class SubmitEventJoinRequestInput {
 }
 
 @InputType()
-export class DeleteEventJoinRequestInput {
+export class DeleteJoinRequestInput {
   @Field(_ => Int)
   eventId: number;
 }
