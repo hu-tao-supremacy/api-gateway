@@ -4,7 +4,7 @@ import { BadRequestException, InternalServerErrorException, UnauthorizedExceptio
 import { AuthGuard } from 'src/guards/auth.guard';
 import { CurrentUser } from 'src/decorators/user.decorator';
 import { AccountService } from '@onepass/account/account.service';
-import { DeleteEventJoinRequestInput, SubmitEventJoinRequestInput, UpdateUserInput } from '@onepass/inputs/user.input';
+import { CreateJoinRequestInput, DeleteJoinRequestInput, UpdateUserInput } from '@onepass/inputs/user.input';
 import { merge } from 'lodash';
 import { ParticipantService } from '@onepass/participant/participant.service';
 import { FileService } from 'src/file/file.service';
@@ -60,7 +60,7 @@ export class UserResolver {
 
   @UseGuards(AuthGuard)
   @Mutation(() => Boolean)
-  createJoinRequest(@CurrentUser() currentUser: User, @Args('input') input: SubmitEventJoinRequestInput) {
+  createJoinRequest(@CurrentUser() currentUser: User, @Args('input') input: CreateJoinRequestInput) {
     return this.participantService.createJoinRequest(currentUser.id, input.eventId).pipe(
       catchError((error) => {
         console.log(error)
@@ -78,7 +78,7 @@ export class UserResolver {
 
   @UseGuards(AuthGuard)
   @Mutation(() => Boolean)
-  deleteJoinRequest(@CurrentUser() currentUser: User, @Args('input') input: DeleteEventJoinRequestInput) {
+  deleteJoinRequest(@CurrentUser() currentUser: User, @Args('input') input: DeleteJoinRequestInput) {
     return this.participantService.deleteJoinRequest(currentUser.id, input.eventId).pipe(map(_ => true))
   }
 }
