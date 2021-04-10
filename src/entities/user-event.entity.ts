@@ -1,5 +1,5 @@
 import { UserEvent_Status as Status } from '@onepass/graphql/common/common';
-import { Field, InputType, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
+import { Field, InputType, Int, IntersectionType, ObjectType, OmitType, registerEnumType } from '@nestjs/graphql';
 import { Column, Entity, Index, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Event } from './event.entity';
 import { User } from './user.entity';
@@ -47,5 +47,6 @@ export class UserEvent {
   status: string;
 }
 
+@InputType('AttendanceInput')
 @ObjectType()
 export class Attendance extends UserEvent {}
