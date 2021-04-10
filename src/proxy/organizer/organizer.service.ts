@@ -50,4 +50,8 @@ export class OrganizerService implements OnModuleInit {
     };
     return this.organizerService.addUsersToOrganization(request).pipe(map((_) => true));
   }
+
+  updateOrganization(userId: number, organization: Organization): Observable<Organization> {
+    return this.organizerService.updateOrganization({ userId, organization: new OrganizationAdapter().toInterchangeFormat(organization) }).pipe(map(org => new OrganizationAdapter().toEntity(org)))
+  }
 }
