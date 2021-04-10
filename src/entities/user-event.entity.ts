@@ -47,4 +47,5 @@ export class UserEvent {
   status: string;
 }
 
+@ObjectType()
 export class Attendance extends UserEvent {}
