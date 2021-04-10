@@ -2,7 +2,7 @@ import { Event, Organization, User } from '@onepass/entities';
 import { AccountService } from '@onepass/account/account.service';
 import { OrganizerService } from '@onepass/organizer/organizer.service';
 import { ParticipantService } from '@onepass/participant/participant.service';
-import { CreateOrganizationInput, AddMembersToOrganizationInput, UpdateOrganizationInput } from '@onepass/inputs/organization.input';
+import { CreateOrganizationInput, UpdateOrganizationInput, UpdateMembersInOrganizationInput } from '@onepass/inputs/organization.input';
 import { BadRequestException, HttpException, UseGuards } from '@nestjs/common';
 import { Args, Int, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { merge } from 'lodash';
@@ -66,7 +66,7 @@ export class OrganizationResolver {
 
   @UseGuards(AuthGuard)
   @Mutation((_) => Organization)
-  addMembersToOrganization(@CurrentUser() currentUser: User, @Args('input') input: AddMembersToOrganizationInput) {
+  addMembersToOrganization(@CurrentUser() currentUser: User, @Args('input') input: UpdateMembersInOrganizationInput) {
     return forkJoin(input.emails.map((email) => this.accountService.getUserByEmail(email))).pipe(
       catchError((error: HttpException) => {
         console.log(error.getStatus(), error);
@@ -83,7 +83,7 @@ export class OrganizationResolver {
 
   @UseGuards(AuthGuard)
   @Mutation((_) => Organization)
-  removeMembersFromOrganization(@CurrentUser() currentUser: User, @Args('input') input: AddMembersToOrganizationInput) {
+  removeMembersFromOrganization(@CurrentUser() currentUser: User, @Args('input') input: UpdateMembersInOrganizationInput) {
     return forkJoin(input.emails.map((email) => this.accountService.getUserByEmail(email))).pipe(
       catchError((error: HttpException) => {
         console.log(error.getStatus(), error);

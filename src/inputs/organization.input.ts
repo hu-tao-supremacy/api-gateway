@@ -16,7 +16,7 @@ export class CreateOrganizationInput extends OmitType(Organization, [
 }
 
 @InputType()
-export class AddMembersToOrganizationInput {
+export class UpdateMembersInOrganizationInput {
   @Field((_) => Int)
   organizationId: number;
 
