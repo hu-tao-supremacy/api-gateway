@@ -1,5 +1,5 @@
 import { Organization } from '@onepass/entities';
-import { Field, InputType, Int, OmitType } from '@nestjs/graphql';
+import { Field, InputType, Int, IntersectionType, OmitType, PartialType, PickType } from '@nestjs/graphql';
 import { FileUpload, GraphQLUpload } from 'graphql-upload';
 
 @InputType()
@@ -22,3 +22,6 @@ export class AddMembersToOrganizationInput {
   @Field((_) => [String])
   emails: string[];
 }
+
+@InputType()
+export class UpdateOrganizationInput extends IntersectionType(PartialType(CreateOrganizationInput), PickType(Organization, ['id'] as const)) {}
