@@ -4,6 +4,7 @@ import {
   HTS_PARTICIPANT_PACKAGE_NAME,
   PARTICIPANT_SERVICE_NAME,
 } from '@onepass/api/participant/service';
+import { QuestionGroupType } from '@onepass/api/common/common'
 import { ClientGrpc } from '@nestjs/microservices';
 import { from, Observable } from 'rxjs';
 import { BoolValue } from '@google/wrappers';
@@ -114,20 +115,20 @@ export class ParticipantService implements OnModuleInit {
     );
   }
 
-  createEventJoinRequest(userId: number, eventId: number): Observable<UserEvent> {
+  createJoinRequest(userId: number, eventId: number): Observable<UserEvent> {
     return this.participantService
       .joinEvent({ userId, eventId })
       .pipe(map((userEvent) => new UserEventAdapter().toEntity(userEvent)));
   }
 
-  submitAnswers(userEventId: number, answers: Omit<Answer, 'userEvent' | 'question'>[]): Observable<Answer[]> {
-    return this.participantService.submitAnswerForPostEventQuestion({ userEventId, answers }).pipe(
+  submitAnswers(userEventId: number, answers: Omit<Answer, 'userEvent' | 'question'>[], type: QuestionGroupType): Observable<Answer[]> {
+    return this.participantService.submitAnswersForEventQuestion({ userEventId, answers, type }).pipe(
       map((project) => project.answers ?? []),
       map((answers) => answers.map((answer) => new AnswerAdapter().toEntity(answer))),
     );
   }
 
-  cancelEventJoinRequest(userId: number, eventId: number): Observable<Event> {
+  deleteJoinRequest(userId: number, eventId: number): Observable<Event> {
     return this.participantService
       .cancelEvent({ userId, eventId })
       .pipe(map((event) => new EventAdapter().toEntity(event)));
