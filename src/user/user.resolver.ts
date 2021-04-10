@@ -1,5 +1,5 @@
 import { Args, Mutation, Query, Resolver, ResolveField, Parent } from '@nestjs/graphql';
-import { User, UserEvent } from '@onepass/entities';
+import { PickedQuestionGroupType, User, UserEvent } from '@onepass/entities';
 import { BadRequestException, InternalServerErrorException, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { CurrentUser } from 'src/decorators/user.decorator';
@@ -30,10 +30,6 @@ export class UserResolver {
   @Mutation((_) => User)
   updateUser(@CurrentUser() currentUser: User, @Args('input') input: UpdateUserInput) {
     const previousProfilePictureUrl = currentUser.profilePictureUrl;
-    // const user = new User();
-    // merge(user, input);
-    // user.id = currentUser.id;
-    // return this.accountService.updateAccountInfo(user);
     return this.fileService.upload(`users/${encode(`${currentUser.id}`)}/${nanoid()}`, input.profilePicture).pipe(switchMap(uri => {
       const user = new User();
       merge(user, input)
@@ -64,14 +60,14 @@ export class UserResolver {
 
   @UseGuards(AuthGuard)
   @Mutation(() => Boolean)
-  submitEventJoinRequest(@CurrentUser() currentUser: User, @Args('input') input: SubmitEventJoinRequestInput) {
-    return this.participantService.createEventJoinRequest(currentUser.id, input.eventId).pipe(
+  createJoinRequest(@CurrentUser() currentUser: User, @Args('input') input: SubmitEventJoinRequestInput) {
+    return this.participantService.createJoinRequest(currentUser.id, input.eventId).pipe(
       catchError((error) => {
         console.log(error)
         throw new BadRequestException();
       }),
       map(userEvent => userEvent.id),
-      switchMap(userEventId => this.participantService.submitAnswers(userEventId, input.answers)),
+      switchMap(userEventId => this.participantService.submitAnswers(userEventId, input.answers, PickedQuestionGroupType.PRE_EVENT)),
       catchError((error) => {
         console.log(error)
         throw new InternalServerErrorException();
@@ -82,7 +78,7 @@ export class UserResolver {
 
   @UseGuards(AuthGuard)
   @Mutation(() => Boolean)
-  deleteEventJoinRequest(@CurrentUser() currentUser: User, @Args('input') input: DeleteEventJoinRequestInput) {
-    return this.participantService.cancelEventJoinRequest(currentUser.id, input.eventId).pipe(map(_ => true))
+  deleteJoinRequest(@CurrentUser() currentUser: User, @Args('input') input: DeleteEventJoinRequestInput) {
+    return this.participantService.deleteJoinRequest(currentUser.id, input.eventId).pipe(map(_ => true))
   }
 }
