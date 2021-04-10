@@ -7,7 +7,7 @@ import {
 import { ClientGrpc } from '@nestjs/microservices';
 import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { User } from '@onepass/entities';
+import { Tag, User } from '@onepass/entities';
 import { UserAdapter } from '@onepass/adapters';
 import { BoolValue } from '@google/wrappers';
 import { HttpException, Inject, Injectable, OnModuleInit, UnauthorizedException } from '@nestjs/common';
@@ -76,5 +76,10 @@ export class AccountService implements OnModuleInit {
 
   assignRole(userId: number, organizationId: number, role: Role): Observable<boolean> {
     return this.accountService.assignRole({ userId, organizationId, role }).pipe(map((data) => data.value));
+  }
+
+  setUserInterests(userId: number, tags: Tag[]) {
+    const tagIds = tags.map(tag => tag.id);
+    return this.accountService.updateUserInterests({ userId, tagIds }).pipe(map(_ => true))
   }
 }
