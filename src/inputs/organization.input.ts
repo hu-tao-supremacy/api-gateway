@@ -9,6 +9,7 @@ export class CreateOrganizationInput extends OmitType(Organization, [
   'events',
   'profilePictureUrl',
   'profilePictureHash',
+  'events'
 ] as const) {
   @Field((_) => GraphQLUpload, { nullable: true })
   profilePicture: Promise<FileUpload>;
