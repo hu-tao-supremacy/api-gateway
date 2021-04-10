@@ -45,6 +45,22 @@ export class User {
 
   @Field({ nullable: true })
   @Column({ nullable: true })
+  phoneNumber?: string;
+
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  district?: string;
+
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  province?: string;
+
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  zipCode?: string;
+
+  @Field({ nullable: true })
+  @Column({ nullable: true })
   profilePictureUrl?: string;
 
   @Field((_) => Boolean)
