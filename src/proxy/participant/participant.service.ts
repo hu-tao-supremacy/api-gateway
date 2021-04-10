@@ -153,4 +153,11 @@ export class ParticipantService implements OnModuleInit {
   getTagById(id: number): Observable<Tag> {
     return null;
   }
+
+  getEventsByTagId(id: number): Observable<Event[]> {
+    return this.participantService.getEventsByTagIds({ tagIds: [id] }).pipe(
+      map(project => project.event ?? []),
+      map(events => events.map(event => new EventAdapter().toEntity(event)))
+    )
+  }
 }
