@@ -11,6 +11,9 @@ import { catchError, map, tap, switchMap } from 'rxjs/operators';
 import { CurrentUser } from 'src/decorators/user.decorator';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { Role } from '@onepass/graphql/account/service';
+import { FileService } from 'src/file/file.service';
+import { encode } from 'js-base64';
+import { nanoid } from 'nanoid';
 
 @Resolver((_) => Organization)
 export class OrganizationResolver {
@@ -18,6 +21,7 @@ export class OrganizationResolver {
     private readonly accountService: AccountService,
     private readonly organizerService: OrganizerService,
     private readonly participantService: ParticipantService,
+    private readonly fileService: FileService
   ) {}
 
   @Query((_) => [Organization])
@@ -44,6 +48,12 @@ export class OrganizationResolver {
       .createOrganization(currentUser.id, org)
       .pipe(
         tap((createdOrg) => this.accountService.assignRole(currentUser.id, createdOrg.id, Role.ORGANIZATION_OWNER)),
+        switchMap((createdOrg) => this.fileService.upload(`orgs/${encode(`${createdOrg.id}`)}/${nanoid()}`, input.profilePicture)),
+        switchMap((uri) => {
+          const org = new Organization();
+          org.profilePictureUrl = uri;
+          return this.updateOrganization(currentUser, org)
+        })
       );
   }
 
