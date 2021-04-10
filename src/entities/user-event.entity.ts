@@ -46,3 +46,5 @@ export class UserEvent {
   @Column('enum', { enum: ['PENDING', 'APPROVED', 'REJECTED'] })
   status: string;
 }
+
+export class Attendance extends UserEvent {}
