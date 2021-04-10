@@ -73,7 +73,24 @@ export class OrganizationResolver {
         throw new BadRequestException();
       }),
       map((users) => users.map((user) => user.id)),
-      switchMap((ids) => this.organizerService.addMembersToOrganization(currentUser.id, input.organizationId, ids)),
+      tap((ids) => this.organizerService.addMembersToOrganization(currentUser.id, input.organizationId, ids)),
+      switchMap((ids) => {
+        return forkJoin(ids.map(id => this.accountService.assignRole(id, input.organizationId, Role.ORGANIZATION_MEMBER)))
+      }),
+      map(_ => true)
+    );
+  }
+
+  @UseGuards(AuthGuard)
+  @Mutation((_) => Organization)
+  removeMembersFromOrganization(@CurrentUser() currentUser: User, @Args('input') input: AddMembersToOrganizationInput) {
+    return forkJoin(input.emails.map((email) => this.accountService.getUserByEmail(email))).pipe(
+      catchError((error: HttpException) => {
+        console.log(error.getStatus(), error);
+        throw new BadRequestException();
+      }),
+      map((users) => users.map((user) => user.id)),
+      switchMap((ids) => this.organizerService.removeMembersFromOrganization(currentUser.id, input.organizationId, ids)),
     );
   }
 }
