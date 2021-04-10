@@ -11,20 +11,20 @@ export class UpdateUserInput extends PartialType(
 }
 
 @InputType()
-class CreateJoinRequestAnswerInput extends OmitType(Answer, ['id', 'userEventId', 'userEvent', 'question']) { }
+class CreateJoinRequestAnswerInput extends OmitType(Answer, ['id', 'userEventId', 'userEvent', 'question']) {}
 
 @InputType()
 export class CreateJoinRequestInput {
-  @Field(_ => Int)
+  @Field((_) => Int)
   eventId: number;
 
-  @Field(_ => [CreateJoinRequestAnswerInput])
-  answers: Omit<Answer, 'userEvent' | 'question'>[]
+  @Field((_) => [CreateJoinRequestAnswerInput])
+  answers: Omit<Answer, 'userEvent' | 'question'>[];
 }
 
 @InputType()
 export class DeleteJoinRequestInput {
-  @Field(_ => Int)
+  @Field((_) => Int)
   eventId: number;
 }
 
@@ -34,5 +34,5 @@ class SetUserInterestsTagInput extends OmitType(Tag, ['events', 'name']) {}
 @InputType()
 export class SetUserInterestsInput {
   @Field(() => [SetUserInterestsTagInput])
-  tags: Tag[]
+  tags: Tag[];
 }

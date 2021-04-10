@@ -7,11 +7,11 @@ import { AuthGuard } from 'src/guards/auth.guard';
 
 @Resolver(() => Question)
 export class QuestionResolver {
-    constructor(private readonly participantService: ParticipantService) { }
+  constructor(private readonly participantService: ParticipantService) {}
 
-    @UseGuards(AuthGuard)
-    @ResolveField()
-    answer(@CurrentUser() currentUser: User, @Parent() question: Question) {
-        return this.participantService.getUserAnswerByQuestionId(currentUser.id, question.id)
-    }
+  @UseGuards(AuthGuard)
+  @ResolveField()
+  answer(@CurrentUser() currentUser: User, @Parent() question: Question) {
+    return this.participantService.getUserAnswerByQuestionId(currentUser.id, question.id);
+  }
 }

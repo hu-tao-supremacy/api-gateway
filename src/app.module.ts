@@ -38,9 +38,13 @@ import { TagModule } from './tag/tag.module';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(graphqlUploadExpress({
-      maxFileSize: 5 * 1000 * 1000
-    })).forRoutes('graphql');
+    consumer
+      .apply(
+        graphqlUploadExpress({
+          maxFileSize: 5 * 1000 * 1000,
+        }),
+      )
+      .forRoutes('graphql');
     consumer.apply(AuthMiddleware).forRoutes('graphql');
   }
 }

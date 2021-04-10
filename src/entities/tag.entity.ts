@@ -15,5 +15,5 @@ export class Tag {
   name: string;
 
   @Field(() => [Event])
-  events: Event[]
+  events: Event[];
 }

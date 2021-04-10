@@ -21,16 +21,22 @@ export class FileService {
   // }
 
   upload(objectPath: string, fileUpload?: Promise<FileUpload>): Observable<string | null> {
-    return fileUpload ? from(fileUpload).pipe(switchMap(({ filename, createReadStream }) => {
-      const extension = filename.split('.').reverse()[0]
-      const path = `${objectPath}.${extension}`
-      return from(new Promise<boolean>((resolve, reject) => {
-        createReadStream()
-          .pipe(this.createWriteStream(path))
-          .on('finish', () => resolve(true))
-          .on('error', () => reject(false))
-      })).pipe(map(_ => `gs://${process.env.GCP_BUCKET_NAME}/${path}`))
-    })) : of(null)
+    return fileUpload
+      ? from(fileUpload).pipe(
+          switchMap(({ filename, createReadStream }) => {
+            const extension = filename.split('.').reverse()[0];
+            const path = `${objectPath}.${extension}`;
+            return from(
+              new Promise<boolean>((resolve, reject) => {
+                createReadStream()
+                  .pipe(this.createWriteStream(path))
+                  .on('finish', () => resolve(true))
+                  .on('error', () => reject(false));
+              }),
+            ).pipe(map((_) => `gs://${process.env.GCP_BUCKET_NAME}/${path}`));
+          }),
+        )
+      : of(null);
   }
 
   createWriteStream(filePath: string, publicRead: boolean = false): Writable {
@@ -39,20 +45,18 @@ export class FileService {
   }
 
   delete(uri: string): Observable<boolean> {
-    const prefix = `gs://${process.env.GCP_BUCKET_NAME}/`
+    const prefix = `gs://${process.env.GCP_BUCKET_NAME}/`;
     const fileName = uri.includes(prefix) ? uri.split(prefix)[1] : uri;
-    const object = this.cloudStorage.file(fileName)
-    return from(object.delete()).pipe(
-      map(_ => true)
-    )
+    const object = this.cloudStorage.file(fileName);
+    return from(object.delete()).pipe(map((_) => true));
   }
 
   // Generate a URL that allows temporary access to download file in GCS.
   getSignedUrl(file: string): Observable<string> {
     // gsutil URI.
-    const prefix = `gs://${process.env.GCP_BUCKET_NAME}/`
+    const prefix = `gs://${process.env.GCP_BUCKET_NAME}/`;
     const fileName = file.includes(prefix) ? file.split(prefix)[1] : file;
-    const now = DateTime.now().setZone("Asia/Bangkok")
+    const now = DateTime.now().setZone('Asia/Bangkok');
     const object = this.cloudStorage.file(fileName);
 
     return from(object.isPublic()).pipe(
@@ -61,13 +65,13 @@ export class FileService {
         return isPublic
           ? from(object.publicUrl())
           : from(
-            object.getSignedUrl({
-              version: "v4",
-              action: 'read',
-              expires: now.plus({ day: 1 }).toJSDate(),
-              accessibleAt: now.minus({ minutes: 30 }).toJSDate(),
-            }),
-          ).pipe(map((data) => data[0]));
+              object.getSignedUrl({
+                version: 'v4',
+                action: 'read',
+                expires: now.plus({ day: 1 }).toJSDate(),
+                accessibleAt: now.minus({ minutes: 30 }).toJSDate(),
+              }),
+            ).pipe(map((data) => data[0]));
       }),
     );
   }

@@ -79,7 +79,7 @@ export class AccountService implements OnModuleInit {
   }
 
   setUserInterests(userId: number, tags: Tag[]) {
-    const tagIds = tags.map(tag => tag.id);
-    return this.accountService.updateUserInterests({ userId, tagIds }).pipe(map(_ => true))
+    const tagIds = tags.map((tag) => tag.id);
+    return this.accountService.updateUserInterests({ userId, tagIds }).pipe(map((_) => true));
   }
 }

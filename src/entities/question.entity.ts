@@ -45,5 +45,5 @@ export class Question {
   subtitle: string;
 
   @Field(() => Answer)
-  answer: Answer
+  answer: Answer;
 }

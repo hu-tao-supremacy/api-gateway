@@ -4,7 +4,12 @@ import { BadRequestException, InternalServerErrorException, UnauthorizedExceptio
 import { AuthGuard } from 'src/guards/auth.guard';
 import { CurrentUser } from 'src/decorators/user.decorator';
 import { AccountService } from '@onepass/account/account.service';
-import { CreateJoinRequestInput, DeleteJoinRequestInput, SetUserInterestsInput, UpdateUserInput } from '@onepass/inputs/user.input';
+import {
+  CreateJoinRequestInput,
+  DeleteJoinRequestInput,
+  SetUserInterestsInput,
+  UpdateUserInput,
+} from '@onepass/inputs/user.input';
 import { merge } from 'lodash';
 import { ParticipantService } from '@onepass/participant/participant.service';
 import { FileService } from 'src/file/file.service';
@@ -17,8 +22,8 @@ export class UserResolver {
   constructor(
     private readonly accountService: AccountService,
     private readonly participantService: ParticipantService,
-    private readonly fileService: FileService
-  ) { }
+    private readonly fileService: FileService,
+  ) {}
 
   @UseGuards(AuthGuard)
   @Query(() => User)
@@ -30,21 +35,28 @@ export class UserResolver {
   @Mutation((_) => User)
   updateUser(@CurrentUser() currentUser: User, @Args('input') input: UpdateUserInput) {
     const previousProfilePictureUrl = currentUser.profilePictureUrl;
-    return this.fileService.upload(`users/${encode(`${currentUser.id}`)}/${nanoid()}`, input.profilePicture).pipe(switchMap(uri => {
-      const user = new User();
-      merge(user, input)
-      user.id = currentUser.id;
-      user.profilePictureUrl = uri;
-      return this.accountService.updateAccountInfo(user)
-    })).pipe(tap(_ => {
-      if (previousProfilePictureUrl) this.fileService.delete(previousProfilePictureUrl)
-    }))
+    return this.fileService
+      .upload(`users/${encode(`${currentUser.id}`)}/${nanoid()}`, input.profilePicture)
+      .pipe(
+        switchMap((uri) => {
+          const user = new User();
+          merge(user, input);
+          user.id = currentUser.id;
+          user.profilePictureUrl = uri;
+          return this.accountService.updateAccountInfo(user);
+        }),
+      )
+      .pipe(
+        tap((_) => {
+          if (previousProfilePictureUrl) this.fileService.delete(previousProfilePictureUrl);
+        }),
+      );
   }
 
   @UseGuards(AuthGuard)
   @Mutation(() => Boolean)
   setUserInterests(@CurrentUser() currentUser: User, @Args('input') input: SetUserInterestsInput) {
-    return this.accountService.setUserInterests(currentUser.id, input.tags)
+    return this.accountService.setUserInterests(currentUser.id, input.tags);
   }
 
   @UseGuards(AuthGuard)
@@ -60,7 +72,7 @@ export class UserResolver {
   @ResolveField()
   profilePictureUrl(@Parent() user: User) {
     if (user.profilePictureUrl) {
-      return this.fileService.getSignedUrl(user.profilePictureUrl)
+      return this.fileService.getSignedUrl(user.profilePictureUrl);
     }
   }
 
@@ -69,30 +81,30 @@ export class UserResolver {
   createJoinRequest(@CurrentUser() currentUser: User, @Args('input') input: CreateJoinRequestInput) {
     return this.participantService.createJoinRequest(currentUser.id, input.eventId).pipe(
       catchError((error) => {
-        console.log(error)
+        console.log(error);
         throw new BadRequestException();
       }),
-      map(userEvent => userEvent.id),
-      switchMap(userEventId => this.participantService.submitAnswers(userEventId, input.answers, PickedQuestionGroupType.PRE_EVENT)),
+      map((userEvent) => userEvent.id),
+      switchMap((userEventId) =>
+        this.participantService.submitAnswers(userEventId, input.answers, PickedQuestionGroupType.PRE_EVENT),
+      ),
       catchError((error) => {
-        console.log(error)
+        console.log(error);
         throw new InternalServerErrorException();
       }),
-      map(_ => true)
-    )
+      map((_) => true),
+    );
   }
 
   @UseGuards(AuthGuard)
   @Mutation(() => Boolean)
   deleteJoinRequest(@CurrentUser() currentUser: User, @Args('input') input: DeleteJoinRequestInput) {
-    return this.participantService.deleteJoinRequest(currentUser.id, input.eventId).pipe(map(_ => true))
+    return this.participantService.deleteJoinRequest(currentUser.id, input.eventId).pipe(map((_) => true));
   }
 
   @UseGuards(AuthGuard)
   @Query(() => User)
-  user(
-    @Args('email') email: string
-  ) {
-    return this.accountService.getUserByEmail(email)
+  user(@Args('email') email: string) {
+    return this.accountService.getUserByEmail(email);
   }
 }

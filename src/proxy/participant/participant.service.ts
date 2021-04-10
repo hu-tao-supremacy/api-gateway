@@ -4,7 +4,7 @@ import {
   HTS_PARTICIPANT_PACKAGE_NAME,
   PARTICIPANT_SERVICE_NAME,
 } from '@onepass/api/participant/service';
-import { QuestionGroupType } from '@onepass/api/common/common'
+import { QuestionGroupType } from '@onepass/api/common/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { from, Observable } from 'rxjs';
 import { BoolValue } from '@google/wrappers';
@@ -26,7 +26,7 @@ import { Event, EventDuration, Tag, Location, QuestionGroup, Question, UserEvent
 export class ParticipantService implements OnModuleInit {
   private participantService: ParticipantServiceClient;
 
-  constructor(@Inject(HTS_PARTICIPANT_PACKAGE_NAME) private client: ClientGrpc) { }
+  constructor(@Inject(HTS_PARTICIPANT_PACKAGE_NAME) private client: ClientGrpc) {}
 
   onModuleInit() {
     this.participantService = this.client.getService<ParticipantServiceClient>(PARTICIPANT_SERVICE_NAME);
@@ -121,7 +121,11 @@ export class ParticipantService implements OnModuleInit {
       .pipe(map((userEvent) => new UserEventAdapter().toEntity(userEvent)));
   }
 
-  submitAnswers(userEventId: number, answers: Omit<Answer, 'userEvent' | 'question'>[], type: QuestionGroupType): Observable<Answer[]> {
+  submitAnswers(
+    userEventId: number,
+    answers: Omit<Answer, 'userEvent' | 'question'>[],
+    type: QuestionGroupType,
+  ): Observable<Answer[]> {
     return this.participantService.submitAnswersForEventQuestion({ userEventId, answers, type }).pipe(
       map((project) => project.answers ?? []),
       map((answers) => answers.map((answer) => new AnswerAdapter().toEntity(answer))),
@@ -136,18 +140,18 @@ export class ParticipantService implements OnModuleInit {
 
   getUserAnswerByQuestionId(userId: number, questionId: number): Observable<Answer> {
     return this.participantService.getUserAnswerByQuestionId({ userId, questionId }).pipe(
-      map(data => new AnswerAdapter().toEntity(data)),
+      map((data) => new AnswerAdapter().toEntity(data)),
       catchError((error) => {
-        throw new NotFoundException()
+        throw new NotFoundException();
       }),
-    )
+    );
   }
 
   getTags(): Observable<Tag[]> {
     return this.participantService.getAllTags({}).pipe(
-      map(project => project.tags ?? []),
-      map(tags => tags.map(tag => new TagAdapter().toEntity(tag)))
-    )
+      map((project) => project.tags ?? []),
+      map((tags) => tags.map((tag) => new TagAdapter().toEntity(tag))),
+    );
   }
 
   getTagById(id: number): Observable<Tag> {
@@ -156,8 +160,8 @@ export class ParticipantService implements OnModuleInit {
 
   getEventsByTagId(id: number): Observable<Event[]> {
     return this.participantService.getEventsByTagIds({ tagIds: [id] }).pipe(
-      map(project => project.event ?? []),
-      map(events => events.map(event => new EventAdapter().toEntity(event)))
-    )
+      map((project) => project.event ?? []),
+      map((events) => events.map((event) => new EventAdapter().toEntity(event))),
+    );
   }
 }

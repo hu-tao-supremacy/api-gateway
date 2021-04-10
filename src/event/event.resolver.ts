@@ -15,7 +15,7 @@ export class EventResolver {
     private readonly participantService: ParticipantService,
     private readonly organizerService: OrganizerService,
     private readonly eventService: EventService,
-  ) { }
+  ) {}
 
   @Query((_) => [Event])
   async upcomingEvents() {
@@ -65,8 +65,10 @@ export class EventResolver {
   @ResolveField()
   questionGroups(@Parent() event: Event, @Args('type', { type: () => PickedQuestionGroupType }) type: number) {
     const { id } = event;
-    return this.participantService.getQuestionGroupsByEventId(id).pipe(map(questionGroups => {
-      return questionGroups.filter(group => group.type === type).sort((a, b) => a.seq - b.seq)
-    }))
+    return this.participantService.getQuestionGroupsByEventId(id).pipe(
+      map((questionGroups) => {
+        return questionGroups.filter((group) => group.type === type).sort((a, b) => a.seq - b.seq);
+      }),
+    );
   }
 }

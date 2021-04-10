@@ -9,7 +9,7 @@ export class CreateOrganizationInput extends OmitType(Organization, [
   'events',
   'profilePictureUrl',
   'profilePictureHash',
-  'events'
+  'events',
 ] as const) {
   @Field((_) => GraphQLUpload, { nullable: true })
   profilePicture: Promise<FileUpload>;
@@ -25,4 +25,7 @@ export class UpdateMembersInOrganizationInput {
 }
 
 @InputType()
-export class UpdateOrganizationInput extends IntersectionType(PartialType(CreateOrganizationInput), PickType(Organization, ['id'] as const)) {}
+export class UpdateOrganizationInput extends IntersectionType(
+  PartialType(CreateOrganizationInput),
+  PickType(Organization, ['id'] as const),
+) {}

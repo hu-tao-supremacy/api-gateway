@@ -5,22 +5,20 @@ import { Observable } from 'rxjs';
 
 @Resolver(() => Tag)
 export class TagResolver {
-    constructor(private readonly participantService: ParticipantService) {}
+  constructor(private readonly participantService: ParticipantService) {}
 
-    @Query(() => [Tag])
-    tags(): Observable<Tag[]> {
-        return this.participantService.getTags()
-    }
-   
-    @Query(() => Tag)
-    tag(
-        @Args('id', { type: () => Int }) id: number
-    ): Observable<Tag> {
-        return this.participantService.getTagById(id)
-    }
+  @Query(() => [Tag])
+  tags(): Observable<Tag[]> {
+    return this.participantService.getTags();
+  }
 
-    @ResolveField(() => [Event])
-    events(@Parent() tag: Tag) {
-        return this.participantService.getEventsByTagId(tag.id);
-    }
+  @Query(() => Tag)
+  tag(@Args('id', { type: () => Int }) id: number): Observable<Tag> {
+    return this.participantService.getTagById(id);
+  }
+
+  @ResolveField(() => [Event])
+  events(@Parent() tag: Tag) {
+    return this.participantService.getEventsByTagId(tag.id);
+  }
 }
