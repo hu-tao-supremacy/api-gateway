@@ -2,7 +2,7 @@ import { Event, Organization, User } from '@onepass/entities';
 import { AccountService } from '@onepass/account/account.service';
 import { OrganizerService } from '@onepass/organizer/organizer.service';
 import { ParticipantService } from '@onepass/participant/participant.service';
-import { CreateOrganizationInput, AddMembersToOrganizationInput } from '@onepass/inputs/organization.input';
+import { CreateOrganizationInput, AddMembersToOrganizationInput, UpdateOrganizationInput } from '@onepass/inputs/organization.input';
 import { BadRequestException, HttpException, UseGuards } from '@nestjs/common';
 import { Args, Int, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { merge } from 'lodash';
@@ -36,7 +36,7 @@ export class OrganizationResolver {
   }
 
   @UseGuards(AuthGuard)
-  @Mutation((_) => Boolean)
+  @Mutation((_) => Organization)
   createOrganization(@CurrentUser() currentUser: User, @Args('input') input: CreateOrganizationInput) {
     const org = new Organization();
     merge(org, input);
@@ -45,6 +45,13 @@ export class OrganizationResolver {
       .pipe(
         tap((createdOrg) => this.accountService.assignRole(currentUser.id, createdOrg.id, Role.ORGANIZATION_OWNER)),
       );
+  }
+
+  @UseGuards(AuthGuard)
+  @Mutation((_) => Organization)
+  updateOrganization(@CurrentUser() currentUser: User, @Args('input') input: UpdateOrganizationInput) {
+    const org = merge(new Organization(), input)
+    return this.updateOrganization(currentUser, org);
   }
 
   @UseGuards(AuthGuard)
