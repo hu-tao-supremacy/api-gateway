@@ -142,4 +142,15 @@ export class ParticipantService implements OnModuleInit {
       }),
     )
   }
+
+  getTags(): Observable<Tag[]> {
+    return this.participantService.getAllTags({}).pipe(
+      map(project => project.tags ?? []),
+      map(tags => tags.map(tag => new TagAdapter().toEntity(tag)))
+    )
+  }
+
+  getTagById(id: number): Observable<Tag> {
+    return null;
+  }
 }
