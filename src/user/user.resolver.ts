@@ -4,7 +4,7 @@ import { BadRequestException, InternalServerErrorException, UnauthorizedExceptio
 import { AuthGuard } from 'src/guards/auth.guard';
 import { CurrentUser } from 'src/decorators/user.decorator';
 import { AccountService } from '@onepass/account/account.service';
-import { CreateJoinRequestInput, DeleteJoinRequestInput, UpdateUserInput } from '@onepass/inputs/user.input';
+import { CreateJoinRequestInput, DeleteJoinRequestInput, SetUserInterestsInput, UpdateUserInput } from '@onepass/inputs/user.input';
 import { merge } from 'lodash';
 import { ParticipantService } from '@onepass/participant/participant.service';
 import { FileService } from 'src/file/file.service';
@@ -39,6 +39,12 @@ export class UserResolver {
     })).pipe(tap(_ => {
       if (previousProfilePictureUrl) this.fileService.delete(previousProfilePictureUrl)
     }))
+  }
+
+  @UseGuards(AuthGuard)
+  @Mutation(() => Boolean)
+  setUserInterests(@CurrentUser() currentUser: User, @Args('input') input: SetUserInterestsInput) {
+    return this.accountService.setUserInterests(currentUser.id, input.tags)
   }
 
   @UseGuards(AuthGuard)
