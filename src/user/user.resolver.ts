@@ -81,4 +81,12 @@ export class UserResolver {
   deleteJoinRequest(@CurrentUser() currentUser: User, @Args('input') input: DeleteJoinRequestInput) {
     return this.participantService.deleteJoinRequest(currentUser.id, input.eventId).pipe(map(_ => true))
   }
+
+  @UseGuards(AuthGuard)
+  @Query(() => User)
+  user(
+    @Args('email') email: string
+  ) {
+    return this.accountService.getUserByEmail(email)
+  }
 }
