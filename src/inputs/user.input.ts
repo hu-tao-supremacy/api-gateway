@@ -33,6 +33,6 @@ class SetUserInterestsTagsInput extends OmitType(Tag, ['events', 'name']) {}
 
 @InputType()
 export class SetUserInterestsInput {
-  @Field(() => [SetUserInterestsTagsInput ])
-  tags: Omit<Tag, 'events' | 'name'>[]
+  @Field(() => [SetUserInterestsTagsInput])
+  tags: Tag[]
 }
