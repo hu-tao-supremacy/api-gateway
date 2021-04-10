@@ -29,10 +29,10 @@ export class DeleteJoinRequestInput {
 }
 
 @InputType()
-class SetUserInterestsTagsInput extends OmitType(Tag, ['events', 'name']) {}
+class SetUserInterestsTagInput extends OmitType(Tag, ['events', 'name']) {}
 
 @InputType()
 export class SetUserInterestsInput {
-  @Field(() => [SetUserInterestsTagsInput])
+  @Field(() => [SetUserInterestsTagInput])
   tags: Tag[]
 }
