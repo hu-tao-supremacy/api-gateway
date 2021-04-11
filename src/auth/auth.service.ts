@@ -84,6 +84,10 @@ export class AuthService {
   isAuthenticated(accessToken: string): Observable<boolean> {
     return this.accountService.isAuthenticated(accessToken);
   }
+
+  generateAccessToken(userId: number): Observable<string> {
+    return this.accountService.generateAccessToken(userId)
+  }
 }
 
 interface ChulaSSOServiceAccount {
