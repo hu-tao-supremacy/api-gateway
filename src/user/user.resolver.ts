@@ -88,9 +88,10 @@ export class UserResolver {
       switchMap((userEventId) =>
         this.participantService.submitAnswers(userEventId, input.answers, PickedQuestionGroupType.PRE_EVENT),
       ),
-      catchError((error) => {
+      catchError(async (error) => {
         console.log(error);
-        throw new InternalServerErrorException();
+        await this.participantService.deleteJoinRequest(currentUser.id, input.eventId).toPromise();
+        throw new InternalServerErrorException()
       }),
       map((_) => true),
     );
