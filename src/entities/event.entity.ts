@@ -85,7 +85,7 @@ export class Event {
   tags: Tag[];
 
   @Field(() => Attendance, { nullable: true })
-  attendance: Attendance;
+  attendance?: Attendance;
   
   @Field(() => [User])
   attendees: User[]
