@@ -4,6 +4,7 @@ import {
   HTS_ORGANIZER_PACKAGE_NAME,
   ORGANIZER_SERVICE_NAME,
   UpdateUsersInOrganizationRequest,
+  UpdateTagRequest,
 } from '@onepass/api/organizer/service';
 import { ClientGrpc } from '@nestjs/microservices';
 import { from, Observable } from 'rxjs';
@@ -68,5 +69,16 @@ export class OrganizerService implements OnModuleInit {
 
   setEventQuestions(userId: number, eventId: number, questionGroups: QuestionGroup[]): Observable<boolean> {
     return from([true]);
+  }
+
+  setEventTags(userId: number, eventId: number, tagIds: number[]): Observable<number[]> {
+    const request: UpdateTagRequest = {
+      userId,
+      tagIds,
+      eventId
+    }
+    return this.organizerService.addTags(request).pipe(
+      map(projectedValue => projectedValue.ids ?? []),
+    )
   }
 }
