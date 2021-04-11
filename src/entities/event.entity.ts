@@ -88,7 +88,7 @@ export class Event {
   attendance: Attendance;
   
   @Field(() => [User])
-  attendees?: User[]
+  attendees: User[]
 
   @Field(() => Int)
   attendeeCount: number;
