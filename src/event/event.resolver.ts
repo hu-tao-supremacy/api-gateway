@@ -1,4 +1,4 @@
-import { Args, Field, Int, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
+import { Args, Int, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { Event, PickedQuestionGroupType, User } from '@onepass/entities';
 import { EventService } from './event.service';
 import { OrganizerService } from '@onepass/organizer/organizer.service';
@@ -8,7 +8,8 @@ import { map } from 'rxjs/operators';
 import { UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { CurrentUser } from 'src/decorators/user.decorator';
-import { SetEventQuestionsInput } from '@onepass/inputs/event.input';
+import { CreateEventInput, SetEventQuestionsInput } from '@onepass/inputs/event.input';
+import { merge } from 'lodash';
 
 @Resolver((_) => Event)
 export class EventResolver {
@@ -77,5 +78,11 @@ export class EventResolver {
   @Mutation(() => Boolean)
   setEventQuestions(@CurrentUser() currentUser: User, @Args('input') input: SetEventQuestionsInput) {
     return this.organizerService.setEventQuestions(currentUser.id, input.eventId, input.questionGroups);
+  }
+
+  @UseGuards(AuthGuard)
+  @Mutation(() => Event)
+  createEvent(@CurrentUser() currentUser: User, @Args('input') input: CreateEventInput) {
+    return this.organizerService.createEvent(currentUser.id, merge(new Event(), input))
   }
 }
