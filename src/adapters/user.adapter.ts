@@ -4,6 +4,7 @@ import { User as User } from '@onepass/entities';
 
 export class UserAdapter extends BaseAdapter<UserIF, User> {
   optionalFields = [
+    'academicYear',
     'phoneNumber',
     'district',
     'province',
