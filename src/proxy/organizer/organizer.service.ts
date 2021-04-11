@@ -5,12 +5,13 @@ import {
   ORGANIZER_SERVICE_NAME,
   UpdateUsersInOrganizationRequest,
   UpdateTagRequest,
+  CreateEventRequest,
 } from '@onepass/api/organizer/service';
 import { ClientGrpc } from '@nestjs/microservices';
 import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Organization, QuestionGroup } from '@onepass/entities';
-import { OrganizationAdapter } from '@onepass/adapters';
+import { Organization, QuestionGroup, Event } from '@onepass/entities';
+import { EventAdapter, OrganizationAdapter } from '@onepass/adapters';
 
 @Injectable()
 export class OrganizerService implements OnModuleInit {
@@ -79,6 +80,17 @@ export class OrganizerService implements OnModuleInit {
     }
     return this.organizerService.addTags(request).pipe(
       map(projectedValue => projectedValue.ids ?? []),
+    )
+  }
+
+  createEvent(userId: number, event: Event): Observable<Event> {
+    const request: CreateEventRequest = {
+      userId,
+      event: new EventAdapter().toInterchangeFormat(event)
+    }
+
+    return this.organizerService.createEvent(request).pipe(
+      map((event) => new EventAdapter().toEntity(event))
     )
   }
 }
