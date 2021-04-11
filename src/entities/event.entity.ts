@@ -6,6 +6,7 @@ import { Organization } from './organization.entity';
 import { QuestionGroup } from './question-group.entity';
 import { Tag } from './tag.entity';
 import { Attendance, UserEvent } from './user-event.entity';
+import { User } from './user.entity';
 
 @InputType('EventInput')
 @ObjectType()
@@ -84,5 +85,11 @@ export class Event {
   tags: Tag[];
 
   @Field(() => Attendance, { nullable: true })
-  attendance?: Attendance;
+  attendance: Attendance;
+  
+  @Field(() => [User])
+  attendees?: User[]
+
+  @Field(() => Int)
+  attendeeCount: number;
 }
