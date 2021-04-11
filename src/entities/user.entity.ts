@@ -75,6 +75,10 @@ export class User {
   @Column('enum', { enum: ['M', 'F', 'NS'] })
   gender: string;
 
+  @Field(() => Int, { nullable: true })
+  @Column({ nullable: true })
+  academicYear?: number;
+
   @Field((_) => [Organization])
   organizations: Organization[];
 
