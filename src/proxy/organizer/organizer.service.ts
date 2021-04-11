@@ -8,10 +8,10 @@ import {
   CreateEventRequest,
 } from '@onepass/api/organizer/service';
 import { ClientGrpc } from '@nestjs/microservices';
-import { from, Observable } from 'rxjs';
+import { forkJoin, from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Organization, QuestionGroup, Event } from '@onepass/entities';
-import { EventAdapter, OrganizationAdapter } from '@onepass/adapters';
+import { Organization, QuestionGroup, Event, Question } from '@onepass/entities';
+import { EventAdapter, OrganizationAdapter, QuestionAdapter, QuestionGroupAdapter } from '@onepass/adapters';
 
 @Injectable()
 export class OrganizerService implements OnModuleInit {
@@ -68,8 +68,30 @@ export class OrganizerService implements OnModuleInit {
       .pipe(map((org) => new OrganizationAdapter().toEntity(org)));
   }
 
-  setEventQuestions(userId: number, eventId: number, questionGroups: QuestionGroup[]): Observable<boolean> {
-    return from([true]);
+  async setEventQuestions(userId: number, eventId: number, questionGroups: QuestionGroup[]): Promise<boolean> {
+    const createdGroups = await this.organizerService.addQuestionGroups({
+      userId,
+      questionGroups: questionGroups.map(group => {
+        group.eventId = eventId;
+        return new QuestionGroupAdapter().toInterchangeFormat(group)
+      })
+    }).toPromise()
+
+    const groupIds = createdGroups.questionGroups.map(group => group.id);
+
+    const questions = questionGroups.map((group, i) => {
+      return group.questions.map(question => {
+        question.questionGroupId = groupIds[i]
+        return question;
+      })
+    }).flatMap((data) => data)
+
+    const createdQuestions = await this.organizerService.addQuestions({
+      userId,
+      questions: questions.map(question => new QuestionAdapter().toInterchangeFormat(question))
+    }).toPromise();
+
+    return true;
   }
 
   setEventTags(userId: number, eventId: number, tagIds: number[]): Observable<number[]> {
