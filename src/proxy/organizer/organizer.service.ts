@@ -67,6 +67,6 @@ export class OrganizerService implements OnModuleInit {
   }
 
   setEventQuestions(userId: number, eventId: number, questionGroups: QuestionGroup[]): Observable<boolean> {
-    return from([true])
+    return from([true]);
   }
 }

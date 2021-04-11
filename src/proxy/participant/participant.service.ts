@@ -155,9 +155,7 @@ export class ParticipantService implements OnModuleInit {
   }
 
   getTagById(id: number): Observable<Tag> {
-    return this.participantService.getTagById({ id }).pipe(
-      map((tag) => new TagAdapter().toEntity(tag))
-    );
+    return this.participantService.getTagById({ id }).pipe(map((tag) => new TagAdapter().toEntity(tag)));
   }
 
   getEventsByTagId(id: number): Observable<Event[]> {
