@@ -4,12 +4,12 @@ import { EventService } from './event.service';
 import { OrganizerService } from '@onepass/organizer/organizer.service';
 import { ParticipantService } from '@onepass/participant/participant.service';
 import { DateTime } from 'luxon';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { CurrentUser } from 'src/decorators/user.decorator';
 import { CreateEventInput, SetEventQuestionsInput } from '@onepass/inputs/event.input';
-import { merge } from 'lodash';
+import { create, merge } from 'lodash';
 
 @Resolver((_) => Event)
 export class EventResolver {
@@ -83,6 +83,9 @@ export class EventResolver {
   @UseGuards(AuthGuard)
   @Mutation(() => Event)
   createEvent(@CurrentUser() currentUser: User, @Args('input') input: CreateEventInput) {
-    return this.organizerService.createEvent(currentUser.id, merge(new Event(), input))
+    const tags = input.tags.map(tag => tag.id);
+    return this.organizerService.createEvent(currentUser.id, merge(new Event(), input)).pipe(
+        tap(createdEvent => this.organizerService.setEventTags(currentUser.id, createdEvent.id, tags))
+      )
   }
 }
