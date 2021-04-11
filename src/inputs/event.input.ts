@@ -43,7 +43,6 @@ export class CreateEventInput extends OmitType(Event, [
   'location',
   'locationId',
   'organization',
-  'organizationId',
   'posterImageHash',
   'posterImageUrl',
   'profileImageHash',
