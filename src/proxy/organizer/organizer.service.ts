@@ -79,7 +79,8 @@ export class OrganizerService implements OnModuleInit {
       eventId
     }
     return this.organizerService.addTags(request).pipe(
-      map(projectedValue => projectedValue.ids ?? []),
+      map(projectedValue => projectedValue.eventTags ?? []),
+      map(eventTags => eventTags.map(eventTag => eventTag.tagId))
     )
   }
 
