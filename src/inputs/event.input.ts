@@ -1,5 +1,5 @@
-import { Answer, Question, QuestionGroup, Tag, User } from '@onepass/entities';
-import { InputType, Field, OmitType, PartialType, Int } from '@nestjs/graphql';
+import { Answer, Event, Question, QuestionGroup, Tag, User } from '@onepass/entities';
+import { InputType, Field, OmitType, PartialType, Int, InputType, IntersectionType, PickType, InputType } from '@nestjs/graphql';
 import { FileUpload, GraphQLUpload } from 'graphql-upload';
 
 @InputType()
@@ -8,7 +8,7 @@ class SetEventQuestionsQuestionInput extends OmitType(Question, ['id', 'answer',
 @InputType()
 class SetEventQuestionsQuestionGroupInput extends OmitType(QuestionGroup, ['id', 'eventId', 'event', 'questions']) {
   @Field(() => [SetEventQuestionsQuestionInput])
-  questions: Question[]
+  questions: Question[];
 }
 
 @InputType()
@@ -19,3 +19,50 @@ export class SetEventQuestionsInput {
   @Field(() => [SetEventQuestionsQuestionGroupInput])
   questionGroups: QuestionGroup[];
 }
+
+@InputType()
+class SetEventTagsTagInput extends OmitType(Tag, ['id', 'events'] as const) {}
+
+@InputType()
+export class SetEventTagsInput {
+  @Field(() => Int)
+  eventId: number;
+
+  @Field(() => [SetEventTagsTagInput])
+  tags: Tag[];
+}
+
+@InputType()
+export class CreateEventInput extends OmitType(Event, [
+  'attendance',
+  'attendeeCount',
+  'attendees',
+  'coverImageHash',
+  'coverImageUrl',
+  'durations',
+  'location',
+  'locationId',
+  'organization',
+  'organizationId',
+  'posterImageHash',
+  'posterImageUrl',
+  'profileImageHash',
+  'profileImageUrl',
+  'questionGroups',
+  'tags',
+] as const) {
+  @Field(() => GraphQLUpload, { nullable: true })
+  coverImage?: Promise<FileUpload>;
+
+  @Field(() => GraphQLUpload, { nullable: true })
+  posterImage?: Promise<FileUpload>;
+
+  @Field(() => GraphQLUpload, { nullable: true })
+  profileImage?: Promise<FileUpload>;
+
+  @Field(() => [SetEventTagsTagInput], { nullable: true })
+  tags?: Tag[]
+}
+
+@InputType()
+export class UpdateEventInput extends IntersectionType(PartialType(CreateEventInput), PickType(Event, ['id'] as const)) {}
