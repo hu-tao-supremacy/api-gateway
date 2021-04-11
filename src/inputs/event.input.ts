@@ -21,7 +21,7 @@ export class SetEventQuestionsInput {
 }
 
 @InputType()
-class SetEventTagsTagInput extends OmitType(Tag, ['id', 'events'] as const) {}
+class SetEventTagsTagInput extends OmitType(Tag, ['name', 'events'] as const) {}
 
 @InputType()
 export class SetEventTagsInput {
