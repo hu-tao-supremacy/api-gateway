@@ -1,6 +1,6 @@
 import { Args, Mutation, Query, Resolver, ResolveField, Parent } from '@nestjs/graphql';
 import { PickedQuestionGroupType, User, UserEvent } from '@onepass/entities';
-import { BadRequestException, HttpException, InternalServerErrorException, UnauthorizedException, UseGuards } from '@nestjs/common';
+import { BadRequestException, InternalServerErrorException, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { CurrentUser } from 'src/decorators/user.decorator';
 import { AccountService } from '@onepass/account/account.service';
@@ -88,10 +88,10 @@ export class UserResolver {
       switchMap((userEventId) =>
         this.participantService.submitAnswers(userEventId, input.answers, PickedQuestionGroupType.PRE_EVENT),
       ),
-      catchError(async (error: HttpException) => {
-        console.log(error, error.getStatus(), error.message);
+      catchError(async (error) => {
+        console.log(error);
         await this.participantService.deleteJoinRequest(currentUser.id, input.eventId).toPromise();
-        throw new InternalServerErrorException(error.message)
+        throw new InternalServerErrorException()
       }),
       map((_) => true),
     );
