@@ -6,9 +6,9 @@ import {
   UpdateUsersInOrganizationRequest,
 } from '@onepass/api/organizer/service';
 import { ClientGrpc } from '@nestjs/microservices';
-import { Observable } from 'rxjs';
+import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Organization } from '@onepass/entities';
+import { Organization, QuestionGroup } from '@onepass/entities';
 import { OrganizationAdapter } from '@onepass/adapters';
 
 @Injectable()
@@ -64,5 +64,9 @@ export class OrganizerService implements OnModuleInit {
     return this.organizerService
       .updateOrganization({ userId, organization: new OrganizationAdapter().toInterchangeFormat(organization) })
       .pipe(map((org) => new OrganizationAdapter().toEntity(org)));
+  }
+
+  setEventQuestions(userId: number, eventId: number, questionGroups: QuestionGroup[]): Observable<boolean> {
+    return from([true])
   }
 }
