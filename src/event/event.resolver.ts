@@ -74,7 +74,8 @@ export class EventResolver {
   }
 
   @UseGuards(AuthGuard)
-  @Mutation()
+  @Mutation(() => Boolean)
   setEventQuestions(@CurrentUser() currentUser: User, @Args('input') input: SetEventQuestionsInput) {
+    return this.organizerService.setEventQuestions(currentUser.id, input.eventId, input.questionGroups)
   }
 }
