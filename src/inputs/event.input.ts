@@ -1,5 +1,5 @@
-import { Answer, Event, Question, QuestionGroup, Tag, User } from '@onepass/entities';
-import { InputType, Field, OmitType, PartialType, Int, InputType, IntersectionType, PickType, InputType } from '@nestjs/graphql';
+import { Event, Question, QuestionGroup, Tag } from '@onepass/entities';
+import { InputType, Field, OmitType, PartialType, Int, IntersectionType, PickType } from '@nestjs/graphql';
 import { FileUpload, GraphQLUpload } from 'graphql-upload';
 
 @InputType()
