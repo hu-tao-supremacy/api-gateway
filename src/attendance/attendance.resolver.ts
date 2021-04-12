@@ -1,4 +1,13 @@
-import { Resolver } from '@nestjs/graphql';
+import { Parent, ResolveField, Resolver } from '@nestjs/graphql';
+import { Answer, Attendance } from '@onepass/entities';
+import { ParticipantService } from '@onepass/participant/participant.service';
 
-@Resolver()
-export class AttendanceResolver {}
+@Resolver(() => Attendance)
+export class AttendanceResolver {
+    constructor(private readonly participantService: ParticipantService) {}
+
+    @ResolveField(() => [Answer])
+    answers(@Parent() attendance: Attendance) {
+        return [];
+    }
+}
