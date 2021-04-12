@@ -1,8 +1,11 @@
 import { Parent, ResolveField, Resolver } from '@nestjs/graphql';
+import { ParticipantService } from '@onepass/participant/participant.service';
 import { AttendanceContext } from 'src/entities/attendance-context.entity';
 
 @Resolver(() => AttendanceContext)
 export class AttendanceContextResolver {
+    constructor(private readonly participantService: ParticipantService) {}
+
     @ResolveField()
     user(@Parent() context: AttendanceContext) {
         const userId = context.userId;
@@ -10,7 +13,7 @@ export class AttendanceContextResolver {
 
     @ResolveField()
     attendance(@Parent() context: AttendanceContext) {
-        const attendanceId = context.attendanceId;
+        return this.participantService.getUserEvent(context.userId, context.eventId);
     }
 
     @ResolveField()
