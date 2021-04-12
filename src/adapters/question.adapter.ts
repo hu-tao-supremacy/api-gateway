@@ -3,5 +3,5 @@ import { Question as QuestionIF } from '@onepass/api/common/common';
 import { Question } from '@onepass/entities';
 
 export class QuestionAdapter extends BaseAdapter<QuestionIF, Question> {
-  optionalFields = [];
+  booleanFields = ['isOptional'];
 }
