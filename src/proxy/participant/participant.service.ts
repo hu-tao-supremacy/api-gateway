@@ -180,4 +180,10 @@ export class ParticipantService implements OnModuleInit {
       map(userEvents => userEvents.map(userEvent => new UserEventAdapter().toEntity(userEvent)))
     )
   }
+
+  getUserEvent(userId: number, eventId: number): Observable<UserEvent> {
+    return this.participantService.getUserEventByUserAndEventId({ userId, eventId }).pipe(
+      map(userEvent => new UserEventAdapter().toEntity(userEvent))
+    )
+  }
 }
