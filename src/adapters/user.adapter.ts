@@ -14,4 +14,8 @@ export class UserAdapter extends BaseAdapter<UserIF, User> {
     'profilePictureUrl',
     'nickname',
   ];
+
+  booleanFields = [
+    'isChulaStudent'
+  ]
 }
