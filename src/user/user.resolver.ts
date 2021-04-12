@@ -16,6 +16,7 @@ import { FileService } from 'src/file/file.service';
 import { encode } from 'js-base64';
 import { nanoid } from 'nanoid';
 import { catchError, switchMap, tap, map } from 'rxjs/operators';
+import { GrpcException } from 'src/exceptions/grpc.exception';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -80,18 +81,17 @@ export class UserResolver {
   @Mutation(() => Boolean)
   createJoinRequest(@CurrentUser() currentUser: User, @Args('input') input: CreateJoinRequestInput) {
     return this.participantService.createJoinRequest(currentUser.id, input.eventId).pipe(
-      catchError((error) => {
-        console.log(error);
-        throw new BadRequestException();
+      catchError((error: GrpcException) => {
+        throw error.httpException()
       }),
       map((userEvent) => userEvent.id),
       switchMap((userEventId) =>
         this.participantService.submitAnswers(userEventId, input.answers, PickedQuestionGroupType.PRE_EVENT),
       ),
-      catchError(async (error) => {
-        console.log(error);
+      catchError(async (error: GrpcException) => {
+        if (error.isAlreadyExists) throw error.httpException();
         await this.participantService.deleteJoinRequest(currentUser.id, input.eventId).toPromise();
-        throw new InternalServerErrorException()
+        throw error.httpException();
       }),
       map((_) => true),
     );
