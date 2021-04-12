@@ -4,7 +4,7 @@ import {
   HTS_PARTICIPANT_PACKAGE_NAME,
   PARTICIPANT_SERVICE_NAME,
 } from '@onepass/api/participant/service';
-import { QuestionGroupType } from '@onepass/api/common/common';
+import { QuestionGroupType, UserEvent_Status } from '@onepass/api/common/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { from, Observable } from 'rxjs';
 import { BoolValue } from '@google/wrappers';
@@ -19,8 +19,9 @@ import {
   QuestionAdapter,
   UserEventAdapter,
   AnswerAdapter,
+  UserAdapter,
 } from '@onepass/adapters';
-import { Event, EventDuration, Tag, Location, QuestionGroup, Question, UserEvent, Answer } from '@onepass/entities';
+import { Event, EventDuration, Tag, Location, QuestionGroup, Question, UserEvent, User, Answer } from '@onepass/entities';
 
 @Injectable()
 export class ParticipantService implements OnModuleInit {
@@ -164,5 +165,12 @@ export class ParticipantService implements OnModuleInit {
       map((project) => project.event ?? []),
       map((events) => events.map((event) => new EventAdapter().toEntity(event))),
     );
+  }
+
+  getUsersByEventId(id: number, status: UserEvent_Status): Observable<User[]> {
+    return this.participantService.getUsersByEventId({ eventId: id, status }).pipe(
+      map(projectedValue => projectedValue.users ?? []),
+      map(users => users.map(user => new UserAdapter().toEntity(user)))
+    )
   }
 }
