@@ -14,6 +14,7 @@ import { QuestionModule } from './question/question.module';
 import { QuestionGroupModule } from './question-group/question-group.module';
 import { TagModule } from './tag/tag.module';
 import { AttendanceContextModule } from './attendance-context/attendance-context.module';
+import { AttendanceModule } from './attendance/attendance.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { AttendanceContextModule } from './attendance-context/attendance-context
     QuestionGroupModule,
     TagModule,
     AttendanceContextModule,
+    AttendanceModule,
   ],
   controllers: [AppController],
   providers: [AppService],
