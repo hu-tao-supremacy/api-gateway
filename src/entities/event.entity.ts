@@ -85,8 +85,8 @@ export class Event {
   @Field((_) => [Tag])
   tags: Tag[];
 
-  @Field(() => Attendance, { nullable: true })
-  attendance?: Attendance;
+  // @Field(() => AttendanceContext, { nullable: true })
+  // attendanceContext?: AttendanceContext;
 
   @Field(() => [AttendanceContext])
   attendees: AttendanceContext[];
