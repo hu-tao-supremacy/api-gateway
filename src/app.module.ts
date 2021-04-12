@@ -13,6 +13,7 @@ import { ProxyModule } from './proxy/proxy.module';
 import { QuestionModule } from './question/question.module';
 import { QuestionGroupModule } from './question-group/question-group.module';
 import { TagModule } from './tag/tag.module';
+import { AttendanceContextModule } from './attendance-context/attendance-context.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { TagModule } from './tag/tag.module';
     QuestionModule,
     QuestionGroupModule,
     TagModule,
+    AttendanceContextModule,
   ],
   controllers: [AppController],
   providers: [AppService],
