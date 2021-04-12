@@ -11,6 +11,7 @@ import { CurrentUser } from 'src/decorators/user.decorator';
 import { CreateEventInput, SetEventQuestionsInput } from '@onepass/inputs/event.input';
 import { create, merge } from 'lodash';
 import { UserEvent_Status } from '@onepass/graphql/common/common';
+import { AttendanceContext } from 'src/entities/attendance-context.entity';
 
 @Resolver((_) => Event)
 export class EventResolver {
@@ -60,9 +61,17 @@ export class EventResolver {
   }
 
   @UseGuards(AuthGuard)
-  @ResolveField()
-  attendees(@CurrentUser() currentUser: User, @Args('status', { type: () => PickedUserEventStatus }) status: UserEvent_Status, @Parent() event: Event) {
-    return this.participantService.getUsersByEventId(currentUser.id, status)
+  @ResolveField(() => [AttendanceContext])
+  attendees(@CurrentUser() currentUser: User, @Parent() event: Event) {
+    return this.participantService.getUserEventsByEventId(event.id).pipe(
+      map(userEvents => userEvents.map(userEvent => {
+        const context = new AttendanceContext();
+        context.userId = userEvent.userId;
+        context.eventId = userEvent.eventId;
+        context.attendanceId = userEvent.id;
+        return context;
+      }))
+    )
   }
 
   @ResolveField()
