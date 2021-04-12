@@ -23,7 +23,6 @@ export class EventDuration {
   @Column('timestamptz')
   finish: string;
 
-  @Field((_) => Event)
   @ManyToOne(() => Event, { onDelete: 'CASCADE' })
   event: Event;
 }
