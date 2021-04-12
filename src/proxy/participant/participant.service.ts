@@ -186,4 +186,11 @@ export class ParticipantService implements OnModuleInit {
       map(userEvent => new UserEventAdapter().toEntity(userEvent))
     )
   }
+
+  getAnswers(attendanceId: number): Observable<Answer[]> {
+    return this.participantService.getAnswersByUserEventId({ id: attendanceId }).pipe(
+      map(projectedValue => projectedValue.answers ?? []),
+      map(answers => answers.map(answer => new AnswerAdapter().toEntity(answer)))
+    )
+  }
 }
