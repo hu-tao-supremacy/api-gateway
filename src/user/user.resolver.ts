@@ -1,6 +1,6 @@
 import { Args, Mutation, Query, Resolver, ResolveField, Parent } from '@nestjs/graphql';
-import { PickedQuestionGroupType, User, UserEvent } from '@onepass/entities';
-import { BadRequestException, InternalServerErrorException, UnauthorizedException, UseGuards } from '@nestjs/common';
+import { PickedQuestionGroupType, User } from '@onepass/entities';
+import { UnauthorizedException, UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { CurrentUser } from 'src/decorators/user.decorator';
 import { AccountService } from '@onepass/account/account.service';
@@ -90,10 +90,8 @@ export class UserResolver {
           catchError(async (e) => {
             const error = GrpcException.from(e);
 
-            if (error.isAlreadyExists) {
-              throw error.httpException;
-            }
-
+            if (error.isAlreadyExists) throw error.httpException;
+            
             await this.participantService.deleteJoinRequest(currentUser.id, input.eventId).toPromise();
             throw error.httpException;
           }),
