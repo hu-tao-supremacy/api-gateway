@@ -34,8 +34,6 @@ export class SetEventTagsInput {
 
 @InputType()
 export class CreateEventInput extends OmitType(Event, [
-  'attendeeCount',
-  'attendees',
   'coverImageHash',
   'coverImageUrl',
   'durations',
