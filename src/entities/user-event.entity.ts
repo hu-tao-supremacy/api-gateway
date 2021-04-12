@@ -5,8 +5,8 @@ import { Event } from './event.entity';
 import { User } from './user.entity';
 import { pick } from 'lodash';
 
-const PickedStatus = pick(Status, ['APPROVED', 'REJECTED', 'PENDING']);
-registerEnumType(PickedStatus, { name: 'UserEventStatus' });
+export const PickedUserEventStatus = pick(Status, ['APPROVED', 'REJECTED', 'PENDING']);
+registerEnumType(PickedUserEventStatus, { name: 'UserEventStatus' });
 
 @InputType('UserEventInput')
 @ObjectType()
@@ -42,7 +42,7 @@ export class UserEvent {
   @Column({ nullable: true })
   ticket?: string;
 
-  @Field((_) => PickedStatus)
+  @Field((_) => PickedUserEventStatus)
   @Column('enum', { enum: ['PENDING', 'APPROVED', 'REJECTED'] })
   status: string;
 }
