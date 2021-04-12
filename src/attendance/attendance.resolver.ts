@@ -8,6 +8,6 @@ export class AttendanceResolver {
 
     @ResolveField(() => [Answer])
     answers(@Parent() attendance: Attendance) {
-        return [];
+        return this.participantService.getAnswers(attendance.id)
     }
 }
