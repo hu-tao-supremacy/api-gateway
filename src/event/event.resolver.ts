@@ -1,5 +1,5 @@
 import { Args, Int, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
-import { Event, PickedQuestionGroupType, PickedUserEventStatus, User } from '@onepass/entities';
+import { Attendance, Event, PickedQuestionGroupType, PickedUserEventStatus, User } from '@onepass/entities';
 import { EventService } from './event.service';
 import { OrganizerService } from '@onepass/organizer/organizer.service';
 import { ParticipantService } from '@onepass/participant/participant.service';
@@ -48,40 +48,28 @@ export class EventResolver {
   }
 
   @UseGuards(AuthGuard)
-  @ResolveField(() => AttendanceContext)
-  async currentUserContext(@CurrentUser() currentUser: User, @Parent() event: Event) {
+  @ResolveField(() => Attendance)
+  async attendance(@CurrentUser() currentUser: User, @Parent() event: Event) {
     const eventId = event.id;
     const userId = currentUser.id;
     try {
-      const attendanceId = (await this.participantService.getUserEvent(userId, eventId).toPromise()).id;
-      const context = new AttendanceContext();
-      context.userId = userId;
-      context.eventId = eventId;
-      context.attendanceId = attendanceId;
-      return context
+      const attendance = (await this.participantService.getUserEvent(userId, eventId).toPromise());
+      return attendance;
     } catch (error) {
       return null;
     }
   }
 
-  @ResolveField()
+  @ResolveField(() => Int)
   attendeeCount(@Parent() event: Event) {
     const { id } = event;
     return this.participantService.getUsersByEventId(id, UserEvent_Status.APPROVED).pipe(map(users => users.length))
   }
 
   @UseGuards(AuthGuard)
-  @ResolveField(() => [AttendanceContext])
+  @ResolveField(() => [Attendance])
   attendees(@CurrentUser() currentUser: User, @Parent() event: Event) {
-    return this.participantService.getUserEventsByEventId(event.id).pipe(
-      map(userEvents => userEvents.map(userEvent => {
-        const context = new AttendanceContext();
-        context.userId = userEvent.userId;
-        context.eventId = userEvent.eventId;
-        context.attendanceId = userEvent.id;
-        return context;
-      }))
-    )
+    return this.participantService.getUserEventsByEventId(event.id);
   }
 
   @ResolveField()
