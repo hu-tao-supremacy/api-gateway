@@ -60,8 +60,11 @@ export class CreateEventInput extends OmitType(Event, [
   profileImage?: Promise<FileUpload>;
 
   @Field(() => [SetEventTagsTagInput], { nullable: true })
-  tags?: Tag[]
+  tags?: Tag[];
 }
 
 @InputType()
-export class UpdateEventInput extends IntersectionType(PartialType(CreateEventInput), PickType(Event, ['id'] as const)) {}
+export class UpdateEventInput extends IntersectionType(
+  PartialType(CreateEventInput),
+  PickType(Event, ['id'] as const),
+) {}

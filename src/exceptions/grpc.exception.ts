@@ -1,5 +1,16 @@
-import { BadRequestException, ConflictException, ForbiddenException, GatewayTimeoutException, HttpException, InternalServerErrorException, NotFoundException, NotImplementedException, ServiceUnavailableException, UnauthorizedException } from '@nestjs/common'
-import { status } from 'grpc'
+import {
+  BadRequestException,
+  ConflictException,
+  ForbiddenException,
+  GatewayTimeoutException,
+  HttpException,
+  InternalServerErrorException,
+  NotFoundException,
+  NotImplementedException,
+  ServiceUnavailableException,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { status } from 'grpc';
 
 export class GrpcException {
   public code: number;
@@ -45,25 +56,53 @@ export class GrpcException {
       case status.UNAVAILABLE:
         return new ServiceUnavailableException(message);
       default:
-        console.log(code, message)
+        console.log(code, message);
         return new InternalServerErrorException(message);
     }
   }
 
-  public get isCancelled() { return this.code === status.CANCELLED; }
-  public get isUnknown() { return this.code === status.UNKNOWN; }
-  public get isInvalidArgument() { return this.code === status.INVALID_ARGUMENT; }
-  public get isDeadlineExceed() { return this.code === status.DEADLINE_EXCEEDED; }
-  public get isNotFound() { return this.code === status.NOT_FOUND; }
-  public get isAlreadyExists() { return this.code === status.ALREADY_EXISTS; }
-  public get isPermissionDenined() { return this.code === status.PERMISSION_DENIED; }
-  public get isUnauthenticated() { return this.code === status.UNAUTHENTICATED; }
-  public get isResourceExhausted() { return this.code === status.RESOURCE_EXHAUSTED; }
-  public get isFailedPrecondition() { return this.code === status.FAILED_PRECONDITION; }
-  public get isAborted() { return this.code === status.ABORTED; }
-  public get isUnimplemented() { return this.code === status.UNIMPLEMENTED; }
-  public get isInternal() { return this.code === status.INTERNAL; }
-  public get isUnavailable() { return this.code === status.UNAVAILABLE; }
+  public get isCancelled() {
+    return this.code === status.CANCELLED;
+  }
+  public get isUnknown() {
+    return this.code === status.UNKNOWN;
+  }
+  public get isInvalidArgument() {
+    return this.code === status.INVALID_ARGUMENT;
+  }
+  public get isDeadlineExceed() {
+    return this.code === status.DEADLINE_EXCEEDED;
+  }
+  public get isNotFound() {
+    return this.code === status.NOT_FOUND;
+  }
+  public get isAlreadyExists() {
+    return this.code === status.ALREADY_EXISTS;
+  }
+  public get isPermissionDenined() {
+    return this.code === status.PERMISSION_DENIED;
+  }
+  public get isUnauthenticated() {
+    return this.code === status.UNAUTHENTICATED;
+  }
+  public get isResourceExhausted() {
+    return this.code === status.RESOURCE_EXHAUSTED;
+  }
+  public get isFailedPrecondition() {
+    return this.code === status.FAILED_PRECONDITION;
+  }
+  public get isAborted() {
+    return this.code === status.ABORTED;
+  }
+  public get isUnimplemented() {
+    return this.code === status.UNIMPLEMENTED;
+  }
+  public get isInternal() {
+    return this.code === status.INTERNAL;
+  }
+  public get isUnavailable() {
+    return this.code === status.UNAVAILABLE;
+  }
 
   public get httpException(): HttpException {
     return GrpcException.toHttpException(this.code, this.message);

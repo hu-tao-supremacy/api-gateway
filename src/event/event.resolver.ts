@@ -83,9 +83,9 @@ export class EventResolver {
   @UseGuards(AuthGuard)
   @Mutation(() => Event)
   createEvent(@CurrentUser() currentUser: User, @Args('input') input: CreateEventInput) {
-    const tags = input.tags?.map(tag => tag.id);
-    return this.organizerService.createEvent(currentUser.id, merge(new Event(), input)).pipe(
-        tap(createdEvent => tags && this.organizerService.setEventTags(currentUser.id, createdEvent.id, tags))
-      )
+    const tags = input.tags?.map((tag) => tag.id);
+    return this.organizerService
+      .createEvent(currentUser.id, merge(new Event(), input))
+      .pipe(tap((createdEvent) => tags && this.organizerService.setEventTags(currentUser.id, createdEvent.id, tags)));
   }
 }

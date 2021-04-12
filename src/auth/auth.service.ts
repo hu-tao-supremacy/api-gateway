@@ -86,7 +86,7 @@ export class AuthService {
   }
 
   generateAccessToken(userId: number): Observable<string> {
-    return this.accountService.generateAccessToken(userId)
+    return this.accountService.generateAccessToken(userId);
   }
 }
 

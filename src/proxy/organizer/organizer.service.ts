@@ -69,27 +69,33 @@ export class OrganizerService implements OnModuleInit {
   }
 
   async setEventQuestions(userId: number, eventId: number, questionGroups: QuestionGroup[]): Promise<boolean> {
-    const createdGroups = await this.organizerService.addQuestionGroups({
-      userId,
-      questionGroups: questionGroups.map(group => {
-        group.eventId = eventId;
-        return new QuestionGroupAdapter().toInterchangeFormat(group)
+    const createdGroups = await this.organizerService
+      .addQuestionGroups({
+        userId,
+        questionGroups: questionGroups.map((group) => {
+          group.eventId = eventId;
+          return new QuestionGroupAdapter().toInterchangeFormat(group);
+        }),
       })
-    }).toPromise()
+      .toPromise();
 
-    const groupIds = createdGroups.questionGroups.map(group => group.id);
+    const groupIds = createdGroups.questionGroups.map((group) => group.id);
 
-    const questions = questionGroups.map((group, i) => {
-      return group.questions.map(question => {
-        question.questionGroupId = groupIds[i]
-        return question;
+    const questions = questionGroups
+      .map((group, i) => {
+        return group.questions.map((question) => {
+          question.questionGroupId = groupIds[i];
+          return question;
+        });
       })
-    }).flatMap((data) => data)
+      .flatMap((data) => data);
 
-    const createdQuestions = await this.organizerService.addQuestions({
-      userId,
-      questions: questions.map(question => new QuestionAdapter().toInterchangeFormat(question))
-    }).toPromise();
+    const createdQuestions = await this.organizerService
+      .addQuestions({
+        userId,
+        questions: questions.map((question) => new QuestionAdapter().toInterchangeFormat(question)),
+      })
+      .toPromise();
 
     return true;
   }
@@ -98,22 +104,20 @@ export class OrganizerService implements OnModuleInit {
     const request: UpdateTagRequest = {
       userId,
       tagIds,
-      eventId
-    }
+      eventId,
+    };
     return this.organizerService.addTags(request).pipe(
-      map(projectedValue => projectedValue.eventTags ?? []),
-      map(eventTags => eventTags.map(eventTag => eventTag.tagId))
-    )
+      map((projectedValue) => projectedValue.eventTags ?? []),
+      map((eventTags) => eventTags.map((eventTag) => eventTag.tagId)),
+    );
   }
 
   createEvent(userId: number, event: Event): Observable<Event> {
     const request: CreateEventRequest = {
       userId,
-      event: new EventAdapter().toInterchangeFormat(event)
-    }
+      event: new EventAdapter().toInterchangeFormat(event),
+    };
 
-    return this.organizerService.createEvent(request).pipe(
-      map((event) => new EventAdapter().toEntity(event))
-    )
+    return this.organizerService.createEvent(request).pipe(map((event) => new EventAdapter().toEntity(event)));
   }
 }

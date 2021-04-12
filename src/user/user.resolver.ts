@@ -82,7 +82,7 @@ export class UserResolver {
   createJoinRequest(@CurrentUser() currentUser: User, @Args('input') input: CreateJoinRequestInput) {
     return this.participantService.createJoinRequest(currentUser.id, input.eventId).pipe(
       catchError((error) => {
-        throw GrpcException.from(error).httpException
+        throw GrpcException.from(error).httpException;
       }),
       map((userEvent) => userEvent.id),
       switchMap((userEventId) =>
