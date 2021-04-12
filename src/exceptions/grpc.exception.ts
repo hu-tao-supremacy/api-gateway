@@ -1,61 +1,71 @@
 import { BadRequestException, ConflictException, ForbiddenException, GatewayTimeoutException, HttpException, InternalServerErrorException, NotFoundException, NotImplementedException, ServiceUnavailableException, UnauthorizedException } from '@nestjs/common'
-import grpc from 'grpc'
+import { status } from 'grpc'
 
-export class GrpcException extends Error {
+export class GrpcException {
   public code: number;
-  public details: string;
+  public message: string;
+
+  constructor(code: number, message: string) {
+    this.code = code;
+    this.message = message;
+  }
+
+  public static from(error: any): GrpcException {
+    return new GrpcException(error.code, error.details);
+  }
 
   public static toHttpException(code: number, message: string): HttpException {
     switch (code) {
-      case grpc.status.CANCELLED:
+      case status.CANCELLED:
         return new ServiceUnavailableException(message);
-      case grpc.status.UNKNOWN:
+      case status.UNKNOWN:
         return new InternalServerErrorException(message);
-      case grpc.status.INVALID_ARGUMENT:
+      case status.INVALID_ARGUMENT:
         return new BadRequestException(message);
-      case grpc.status.DEADLINE_EXCEEDED:
+      case status.DEADLINE_EXCEEDED:
         return new GatewayTimeoutException(message);
-      case grpc.status.NOT_FOUND:
+      case status.NOT_FOUND:
         return new NotFoundException(message);
-      case grpc.status.ALREADY_EXISTS:
+      case status.ALREADY_EXISTS:
         return new ConflictException(message);
-      case grpc.status.PERMISSION_DENIED:
+      case status.PERMISSION_DENIED:
         return new ForbiddenException(message);
-      case grpc.status.UNAUTHENTICATED:
+      case status.UNAUTHENTICATED:
         return new UnauthorizedException(message);
-      case grpc.status.RESOURCE_EXHAUSTED:
+      case status.RESOURCE_EXHAUSTED:
         return new InternalServerErrorException(message);
-      case grpc.status.FAILED_PRECONDITION:
+      case status.FAILED_PRECONDITION:
         return new BadRequestException(message);
-      case grpc.status.ABORTED:
+      case status.ABORTED:
         return new ConflictException(message);
-      case grpc.status.UNIMPLEMENTED:
+      case status.UNIMPLEMENTED:
         return new NotImplementedException(message);
-      case grpc.status.INTERNAL:
+      case status.INTERNAL:
         return new InternalServerErrorException(message);
-      case grpc.status.UNAVAILABLE:
+      case status.UNAVAILABLE:
         return new ServiceUnavailableException(message);
       default:
+        console.log(code, message)
         return new InternalServerErrorException(message);
     }
   }
 
-  public get isCancelled() { return this.code === grpc.status.CANCELLED; }
-  public get isUnknown() { return this.code === grpc.status.UNKNOWN; }
-  public get isInvalidArgument() { return this.code === grpc.status.INVALID_ARGUMENT; }
-  public get isDeadlineExceed() { return this.code === grpc.status.DEADLINE_EXCEEDED; }
-  public get isNotFound() { return this.code === grpc.status.NOT_FOUND; }
-  public get isAlreadyExists() { return this.code === grpc.status.ALREADY_EXISTS; }
-  public get isPermissionDenined() { return this.code === grpc.status.PERMISSION_DENIED; }
-  public get isUnauthenticated() { return this.code === grpc.status.UNAUTHENTICATED; }
-  public get isResourceExhausted() { return this.code === grpc.status.RESOURCE_EXHAUSTED; }
-  public get isFailedPrecondition() { return this.code === grpc.status.FAILED_PRECONDITION; }
-  public get isAborted() { return this.code === grpc.status.ABORTED; }
-  public get isUnimplemented() { return this.code === grpc.status.UNIMPLEMENTED; }
-  public get isInternal() { return this.code === grpc.status.INTERNAL; }
-  public get isUnavailable() { return this.code === grpc.status.UNAVAILABLE; }
+  public get isCancelled() { return this.code === status.CANCELLED; }
+  public get isUnknown() { return this.code === status.UNKNOWN; }
+  public get isInvalidArgument() { return this.code === status.INVALID_ARGUMENT; }
+  public get isDeadlineExceed() { return this.code === status.DEADLINE_EXCEEDED; }
+  public get isNotFound() { return this.code === status.NOT_FOUND; }
+  public get isAlreadyExists() { return this.code === status.ALREADY_EXISTS; }
+  public get isPermissionDenined() { return this.code === status.PERMISSION_DENIED; }
+  public get isUnauthenticated() { return this.code === status.UNAUTHENTICATED; }
+  public get isResourceExhausted() { return this.code === status.RESOURCE_EXHAUSTED; }
+  public get isFailedPrecondition() { return this.code === status.FAILED_PRECONDITION; }
+  public get isAborted() { return this.code === status.ABORTED; }
+  public get isUnimplemented() { return this.code === status.UNIMPLEMENTED; }
+  public get isInternal() { return this.code === status.INTERNAL; }
+  public get isUnavailable() { return this.code === status.UNAVAILABLE; }
 
-  public httpException(): HttpException {
-    return GrpcException.toHttpException(this.code, this.details);
+  public get httpException(): HttpException {
+    return GrpcException.toHttpException(this.code, this.message);
   }
 }
