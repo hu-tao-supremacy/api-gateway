@@ -4,6 +4,8 @@ import { DateTime } from 'luxon';
 
 export class BaseAdapter<IF extends object, E extends object> {
   optionalFields: string[] = [];
+  booleanFields: string[] = [];
+  numericFields: string[] = [];
 
   wrapperToOptional(field: any) {
     return field?.value;
@@ -14,13 +16,13 @@ export class BaseAdapter<IF extends object, E extends object> {
   }
 
   toEntity(object: IF): E {
-    return mapValues(object, (value, key) => {
+    const entity = mapValues(object, (value, key) => {
       let a = value;
 
       if (this.optionalFields.includes(key)) {
         a = this.wrapperToOptional(value);
       }
-
+      
       if (isLong(a)) {
         // @ts-ignore
         a = Number(a.toString());
@@ -38,6 +40,16 @@ export class BaseAdapter<IF extends object, E extends object> {
 
       return a;
     }) as E;
+
+    this.booleanFields.forEach(field => {
+      entity[field] = false;
+    })
+
+    this.numericFields.forEach(field => {
+      entity[field] = 0;
+    })
+
+    return entity;
   }
 
   toInterchangeFormat(object: E): IF {
