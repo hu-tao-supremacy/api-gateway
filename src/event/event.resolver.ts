@@ -48,10 +48,20 @@ export class EventResolver {
   }
 
   @UseGuards(AuthGuard)
-  @ResolveField()
-  attendance(@CurrentUser() currentUser: User, @Parent() event: Event) {
-    const { id } = event;
-    return null;
+  @ResolveField(() => AttendanceContext)
+  async currentUserContext(@CurrentUser() currentUser: User, @Parent() event: Event) {
+    const eventId = event.id;
+    const userId = currentUser.id;
+    try {
+      const attendanceId = (await this.participantService.getUserEvent(userId, eventId).toPromise()).id;
+      const context = new AttendanceContext();
+      context.userId = userId;
+      context.eventId = eventId;
+      context.attendanceId = attendanceId;
+      return context
+    } catch (error) {
+      return null;
+    }
   }
 
   @ResolveField()
