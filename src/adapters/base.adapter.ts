@@ -42,11 +42,13 @@ export class BaseAdapter<IF extends object, E extends object> {
     }) as E;
 
     this.booleanFields.forEach(field => {
-      entity[field] = false;
+      if (!entity[field])
+        entity[field] = false;
     })
 
     this.numericFields.forEach(field => {
-      entity[field] = 0;
+      if (!entity[field])
+        entity[field] = 0;
     })
 
     return entity;
