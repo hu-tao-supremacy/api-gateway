@@ -1,5 +1,6 @@
 import { ObjectType, Field, Int, InputType } from '@nestjs/graphql';
 import { Column, Entity, Index, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { AttendanceContext } from './attendance-context.entity';
 import { EventDuration } from './event-duration.entity';
 import { Location } from './location.entity';
 import { Organization } from './organization.entity';
@@ -87,8 +88,8 @@ export class Event {
   @Field(() => Attendance, { nullable: true })
   attendance?: Attendance;
 
-  @Field(() => [User])
-  attendees: User[];
+  @Field(() => [AttendanceContext])
+  attendees: AttendanceContext[];
 
   @Field(() => Int)
   attendeeCount: number;
