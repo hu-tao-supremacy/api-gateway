@@ -1,5 +1,5 @@
 import { Args, Int, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
-import { Event, PickedQuestionGroupType, User } from '@onepass/entities';
+import { Event, PickedQuestionGroupType, PickedUserEventStatus, User } from '@onepass/entities';
 import { EventService } from './event.service';
 import { OrganizerService } from '@onepass/organizer/organizer.service';
 import { ParticipantService } from '@onepass/participant/participant.service';
@@ -10,6 +10,7 @@ import { AuthGuard } from 'src/guards/auth.guard';
 import { CurrentUser } from 'src/decorators/user.decorator';
 import { CreateEventInput, SetEventQuestionsInput } from '@onepass/inputs/event.input';
 import { create, merge } from 'lodash';
+import { UserEvent_Status } from '@onepass/graphql/common/common';
 
 @Resolver((_) => Event)
 export class EventResolver {
@@ -50,6 +51,18 @@ export class EventResolver {
   attendance(@CurrentUser() currentUser: User, @Parent() event: Event) {
     const { id } = event;
     return null;
+  }
+
+  @ResolveField()
+  attendeeCount(@Parent() event: Event) {
+    const { id } = event;
+    return this.participantService.getUsersByEventId(id, UserEvent_Status.APPROVED).pipe(map(users => users.length))
+  }
+
+  @UseGuards(AuthGuard)
+  @ResolveField()
+  attendees(@CurrentUser() currentUser: User, @Args('status', { type: () => PickedUserEventStatus }) status: UserEvent_Status, @Parent() event: Event) {
+    return this.participantService.getUsersByEventId(currentUser.id, status)
   }
 
   @ResolveField()
