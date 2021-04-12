@@ -81,18 +81,24 @@ export class UserResolver {
   @Mutation(() => Boolean)
   createJoinRequest(@CurrentUser() currentUser: User, @Args('input') input: CreateJoinRequestInput) {
     return this.participantService.createJoinRequest(currentUser.id, input.eventId).pipe(
-      catchError((error: GrpcException) => {
-        throw error.httpException()
+      catchError((error) => {
+        throw GrpcException.from(error).httpException
       }),
       map((userEvent) => userEvent.id),
       switchMap((userEventId) =>
-        this.participantService.submitAnswers(userEventId, input.answers, PickedQuestionGroupType.PRE_EVENT),
+        this.participantService.submitAnswers(userEventId, input.answers, PickedQuestionGroupType.PRE_EVENT).pipe(
+          catchError(async (e) => {
+            const error = GrpcException.from(e);
+
+            if (error.isAlreadyExists) {
+              throw error.httpException;
+            }
+
+            await this.participantService.deleteJoinRequest(currentUser.id, input.eventId).toPromise();
+            throw error.httpException;
+          }),
+        ),
       ),
-      catchError(async (error: GrpcException) => {
-        if (error.isAlreadyExists) throw error.httpException();
-        await this.participantService.deleteJoinRequest(currentUser.id, input.eventId).toPromise();
-        throw error.httpException();
-      }),
       map((_) => true),
     );
   }
