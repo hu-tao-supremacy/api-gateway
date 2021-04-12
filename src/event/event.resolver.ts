@@ -48,7 +48,7 @@ export class EventResolver {
   }
 
   @UseGuards(AuthGuard)
-  @ResolveField(() => Attendance)
+  @ResolveField(() => Attendance, { nullable: true })
   async attendance(@CurrentUser() currentUser: User, @Parent() event: Event) {
     const eventId = event.id;
     const userId = currentUser.id;
