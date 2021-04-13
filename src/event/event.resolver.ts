@@ -53,7 +53,7 @@ export class EventResolver {
     const eventId = event.id;
     const userId = currentUser.id;
     try {
-      const attendance = (await this.participantService.getUserEvent(userId, eventId).toPromise());
+      const attendance = await this.participantService.getUserEvent(userId, eventId).toPromise();
       return attendance;
     } catch (error) {
       return null;
@@ -63,7 +63,7 @@ export class EventResolver {
   @ResolveField(() => Int)
   attendeeCount(@Parent() event: Event) {
     const { id } = event;
-    return this.participantService.getUsersByEventId(id, UserEvent_Status.APPROVED).pipe(map(users => users.length))
+    return this.participantService.getUsersByEventId(id, UserEvent_Status.APPROVED).pipe(map((users) => users.length));
   }
 
   @UseGuards(AuthGuard)

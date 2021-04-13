@@ -4,10 +4,10 @@ import { ParticipantService } from '@onepass/participant/participant.service';
 
 @Resolver(() => Attendance)
 export class AttendanceResolver {
-    constructor(private readonly participantService: ParticipantService) {}
+  constructor(private readonly participantService: ParticipantService) {}
 
-    @ResolveField(() => [Answer])
-    answers(@Parent() attendance: Attendance) {
-        return this.participantService.getAnswers(attendance.id)
-    }
+  @ResolveField(() => [Answer])
+  answers(@Parent() attendance: Attendance) {
+    return this.participantService.getAnswers(attendance.id);
+  }
 }

@@ -15,7 +15,5 @@ export class UserAdapter extends BaseAdapter<UserIF, User> {
     'nickname',
   ];
 
-  booleanFields = [
-    'isChulaStudent'
-  ]
+  booleanFields = ['isChulaStudent'];
 }

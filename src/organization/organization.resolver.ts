@@ -49,16 +49,16 @@ export class OrganizationResolver {
     const org = new Organization();
     merge(org, input);
     return this.organizerService.createOrganization(currentUser.id, org).pipe(
-      switchMap(createdOrg => {
+      switchMap((createdOrg) => {
         return forkJoin([
-                  this.accountService.assignRole(currentUser.id, createdOrg.id, Role.ORGANIZATION_OWNER),
-                  this.fileService.upload(`orgs/${encode(`${createdOrg.id}`)}/${nanoid()}`, input.profilePicture),
-                  of(createdOrg)
-               ])
+          this.accountService.assignRole(currentUser.id, createdOrg.id, Role.ORGANIZATION_OWNER),
+          this.fileService.upload(`orgs/${encode(`${createdOrg.id}`)}/${nanoid()}`, input.profilePicture),
+          of(createdOrg),
+        ]);
       }),
       switchMap(([_, fileURI, createdOrg]) => {
         const org = new Organization();
-        org.id = createdOrg.id
+        org.id = createdOrg.id;
         org.profilePictureUrl = fileURI;
         return this.updateOrganization(currentUser, org);
       }),
