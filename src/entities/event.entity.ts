@@ -58,14 +58,6 @@ export class Event {
   @Column({ nullable: true })
   posterImageHash?: string;
 
-  @Field({ nullable: true })
-  @Column({ nullable: true })
-  profileImageUrl?: string;
-
-  @Field({ nullable: true })
-  @Column({ nullable: true })
-  profileImageHash?: string;
-
   @Field((_) => Int)
   @Column()
   attendeeLimit: number;

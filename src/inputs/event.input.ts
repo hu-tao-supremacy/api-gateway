@@ -42,8 +42,6 @@ export class CreateEventInput extends OmitType(Event, [
   'organization',
   'posterImageHash',
   'posterImageUrl',
-  'profileImageHash',
-  'profileImageUrl',
   'questionGroups',
   'tags',
 ] as const) {
@@ -52,9 +50,6 @@ export class CreateEventInput extends OmitType(Event, [
 
   @Field(() => GraphQLUpload, { nullable: true })
   posterImage?: Promise<FileUpload>;
-
-  @Field(() => GraphQLUpload, { nullable: true })
-  profileImage?: Promise<FileUpload>;
 
   @Field(() => [SetEventTagsTagInput], { nullable: true })
   tags?: Tag[];
