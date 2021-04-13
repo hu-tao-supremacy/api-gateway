@@ -18,6 +18,8 @@ import { Role } from '@onepass/graphql/account/service';
 import { FileService } from 'src/file/file.service';
 import { encode } from 'js-base64';
 import { nanoid } from 'nanoid';
+import { catchGrpcException } from 'src/operators/catch-exceptions.operator';
+import { GrpcException } from 'src/exceptions/grpc.exception';
 
 @Resolver((_) => Organization)
 export class OrganizationResolver {
@@ -49,9 +51,10 @@ export class OrganizationResolver {
     const org = new Organization();
     merge(org, input);
     return this.organizerService.createOrganization(currentUser.id, org).pipe(
+      catchGrpcException(),
       switchMap((createdOrg) => {
         return forkJoin([
-          this.accountService.assignRole(currentUser.id, createdOrg.id, Role.ORGANIZATION_OWNER),
+          this.accountService.assignRole(currentUser.id, createdOrg.id, Role.ORGANIZATION_OWNER).pipe(catchGrpcException()),
           this.fileService.upload(`orgs/${encode(`${createdOrg.id}`)}/${nanoid()}`, input.profilePicture),
           of(createdOrg),
         ]);
@@ -76,10 +79,7 @@ export class OrganizationResolver {
   @Mutation((_) => Organization)
   addMembersToOrganization(@CurrentUser() currentUser: User, @Args('input') input: UpdateMembersInOrganizationInput) {
     return forkJoin(input.emails.map((email) => this.accountService.getUserByEmail(email))).pipe(
-      catchError((error: HttpException) => {
-        console.log(error.getStatus(), error);
-        throw new BadRequestException();
-      }),
+      catchGrpcException(),
       map((users) => users.map((user) => user.id)),
       tap((ids) => this.organizerService.addMembersToOrganization(currentUser.id, input.organizationId, ids)),
       switchMap((ids) => {
@@ -98,10 +98,7 @@ export class OrganizationResolver {
     @Args('input') input: UpdateMembersInOrganizationInput,
   ) {
     return forkJoin(input.emails.map((email) => this.accountService.getUserByEmail(email))).pipe(
-      catchError((error: HttpException) => {
-        console.log(error.getStatus(), error);
-        throw new BadRequestException();
-      }),
+      catchGrpcException(),
       map((users) => users.map((user) => user.id)),
       switchMap((ids) =>
         this.organizerService.removeMembersFromOrganization(currentUser.id, input.organizationId, ids),
