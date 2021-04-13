@@ -21,7 +21,17 @@ import {
   AnswerAdapter,
   UserAdapter,
 } from '@onepass/adapters';
-import { Event, EventDuration, Tag, Location, QuestionGroup, Question, UserEvent, User, Answer } from '@onepass/entities';
+import {
+  Event,
+  EventDuration,
+  Tag,
+  Location,
+  QuestionGroup,
+  Question,
+  UserEvent,
+  User,
+  Answer,
+} from '@onepass/entities';
 
 @Injectable()
 export class ParticipantService implements OnModuleInit {
@@ -169,28 +179,28 @@ export class ParticipantService implements OnModuleInit {
 
   getUsersByEventId(id: number, status: UserEvent_Status): Observable<User[]> {
     return this.participantService.getUsersByEventId({ eventId: id, status }).pipe(
-      map(projectedValue => projectedValue.users ?? []),
-      map(users => users.map(user => new UserAdapter().toEntity(user)))
-    )
+      map((projectedValue) => projectedValue.users ?? []),
+      map((users) => users.map((user) => new UserAdapter().toEntity(user))),
+    );
   }
 
   getUserEventsByEventId(eventId: number): Observable<UserEvent[]> {
     return this.participantService.getUserEventsByEventId({ id: eventId }).pipe(
-      map(projectedValue => projectedValue.userEvents ?? []),
-      map(userEvents => userEvents.map(userEvent => new UserEventAdapter().toEntity(userEvent)))
-    )
+      map((projectedValue) => projectedValue.userEvents ?? []),
+      map((userEvents) => userEvents.map((userEvent) => new UserEventAdapter().toEntity(userEvent))),
+    );
   }
 
   getUserEvent(userId: number, eventId: number): Observable<UserEvent> {
-    return this.participantService.getUserEventByUserAndEventId({ userId, eventId }).pipe(
-      map(userEvent => new UserEventAdapter().toEntity(userEvent))
-    )
+    return this.participantService
+      .getUserEventByUserAndEventId({ userId, eventId })
+      .pipe(map((userEvent) => new UserEventAdapter().toEntity(userEvent)));
   }
 
   getAnswers(attendanceId: number): Observable<Answer[]> {
     return this.participantService.getAnswersByUserEventId({ id: attendanceId }).pipe(
-      map(projectedValue => projectedValue.answers ?? []),
-      map(answers => answers.map(answer => new AnswerAdapter().toEntity(answer)))
-    )
+      map((projectedValue) => projectedValue.answers ?? []),
+      map((answers) => answers.map((answer) => new AnswerAdapter().toEntity(answer))),
+    );
   }
 }

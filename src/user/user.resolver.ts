@@ -91,7 +91,7 @@ export class UserResolver {
             const error = GrpcException.from(e);
 
             if (error.isAlreadyExists) throw error.httpException;
-            
+
             await this.participantService.deleteJoinRequest(currentUser.id, input.eventId).toPromise();
             throw error.httpException;
           }),

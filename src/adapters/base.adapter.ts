@@ -22,7 +22,7 @@ export class BaseAdapter<IF extends object, E extends object> {
       if (this.optionalFields.includes(key)) {
         a = this.wrapperToOptional(value);
       }
-      
+
       if (isLong(a)) {
         // @ts-ignore
         a = Number(a.toString());
@@ -41,15 +41,13 @@ export class BaseAdapter<IF extends object, E extends object> {
       return a;
     }) as E;
 
-    this.booleanFields.forEach(field => {
-      if (!entity[field])
-        entity[field] = false;
-    })
+    this.booleanFields.forEach((field) => {
+      if (!entity[field]) entity[field] = false;
+    });
 
-    this.numericFields.forEach(field => {
-      if (!entity[field])
-        entity[field] = 0;
-    })
+    this.numericFields.forEach((field) => {
+      if (!entity[field]) entity[field] = 0;
+    });
 
     return entity;
   }
