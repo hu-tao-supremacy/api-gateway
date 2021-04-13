@@ -10,7 +10,7 @@ import {
 import { BadRequestException, HttpException, UseGuards } from '@nestjs/common';
 import { Args, Int, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { merge } from 'lodash';
-import { from, forkJoin } from 'rxjs';
+import { from, forkJoin, of } from 'rxjs';
 import { catchError, map, tap, switchMap } from 'rxjs/operators';
 import { CurrentUser } from 'src/decorators/user.decorator';
 import { AuthGuard } from 'src/guards/auth.guard';
@@ -49,13 +49,17 @@ export class OrganizationResolver {
     const org = new Organization();
     merge(org, input);
     return this.organizerService.createOrganization(currentUser.id, org).pipe(
-      tap((createdOrg) => this.accountService.assignRole(currentUser.id, createdOrg.id, Role.ORGANIZATION_OWNER)),
-      switchMap((createdOrg) =>
-        this.fileService.upload(`orgs/${encode(`${createdOrg.id}`)}/${nanoid()}`, input.profilePicture),
-      ),
-      switchMap((uri) => {
+      switchMap(createdOrg => {
+        return forkJoin([
+                  this.accountService.assignRole(currentUser.id, createdOrg.id, Role.ORGANIZATION_OWNER),
+                  this.fileService.upload(`orgs/${encode(`${createdOrg.id}`)}/${nanoid()}`, input.profilePicture),
+                  of(createdOrg)
+               ])
+      }),
+      switchMap(([_, fileURI, createdOrg]) => {
         const org = new Organization();
-        org.profilePictureUrl = uri;
+        org.id = createdOrg.id
+        org.profilePictureUrl = fileURI;
         return this.updateOrganization(currentUser, org);
       }),
     );
