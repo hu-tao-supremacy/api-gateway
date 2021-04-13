@@ -54,7 +54,9 @@ export class OrganizationResolver {
       catchGrpcException(),
       switchMap((createdOrg) => {
         return forkJoin([
-          this.accountService.assignRole(currentUser.id, createdOrg.id, Role.ORGANIZATION_OWNER).pipe(catchGrpcException()),
+          this.accountService
+            .assignRole(currentUser.id, createdOrg.id, Role.ORGANIZATION_OWNER)
+            .pipe(catchGrpcException()),
           this.fileService.upload(`orgs/${encode(`${createdOrg.id}`)}/${nanoid()}`, input.profilePicture),
           of(createdOrg),
         ]);

@@ -1,11 +1,7 @@
 import { Catch, ArgumentsHost, HttpException } from '@nestjs/common';
 import { BaseExceptionFilter } from '@nestjs/core';
-import {
-  ApolloError,
-  AuthenticationError,
-  ForbiddenError,
-} from 'apollo-server-errors';
-import { GqlContextType } from '@nestjs/graphql'
+import { ApolloError, AuthenticationError, ForbiddenError } from 'apollo-server-errors';
+import { GqlContextType } from '@nestjs/graphql';
 
 const apolloPredefinedExceptions: Record<number, typeof ApolloError> = {
   401: AuthenticationError,
@@ -21,14 +17,9 @@ export class GraphQLBaseExceptionFilter extends BaseExceptionFilter {
 
     let error: ApolloError;
     if (exception.getStatus() in apolloPredefinedExceptions) {
-      error = new apolloPredefinedExceptions[exception.getStatus()](
-        exception.message,
-      );
+      error = new apolloPredefinedExceptions[exception.getStatus()](exception.message);
     } else {
-      error = new ApolloError(
-        exception.message,
-        exception.getStatus().toString(),
-      );
+      error = new ApolloError(exception.message, exception.getStatus().toString());
     }
 
     error.stack = exception.stack;
