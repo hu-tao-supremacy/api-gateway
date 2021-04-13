@@ -6,6 +6,7 @@ import {
   UpdateUsersInOrganizationRequest,
   UpdateTagRequest,
   CreateEventRequest,
+  UpdateEventRequest,
 } from '@onepass/api/organizer/service';
 import { ClientGrpc } from '@nestjs/microservices';
 import { forkJoin, from, Observable } from 'rxjs';
@@ -119,5 +120,14 @@ export class OrganizerService implements OnModuleInit {
     };
 
     return this.organizerService.createEvent(request).pipe(map((event) => new EventAdapter().toEntity(event)));
+  }
+
+  updateEvent(userId: number, event: Event): Observable<Event> {
+    const request: UpdateEventRequest = {
+      userId,
+      event: new EventAdapter().toInterchangeFormat(event)
+    }
+
+    return this.organizerService.updateEvent(request).pipe(map((event) => new EventAdapter().toEntity(event)))
   }
 }
