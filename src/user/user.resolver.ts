@@ -77,6 +77,11 @@ export class UserResolver {
     }
   }
 
+  @ResolveField()
+  organizations(@Parent() user: User) {
+    return this.accountService.getUserOrganizationsByUserId(user.id)
+  }
+
   @UseGuards(AuthGuard)
   @Mutation(() => Boolean)
   createJoinRequest(@CurrentUser() currentUser: User, @Args('input') input: CreateJoinRequestInput) {

@@ -7,11 +7,12 @@ import {
 import { ClientGrpc } from '@nestjs/microservices';
 import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { Tag, User } from '@onepass/entities';
+import { Tag, User, UserOrganization } from '@onepass/entities';
 import { UserAdapter } from '@onepass/adapters';
 import { BoolValue } from '@google/wrappers';
 import { HttpException, Inject, Injectable, OnModuleInit, UnauthorizedException } from '@nestjs/common';
 import { Permission } from '@onepass/api/common/common';
+import { UserOrganizationAdapter } from 'src/adapters/user-organization.adapter';
 
 @Injectable()
 export class AccountService implements OnModuleInit {
@@ -81,5 +82,19 @@ export class AccountService implements OnModuleInit {
   setUserInterests(userId: number, tags: Tag[]) {
     const tagIds = tags.map((tag) => tag.id);
     return this.accountService.updateUserInterests({ userId, tagIds }).pipe(map((_) => true));
+  }
+
+  getUserOrganizationsByUserId(userId: number): Observable<UserOrganization[]> {
+    return this.accountService.getUserOrganizationsByUserId({ id: userId }).pipe(
+      map(projectedValue => projectedValue.userOrganizations),
+      map(userOrgs => userOrgs.map(userOrg => new UserOrganizationAdapter().toEntity(userOrg)))
+    )
+  }
+
+  getUserOrganizationsByOrganizationId(orgId: number): Observable<UserOrganization[]> {
+    return this.accountService.getUserOrganizationsByOrganizationId({ id: orgId }).pipe(
+      map(projectedValue => projectedValue.userOrganizations),
+      map(userOrgs => userOrgs.map(userOrg => new UserOrganizationAdapter().toEntity(userOrg)))
+    )
   }
 }
