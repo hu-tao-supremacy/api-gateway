@@ -8,10 +8,9 @@ import { map, switchMap, tap } from 'rxjs/operators';
 import { UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { CurrentUser } from 'src/decorators/user.decorator';
-import { CreateEventInput, SetEventQuestionsInput } from '@onepass/inputs/event.input';
-import { create, merge } from 'lodash';
+import { CreateEventInput, SetEventQuestionsInput, UpdateEventInput } from '@onepass/inputs/event.input';
+import { merge } from 'lodash';
 import { UserEvent_Status } from '@onepass/graphql/common/common';
-import { AttendanceContext } from 'src/entities/attendance-context.entity';
 import { forkJoin, of } from 'rxjs';
 import { catchGrpcException } from 'src/operators/catch-exceptions.operator';
 import { FileService } from 'src/file/file.service';
@@ -24,7 +23,7 @@ export class EventResolver {
     private readonly participantService: ParticipantService,
     private readonly organizerService: OrganizerService,
     private readonly eventService: EventService,
-    private readonly fileService: FileService
+    private readonly fileService: FileService,
   ) {}
 
   @Query((_) => [Event])
@@ -110,22 +109,29 @@ export class EventResolver {
   @Mutation(() => Event)
   createEvent(@CurrentUser() currentUser: User, @Args('input') input: CreateEventInput) {
     const tags = input.tags?.map((tag) => tag.id);
-    return this.organizerService
-      .createEvent(currentUser.id, merge(new Event(), input)).pipe(
-        catchGrpcException(),
-        switchMap((createdEvent) => {
-          return forkJoin([
-            of(createdEvent),
-            tags ? of<number[]>([]) : this.organizerService.setEventTags(currentUser.id, createdEvent.id, tags).pipe(catchGrpcException()),
-            this.fileService.upload(`events/${encode(`${createdEvent.id}`)}/posters/${nanoid()}`, input.posterImage),
-            this.fileService.upload(`events/${encode(`${createdEvent.id}`)}/covers/${nanoid()}`, input.coverImage)
-          ])
-        }),
-        switchMap(([createdEvent, _, posterImageURI, coverImageURI]) => {
-          createdEvent.posterImageUrl = posterImageURI;
-          createdEvent.coverImageUrl = coverImageURI;
-          return this.organizerService.updateEvent(currentUser.id, createdEvent).pipe(catchGrpcException())
-        })
-      )
+    return this.organizerService.createEvent(currentUser.id, merge(new Event(), input)).pipe(
+      catchGrpcException(),
+      switchMap((createdEvent) => {
+        return forkJoin([
+          of(createdEvent),
+          tags
+            ? of<number[]>([])
+            : this.organizerService.setEventTags(currentUser.id, createdEvent.id, tags).pipe(catchGrpcException()),
+          this.fileService.upload(`events/${encode(`${createdEvent.id}`)}/posters/${nanoid()}`, input.posterImage),
+          this.fileService.upload(`events/${encode(`${createdEvent.id}`)}/covers/${nanoid()}`, input.coverImage),
+        ]);
+      }),
+      switchMap(([createdEvent, _, posterImageURI, coverImageURI]) => {
+        createdEvent.posterImageUrl = posterImageURI;
+        createdEvent.coverImageUrl = coverImageURI;
+        return this.organizerService.updateEvent(currentUser.id, createdEvent).pipe(catchGrpcException());
+      }),
+    );
+  }
+
+  @UseGuards(AuthGuard)
+  @Mutation(() => Event)
+  updateEvent(@CurrentUser() currentUser: User, @Args('input') input: UpdateEventInput) {
+    return this.organizerService.updateEvent(currentUser.id, merge(new Event(), input)).pipe(catchGrpcException());
   }
 }
