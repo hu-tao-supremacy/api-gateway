@@ -45,6 +45,13 @@ export class OrganizationResolver {
     return this.participantService.getEventsByOrganizationId(org.id);
   }
 
+  @ResolveField()
+  profilePictureUrl(@Parent() org: Organization) {
+    if (org.profilePictureUrl) {
+      return this.fileService.getSignedUrl(org.profilePictureUrl);
+    }
+  }
+
   @UseGuards(AuthGuard)
   @Mutation((_) => Organization)
   createOrganization(@CurrentUser() currentUser: User, @Args('input') input: CreateOrganizationInput) {
