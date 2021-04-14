@@ -27,12 +27,3 @@ export class DeleteJoinRequestInput {
   @Field((_) => Int)
   eventId: number;
 }
-
-@InputType()
-class SetUserInterestsTagInput extends OmitType(Tag, ['events', 'name']) {}
-
-@InputType()
-export class SetUserInterestsInput {
-  @Field(() => [SetUserInterestsTagInput])
-  tags: Tag[];
-}
