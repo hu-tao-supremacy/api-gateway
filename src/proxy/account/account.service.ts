@@ -11,7 +11,7 @@ import { Tag, User, UserOrganization } from '@onepass/entities';
 import { UserAdapter } from '@onepass/adapters';
 import { BoolValue } from '@google/wrappers';
 import { HttpException, Inject, Injectable, OnModuleInit, UnauthorizedException } from '@nestjs/common';
-import { Permission } from '@onepass/api/common/common';
+import { Event, Permission } from '@onepass/api/common/common';
 import { UserOrganizationAdapter } from 'src/adapters/user-organization.adapter';
 
 @Injectable()
@@ -79,22 +79,27 @@ export class AccountService implements OnModuleInit {
     return this.accountService.assignRole({ userId, organizationId, role }).pipe(map((data) => data.value));
   }
 
-  setUserInterests(userId: number, tags: Tag[]) {
+  setInterestedEvents(userId: number, events: Event[]) {
+    const eventIds = events.map((event) => event.id);
+    return this.accountService.setInterestedEvents({ userId, eventIds }).pipe(map((_) => true));
+  }
+
+  setInterestedTags(userId: number, tags: Tag[]) {
     const tagIds = tags.map((tag) => tag.id);
-    return this.accountService.updateUserInterests({ userId, tagIds }).pipe(map((_) => true));
+    return this.accountService.setInterestedTags({ userId, tagIds }).pipe(map((_) => true));
   }
 
   getUserOrganizationsByUserId(userId: number): Observable<UserOrganization[]> {
     return this.accountService.getUserOrganizationsByUserId({ id: userId }).pipe(
-      map(projectedValue => projectedValue.userOrganizations),
-      map(userOrgs => userOrgs.map(userOrg => new UserOrganizationAdapter().toEntity(userOrg)))
-    )
+      map((projectedValue) => projectedValue.userOrganizations),
+      map((userOrgs) => userOrgs.map((userOrg) => new UserOrganizationAdapter().toEntity(userOrg))),
+    );
   }
 
   getUserOrganizationsByOrganizationId(orgId: number): Observable<UserOrganization[]> {
     return this.accountService.getUserOrganizationsByOrganizationId({ id: orgId }).pipe(
-      map(projectedValue => projectedValue.userOrganizations),
-      map(userOrgs => userOrgs.map(userOrg => new UserOrganizationAdapter().toEntity(userOrg)))
-    )
+      map((projectedValue) => projectedValue.userOrganizations),
+      map((userOrgs) => userOrgs.map((userOrg) => new UserOrganizationAdapter().toEntity(userOrg))),
+    );
   }
 }
