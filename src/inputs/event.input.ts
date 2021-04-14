@@ -59,5 +59,5 @@ export class CreateEventInput extends OmitType(Event, [
 @InputType()
 export class UpdateEventInput extends IntersectionType(
   PartialType(CreateEventInput),
-  PickType(Event, ['id'] as const),
+  PickType(Event, ['id', 'organizationId'] as const),
 ) {}
