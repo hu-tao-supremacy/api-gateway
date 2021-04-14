@@ -34,6 +34,20 @@ export class EventResolver {
     );
   }
 
+  @ResolveField()
+  coverImageUrl(@Parent() event: Event) {
+    if (event.coverImageUrl) {
+      return this.fileService.getSignedUrl(event.coverImageUrl);
+    }
+  }
+
+  @ResolveField()
+  posterImageUrl(@Parent() event: Event) {
+    if (event.posterImageUrl) {
+      return this.fileService.getSignedUrl(event.posterImageUrl);
+    }
+  }
+
   @Query((_) => Event)
   event(@Args('id', { type: () => Int }) id: number) {
     return this.participantService.getEventById(id);
