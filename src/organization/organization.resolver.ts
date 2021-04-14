@@ -78,9 +78,11 @@ export class OrganizationResolver {
   @UseGuards(AuthGuard)
   @Mutation((_) => Organization)
   updateOrganization(@CurrentUser() currentUser: User, @Args('input') input: UpdateOrganizationInput) {
-    const org = merge(new Organization(), input);
-    return this.organizerService.updateOrganization(currentUser.id, org).pipe(
+    return this.organizerService.getOrganizationById(input.id).pipe(
       catchGrpcException(),
+      switchMap((org) =>
+        this.organizerService.updateOrganization(currentUser.id, merge(org, input)).pipe(catchGrpcException()),
+      ),
       switchMap((updatedOrg) => {
         return forkJoin([
           of(updatedOrg),
