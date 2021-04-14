@@ -79,7 +79,22 @@ export class OrganizationResolver {
   @Mutation((_) => Organization)
   updateOrganization(@CurrentUser() currentUser: User, @Args('input') input: UpdateOrganizationInput) {
     const org = merge(new Organization(), input);
-    return this.organizerService.updateOrganization(currentUser.id, org);
+    return this.organizerService.updateOrganization(currentUser.id, org).pipe(
+      switchMap((updatedOrg) => {
+        return forkJoin([
+          of(updatedOrg),
+          this.fileService.upload(`orgs/${encode(`${updatedOrg.id}`)}/${nanoid()}`, input.profilePicture),
+        ]);
+      }),
+      switchMap(([updatedOrg, profilePictureURI]) => {
+        if (profilePictureURI) {
+          updatedOrg.profilePictureUrl = profilePictureURI;
+          return this.organizerService.updateOrganization(currentUser.id, updatedOrg);
+        }
+
+        return of(updatedOrg);
+      }),
+    );
   }
 
   @UseGuards(AuthGuard)
