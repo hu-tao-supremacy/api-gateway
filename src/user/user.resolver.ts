@@ -1,15 +1,10 @@
-import { Args, Mutation, Query, Resolver, ResolveField, Parent } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver, ResolveField, Parent, Int } from '@nestjs/graphql';
 import { PickedQuestionGroupType, User } from '@onepass/entities';
 import { UnauthorizedException, UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { CurrentUser } from 'src/decorators/user.decorator';
 import { AccountService } from '@onepass/account/account.service';
-import {
-  CreateJoinRequestInput,
-  DeleteJoinRequestInput,
-  SetUserInterestsInput,
-  UpdateUserInput,
-} from '@onepass/inputs/user.input';
+import { CreateJoinRequestInput, DeleteJoinRequestInput, UpdateUserInput } from '@onepass/inputs/user.input';
 import { merge } from 'lodash';
 import { ParticipantService } from '@onepass/participant/participant.service';
 import { FileService } from 'src/file/file.service';
@@ -56,8 +51,14 @@ export class UserResolver {
 
   @UseGuards(AuthGuard)
   @Mutation(() => Boolean)
-  setUserInterests(@CurrentUser() currentUser: User, @Args('input') input: SetUserInterestsInput) {
-    return this.accountService.setUserInterests(currentUser.id, input.tags);
+  setInterestedTags(@CurrentUser() currentUser: User, @Args('tags', { type: () => [Int] }) tags: number[]) {
+    return this.accountService.setInterestedTags(currentUser.id, tags);
+  }
+
+  @UseGuards(AuthGuard)
+  @Mutation(() => Boolean)
+  setInterestedEvents(@CurrentUser() currentUser: User, @Args('events', { type: () => [Int] }) events: number[]) {
+    return this.accountService.setInterestedEvents(currentUser.id, events);
   }
 
   @UseGuards(AuthGuard)
@@ -79,7 +80,7 @@ export class UserResolver {
 
   @ResolveField()
   organizations(@Parent() user: User) {
-    return this.accountService.getUserOrganizationsByUserId(user.id)
+    return this.accountService.getUserOrganizationsByUserId(user.id);
   }
 
   @UseGuards(AuthGuard)
