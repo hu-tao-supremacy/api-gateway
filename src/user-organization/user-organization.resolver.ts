@@ -6,19 +6,19 @@ import { ParticipantService } from '@onepass/participant/participant.service';
 
 @Resolver((of) => UserOrganization)
 export class UserOrganizationResolver {
-    constructor(
-        private readonly accountService: AccountService,
-        private readonly participantService: ParticipantService,
-        private readonly organizerService: OrganizerService
-    ) {}
+  constructor(
+    private readonly accountService: AccountService,
+    private readonly participantService: ParticipantService,
+    private readonly organizerService: OrganizerService,
+  ) {}
 
-    @ResolveField(() => Organization)
-    organization(@Parent() userOrg: UserOrganization) {
-        return this.organizerService.getOrganizationById(userOrg.organizationId);
-    }
+  @ResolveField(() => Organization)
+  organization(@Parent() userOrg: UserOrganization) {
+    return this.organizerService.getOrganizationById(userOrg.organizationId);
+  }
 
-    @ResolveField(() => User)
-    user(@Parent() userOrg: UserOrganization) {
-        return this.accountService.getUserById(userOrg.id)
-    }
+  @ResolveField(() => User)
+  user(@Parent() userOrg: UserOrganization) {
+    return this.accountService.getUserById(userOrg.id);
+  }
 }

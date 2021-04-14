@@ -125,9 +125,9 @@ export class OrganizerService implements OnModuleInit {
   updateEvent(userId: number, event: Event): Observable<Event> {
     const request: UpdateEventRequest = {
       userId,
-      event: new EventAdapter().toInterchangeFormat(event)
-    }
+      event: new EventAdapter().toInterchangeFormat(event),
+    };
 
-    return this.organizerService.updateEvent(request).pipe(map((event) => new EventAdapter().toEntity(event)))
+    return this.organizerService.updateEvent(request).pipe(map((event) => new EventAdapter().toEntity(event)));
   }
 }
