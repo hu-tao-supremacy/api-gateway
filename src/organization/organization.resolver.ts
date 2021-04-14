@@ -62,10 +62,8 @@ export class OrganizationResolver {
         ]);
       }),
       switchMap(([_, fileURI, createdOrg]) => {
-        const org = new Organization();
-        org.id = createdOrg.id;
-        org.profilePictureUrl = fileURI;
-        return this.updateOrganization(currentUser, org);
+        createdOrg.profilePictureUrl = fileURI;
+        return this.organizerService.updateOrganization(currentUser.id, createdOrg).pipe(catchGrpcException());
       }),
     );
   }
@@ -74,7 +72,7 @@ export class OrganizationResolver {
   @Mutation((_) => Organization)
   updateOrganization(@CurrentUser() currentUser: User, @Args('input') input: UpdateOrganizationInput) {
     const org = merge(new Organization(), input);
-    return this.updateOrganization(currentUser, org);
+    return this.organizerService.updateOrganization(currentUser.id, org);
   }
 
   @UseGuards(AuthGuard)
