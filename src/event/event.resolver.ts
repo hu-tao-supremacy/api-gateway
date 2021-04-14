@@ -146,6 +146,24 @@ export class EventResolver {
   @UseGuards(AuthGuard)
   @Mutation(() => Event)
   updateEvent(@CurrentUser() currentUser: User, @Args('input') input: UpdateEventInput) {
-    return this.organizerService.updateEvent(currentUser.id, merge(new Event(), input)).pipe(catchGrpcException());
+    return this.organizerService.updateEvent(currentUser.id, merge(new Event(), input)).pipe(
+      catchGrpcException(),
+      switchMap((updatedEvent) => {
+        return forkJoin([
+          of(updatedEvent),
+          this.fileService.upload(`events/${encode(`${updatedEvent.id}`)}/posters/${nanoid()}`, input.posterImage),
+          this.fileService.upload(`events/${encode(`${updatedEvent.id}`)}/covers/${nanoid()}`, input.coverImage),
+        ]);
+      }),
+      switchMap(([updatedEvent, posterImageURI, coverImageURI]) => {
+        if (posterImageURI || coverImageURI) {
+          updatedEvent.posterImageUrl = posterImageURI;
+          updatedEvent.coverImageUrl = coverImageURI;
+          return this.organizerService.updateEvent(currentUser.id, updatedEvent);
+        }
+
+        return of(updatedEvent);
+      }),
+    );
   }
 }
