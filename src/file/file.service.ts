@@ -13,13 +13,6 @@ export class FileService {
     credentials: JSON.parse(process.env.GCP_CREDENTIALS),
   }).bucket(process.env.GCP_BUCKET_NAME);
 
-  // async upload(filePath: string, readableStream: Readable) {
-  //   const file = this.cloudStorage.file(filePath);
-  //   await new Promise((resolve, reject) =>
-  //     readableStream.pipe(file.createWriteStream()).on('error', reject).on('finish', resolve),
-  //   );
-  // }
-
   upload(objectPath: string, fileUpload?: Promise<FileUpload>): Observable<string | null> {
     return fileUpload
       ? from(fileUpload).pipe(
