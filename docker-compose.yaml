@@ -45,4 +45,4 @@ services:
       - POSTGRES_PORT=5432
       - GRPC_HOST=localhost
       - GRPC_PORT=50057
-      - HTS_SVC_ACCOUNT=localhost:50055
+      - HTS_SVC_ACCOUNT=hts-svc-account:50055
