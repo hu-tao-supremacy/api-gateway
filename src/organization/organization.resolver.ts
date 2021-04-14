@@ -80,6 +80,7 @@ export class OrganizationResolver {
   updateOrganization(@CurrentUser() currentUser: User, @Args('input') input: UpdateOrganizationInput) {
     const org = merge(new Organization(), input);
     return this.organizerService.updateOrganization(currentUser.id, org).pipe(
+      catchGrpcException(),
       switchMap((updatedOrg) => {
         return forkJoin([
           of(updatedOrg),
@@ -89,7 +90,7 @@ export class OrganizationResolver {
       switchMap(([updatedOrg, profilePictureURI]) => {
         if (profilePictureURI) {
           updatedOrg.profilePictureUrl = profilePictureURI;
-          return this.organizerService.updateOrganization(currentUser.id, updatedOrg);
+          return this.organizerService.updateOrganization(currentUser.id, updatedOrg).pipe(catchGrpcException());
         }
 
         return of(updatedOrg);
