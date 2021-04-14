@@ -89,14 +89,14 @@ export class AccountService implements OnModuleInit {
 
   getUserOrganizationsByUserId(userId: number): Observable<UserOrganization[]> {
     return this.accountService.getUserOrganizationsByUserId({ id: userId }).pipe(
-      map((projectedValue) => projectedValue.userOrganizations),
+      map((projectedValue) => projectedValue.userOrganizations ?? []),
       map((userOrgs) => userOrgs.map((userOrg) => new UserOrganizationAdapter().toEntity(userOrg))),
     );
   }
 
   getUserOrganizationsByOrganizationId(orgId: number): Observable<UserOrganization[]> {
     return this.accountService.getUserOrganizationsByOrganizationId({ id: orgId }).pipe(
-      map((projectedValue) => projectedValue.userOrganizations),
+      map((projectedValue) => projectedValue.userOrganizations ?? []),
       map((userOrgs) => userOrgs.map((userOrg) => new UserOrganizationAdapter().toEntity(userOrg))),
     );
   }
