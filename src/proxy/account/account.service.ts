@@ -79,14 +79,12 @@ export class AccountService implements OnModuleInit {
     return this.accountService.assignRole({ userId, organizationId, role }).pipe(map((data) => data.value));
   }
 
-  setInterestedEvents(userId: number, events: Event[]) {
-    const eventIds = events.map((event) => event.id);
-    return this.accountService.setInterestedEvents({ userId, eventIds }).pipe(map((_) => true));
+  setInterestedEvents(userId: number, events: number[]) {
+    return this.accountService.setInterestedEvents({ userId, eventIds: events }).pipe(map((_) => true));
   }
 
-  setInterestedTags(userId: number, tags: Tag[]) {
-    const tagIds = tags.map((tag) => tag.id);
-    return this.accountService.setInterestedTags({ userId, tagIds }).pipe(map((_) => true));
+  setInterestedTags(userId: number, tags: number[]) {
+    return this.accountService.setInterestedTags({ userId, tagIds: tags }).pipe(map((_) => true));
   }
 
   getUserOrganizationsByUserId(userId: number): Observable<UserOrganization[]> {
