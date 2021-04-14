@@ -46,7 +46,3 @@ export class UserEvent {
   @Column('enum', { enum: ['PENDING', 'APPROVED', 'REJECTED'] })
   status: string;
 }
-
-@InputType('AttendanceInput')
-@ObjectType()
-export class Attendance extends UserEvent {}

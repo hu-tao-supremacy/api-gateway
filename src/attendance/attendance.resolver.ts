@@ -1,13 +1,13 @@
 import { Parent, ResolveField, Resolver } from '@nestjs/graphql';
-import { Answer, Attendance } from '@onepass/entities';
+import { Answer, UserEvent } from '@onepass/entities';
 import { ParticipantService } from '@onepass/participant/participant.service';
 
-@Resolver(() => Attendance)
+@Resolver(() => UserEvent)
 export class AttendanceResolver {
   constructor(private readonly participantService: ParticipantService) {}
 
   @ResolveField(() => [Answer])
-  answers(@Parent() attendance: Attendance) {
+  answers(@Parent() attendance: UserEvent) {
     return this.participantService.getAnswers(attendance.id);
   }
 }

@@ -1,5 +1,5 @@
 import { Args, Int, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
-import { Attendance, Event, PickedQuestionGroupType, PickedUserEventStatus, User } from '@onepass/entities';
+import { UserEvent, Event, PickedQuestionGroupType, PickedUserEventStatus, User } from '@onepass/entities';
 import { EventService } from './event.service';
 import { OrganizerService } from '@onepass/organizer/organizer.service';
 import { ParticipantService } from '@onepass/participant/participant.service';
@@ -54,7 +54,7 @@ export class EventResolver {
   }
 
   @UseGuards(AuthGuard)
-  @ResolveField(() => Attendance, { nullable: true })
+  @ResolveField(() => UserEvent, { nullable: true })
   async attendance(@CurrentUser() currentUser: User, @Parent() event: Event) {
     const eventId = event.id;
     const userId = currentUser.id;
@@ -73,7 +73,7 @@ export class EventResolver {
   }
 
   @UseGuards(AuthGuard)
-  @ResolveField(() => [Attendance])
+  @ResolveField(() => [UserEvent])
   attendees(@CurrentUser() currentUser: User, @Parent() event: Event) {
     return this.participantService.getUserEventsByEventId(event.id);
   }

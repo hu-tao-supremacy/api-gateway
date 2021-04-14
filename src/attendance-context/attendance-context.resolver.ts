@@ -1,6 +1,5 @@
-import { Parent, ResolveField, Resolver } from '@nestjs/graphql';
 import { ParticipantService } from '@onepass/participant/participant.service';
-import { AttendanceContext } from 'src/entities/attendance-context.entity';
+import { Resolver } from '@nestjs/graphql';
 
 @Resolver()
 export class AttendanceContextResolver {
