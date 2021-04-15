@@ -4,8 +4,11 @@ import { Readable, Writable } from 'stream';
 import { DateTime } from 'luxon';
 import { from, Observable, of } from 'rxjs';
 import { map, tap, switchMap, catchError } from 'rxjs/operators';
-import { ReadStream } from 'node:fs';
 import { FileUpload } from 'graphql-upload';
+import * as sharp from 'sharp';
+import { encode as encodeImage } from 'blurhash';
+import { ReadStream } from 'node:fs';
+// const concat = require('concat-stream');
 
 @Injectable()
 export class FileService {
@@ -13,15 +16,28 @@ export class FileService {
     credentials: JSON.parse(process.env.GCP_CREDENTIALS),
   }).bucket(process.env.GCP_BUCKET_NAME);
 
+  // async encode(buffer: ReadStream) {
+  //   const concatStream = concat(async (buf: Buffer) => {
+  //     const s = sharp(buf);
+  //     const metadata = await s.metadata();
+  //     const w = metadata.width!;
+  //     const h = metadata.height!;
+  //     const resized = await s.raw().ensureAlpha().resize(w, h, { fit: 'inside' }).toBuffer();
+  //     console.log(encodeImage(new Uint8ClampedArray(resized), w, h, 4, 4));
+  //   });
+  //   buffer.pipe(concatStream);
+  // }
+
   upload(objectPath: string, fileUpload?: Promise<FileUpload>): Observable<string | null> {
     return fileUpload
       ? from(fileUpload).pipe(
           switchMap(({ filename, createReadStream }) => {
+            const stream = createReadStream();
             const extension = filename.split('.').reverse()[0];
             const path = `${objectPath}.${extension}`;
             return from(
               new Promise<boolean>((resolve, reject) => {
-                createReadStream()
+                stream
                   .pipe(this.createWriteStream(path))
                   .on('finish', () => resolve(true))
                   .on('error', () => reject(false));
