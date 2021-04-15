@@ -203,4 +203,11 @@ export class ParticipantService implements OnModuleInit {
       map((answers) => answers.map((answer) => new AnswerAdapter().toEntity(answer))),
     );
   }
+
+  getRecommendedEvents(userId: number): Observable<Event[]> {
+    return this.participantService.getSuggestedEvents({}).pipe(
+      map((projectedValue) => projectedValue.event ?? []),
+      map((events) => events.map((event) => new EventAdapter().toEntity(event))),
+    );
+  }
 }

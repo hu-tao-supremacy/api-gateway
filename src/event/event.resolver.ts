@@ -39,6 +39,11 @@ export class EventResolver {
     );
   }
 
+  @UseGuards(AuthGuard)
+  @Query(() => [Event])
+  async recommendedEvents(@CurrentUser() user: User) {
+    return this.participantService.getRecommendedEvents(user.id);
+  }
   @ResolveField()
   coverImageUrl(@Parent() event: Event) {
     if (event.coverImageUrl) {
