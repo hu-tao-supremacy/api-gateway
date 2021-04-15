@@ -1,4 +1,4 @@
-import { Event, Question, QuestionGroup, Tag, UserEvent } from '@onepass/entities';
+import { Event, Location, Question, QuestionGroup, Tag, UserEvent } from '@onepass/entities';
 import { InputType, Field, OmitType, PartialType, Int, IntersectionType, PickType } from '@nestjs/graphql';
 import { FileUpload, GraphQLUpload } from 'graphql-upload';
 
@@ -33,6 +33,13 @@ export class SetEventTagsInput {
 }
 
 @InputType()
+export class CreateEventLocationInput extends OmitType(Location, [
+  'id',
+  'travelInformationImageUrl',
+  'travelInformationImageHash',
+] as const) {}
+
+@InputType()
 export class CreateEventInput extends OmitType(Event, [
   'id',
   'coverImageHash',
@@ -48,6 +55,9 @@ export class CreateEventInput extends OmitType(Event, [
 ] as const) {
   @Field(() => GraphQLUpload, { nullable: true })
   coverImage?: Promise<FileUpload>;
+
+  @Field(() => CreateEventLocationInput, { nullable: true })
+  location?: Location;
 
   @Field(() => GraphQLUpload, { nullable: true })
   posterImage?: Promise<FileUpload>;
