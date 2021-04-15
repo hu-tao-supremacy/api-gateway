@@ -38,7 +38,7 @@ export class OrganizationResolver {
 
   @Query(() => [Organization])
   featuredOrganizations(): Observable<Organization[]> {
-    return forkJoin([1501, 1502, 1503].map((id) => this.organizerService.getOrganizationById(id))).pipe(
+    return forkJoin([1501, 1502, 1503, 1504, 1505].map((id) => this.organizerService.getOrganizationById(id))).pipe(
       switchMap((A) => of(flatten(A))),
     );
   }
