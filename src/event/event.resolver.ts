@@ -41,7 +41,7 @@ export class EventResolver {
 
   @Query((_) => [Event])
   featuredEvents(): Observable<Event[]> {
-    const organizationIds = [1501, 1502, 1503];
+    const organizationIds = [1501, 1502, 1503, 1504, 1505];
     return forkJoin(organizationIds.map((id) => this.participantService.getEventsByOrganizationId(id))).pipe(
       switchMap((A) => {
         return of(flatten(A));
