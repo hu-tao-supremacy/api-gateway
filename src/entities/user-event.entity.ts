@@ -44,5 +44,5 @@ export class UserEvent {
 
   @Field((_) => PickedUserEventStatus)
   @Column('enum', { enum: ['PENDING', 'APPROVED', 'REJECTED'] })
-  status: string;
+  status: Status;
 }

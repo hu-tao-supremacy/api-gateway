@@ -8,7 +8,12 @@ import { map, switchMap, tap } from 'rxjs/operators';
 import { UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { CurrentUser } from 'src/decorators/user.decorator';
-import { CreateEventInput, SetEventQuestionsInput, UpdateEventInput } from '@onepass/inputs/event.input';
+import {
+  CreateEventInput,
+  ReviewJoinRequestInput,
+  SetEventQuestionsInput,
+  UpdateEventInput,
+} from '@onepass/inputs/event.input';
 import { merge } from 'lodash';
 import { UserEvent_Status } from '@onepass/graphql/common/common';
 import { forkJoin, of } from 'rxjs';
@@ -165,5 +170,11 @@ export class EventResolver {
         return of(updatedEvent);
       }),
     );
+  }
+
+  @UseGuards(AuthGuard)
+  @Mutation(() => Boolean)
+  reviewJoinRequest(@CurrentUser() currentUser: User, @Args('input') input: ReviewJoinRequestInput) {
+    return this.organizerService.reviewJoinRequest(currentUser.id, input.userId, input.eventId, input.status);
   }
 }

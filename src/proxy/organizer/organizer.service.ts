@@ -7,12 +7,20 @@ import {
   UpdateTagRequest,
   CreateEventRequest,
   UpdateEventRequest,
+  UpdateRegistrationRequestRequest,
 } from '@onepass/api/organizer/service';
 import { ClientGrpc } from '@nestjs/microservices';
 import { forkJoin, from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Organization, QuestionGroup, Event, Question } from '@onepass/entities';
-import { EventAdapter, OrganizationAdapter, QuestionAdapter, QuestionGroupAdapter } from '@onepass/adapters';
+import { Organization, QuestionGroup, Event, Question, PickedUserEventStatus, UserEvent } from '@onepass/entities';
+import {
+  EventAdapter,
+  OrganizationAdapter,
+  QuestionAdapter,
+  QuestionGroupAdapter,
+  UserEventAdapter,
+} from '@onepass/adapters';
+import { UserEvent_Status } from '@onepass/graphql/common/common';
 
 @Injectable()
 export class OrganizerService implements OnModuleInit {
@@ -129,5 +137,22 @@ export class OrganizerService implements OnModuleInit {
     };
 
     return this.organizerService.updateEvent(request).pipe(map((event) => new EventAdapter().toEntity(event)));
+  }
+
+  reviewJoinRequest(
+    reviewerUserId: number,
+    userId: number,
+    eventId: number,
+    status: UserEvent_Status,
+  ): Observable<UserEvent> {
+    const request: UpdateRegistrationRequestRequest = {
+      userId: reviewerUserId,
+      registeredUserId: userId,
+      registeredEventId: eventId,
+      status,
+    };
+    return this.organizerService
+      .updateRegistrationRequest(request)
+      .pipe(map((userEvent) => new UserEventAdapter().toEntity(userEvent)));
   }
 }
