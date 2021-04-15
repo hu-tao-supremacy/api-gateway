@@ -163,8 +163,12 @@ export class EventResolver {
   updateEvent(@CurrentUser() currentUser: User, @Args('input') input: UpdateEventInput) {
     const location = input.location;
     const tags = input.tags?.map((tag) => tag.id);
-    return this.organizerService.updateEvent(currentUser.id, merge(new Event(), input)).pipe(
+
+    return this.participantService.getEventById(input.id).pipe(
       catchGrpcException(),
+      switchMap((event) => {
+        return this.organizerService.updateEvent(currentUser.id, merge(event, input)).pipe(catchGrpcException());
+      }),
       switchMap((createdEvent) => {
         return forkJoin([
           of(createdEvent),
