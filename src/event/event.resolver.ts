@@ -4,7 +4,7 @@ import { EventService } from './event.service';
 import { OrganizerService } from '@onepass/organizer/organizer.service';
 import { ParticipantService } from '@onepass/participant/participant.service';
 import { DateTime } from 'luxon';
-import { map, switchMap, tap } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import { UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { CurrentUser } from 'src/decorators/user.decorator';
@@ -14,9 +14,9 @@ import {
   SetEventQuestionsInput,
   UpdateEventInput,
 } from '@onepass/inputs/event.input';
-import { flatMap, merge } from 'lodash';
+import { merge, flatten } from 'lodash';
 import { UserEvent_Status } from '@onepass/graphql/common/common';
-import { forkJoin, of } from 'rxjs';
+import { forkJoin, Observable, of } from 'rxjs';
 import { catchGrpcException } from 'src/operators/catch-exceptions.operator';
 import { FileService } from 'src/file/file.service';
 import { encode } from 'js-base64';
@@ -40,10 +40,12 @@ export class EventResolver {
   }
 
   @Query((_) => [Event])
-  async featuredEvents() {
+  featuredEvents(): Observable<Event[]> {
     const organizationIds = [1501, 1502, 1503];
     return forkJoin(organizationIds.map((id) => this.participantService.getEventsByOrganizationId(id))).pipe(
-      switchMap((A) => A.reduce((previousValue, currentValue) => [...previousValue, ...currentValue], [])),
+      switchMap((A) => {
+        return of(flatten(A));
+      }),
     );
   }
 
