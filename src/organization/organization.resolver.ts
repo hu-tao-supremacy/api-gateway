@@ -10,7 +10,7 @@ import {
 import { BadRequestException, HttpException, UseGuards } from '@nestjs/common';
 import { Args, Int, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { merge } from 'lodash';
-import { from, forkJoin, of } from 'rxjs';
+import { from, forkJoin, of, Observable } from 'rxjs';
 import { catchError, map, tap, switchMap } from 'rxjs/operators';
 import { CurrentUser } from 'src/decorators/user.decorator';
 import { AuthGuard } from 'src/guards/auth.guard';
@@ -20,6 +20,7 @@ import { encode } from 'js-base64';
 import { nanoid } from 'nanoid';
 import { catchGrpcException } from 'src/operators/catch-exceptions.operator';
 import { GrpcException } from 'src/exceptions/grpc.exception';
+import { flatten } from 'lodash';
 
 @Resolver((_) => Organization)
 export class OrganizationResolver {
@@ -33,6 +34,13 @@ export class OrganizationResolver {
   @Query((_) => [Organization])
   organizations() {
     return this.organizerService.getOrganizations();
+  }
+
+  @Query(() => [Organization])
+  featuredOrganizations(): Observable<Organization[]> {
+    return forkJoin([1501, 1502, 1503].map((id) => this.organizerService.getOrganizationById(id))).pipe(
+      switchMap((A) => of(flatten(A))),
+    );
   }
 
   @Query((_) => Organization)
