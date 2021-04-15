@@ -45,7 +45,6 @@ export class CreateEventInput extends OmitType(Event, [
   'coverImageHash',
   'coverImageUrl',
   'durations',
-  'location',
   'locationId',
   'organization',
   'posterImageHash',

@@ -140,13 +140,13 @@ export class EventResolver {
         return forkJoin([
           of(createdEvent),
           tags
-            ? of<number[]>([])
-            : this.organizerService.setEventTags(currentUser.id, createdEvent.id, tags).pipe(catchGrpcException()),
+            ? this.organizerService.setEventTags(currentUser.id, createdEvent.id, tags).pipe(catchGrpcException())
+            : of<number[]>([]),
           this.fileService.upload(`events/${encode(`${createdEvent.id}`)}/posters/${nanoid()}`, input.posterImage),
           this.fileService.upload(`events/${encode(`${createdEvent.id}`)}/covers/${nanoid()}`, input.coverImage),
           location
-            ? of<number>(null)
-            : this.organizerService.setEventLocation(currentUser.id, location).pipe(map((loc) => loc.id)),
+            ? this.organizerService.setEventLocation(currentUser.id, location).pipe(map((loc) => loc.id))
+            : of<number>(null)
         ]);
       }),
       switchMap(([createdEvent, _, posterImageURI, coverImageURI, locationId]) => {

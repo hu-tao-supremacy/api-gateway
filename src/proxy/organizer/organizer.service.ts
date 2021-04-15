@@ -12,7 +12,7 @@ import {
 } from '@onepass/api/organizer/service';
 import { ClientGrpc } from '@nestjs/microservices';
 import { forkJoin, from, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import {
   Organization,
   QuestionGroup,
@@ -171,6 +171,8 @@ export class OrganizerService implements OnModuleInit {
       userId,
       location: new LocationAdapter().toInterchangeFormat(location),
     };
-    return this.organizerService.createLocation(request).pipe(map((loc) => new LocationAdapter().toEntity(loc)));
+    return this.organizerService.createLocation(request).pipe(
+      map((loc) => new LocationAdapter().toEntity(loc))
+     );
   }
 }
