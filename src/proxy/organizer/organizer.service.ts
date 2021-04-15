@@ -8,13 +8,23 @@ import {
   CreateEventRequest,
   UpdateEventRequest,
   UpdateRegistrationRequestRequest,
+  CreateLocationRequest,
 } from '@onepass/api/organizer/service';
 import { ClientGrpc } from '@nestjs/microservices';
 import { forkJoin, from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Organization, QuestionGroup, Event, Question, PickedUserEventStatus, UserEvent } from '@onepass/entities';
+import {
+  Organization,
+  QuestionGroup,
+  Event,
+  Question,
+  PickedUserEventStatus,
+  UserEvent,
+  Location,
+} from '@onepass/entities';
 import {
   EventAdapter,
+  LocationAdapter,
   OrganizationAdapter,
   QuestionAdapter,
   QuestionGroupAdapter,
@@ -154,5 +164,13 @@ export class OrganizerService implements OnModuleInit {
     return this.organizerService
       .updateRegistrationRequest(request)
       .pipe(map((userEvent) => new UserEventAdapter().toEntity(userEvent)));
+  }
+
+  setEventLocation(userId: number, location: Location): Observable<Location> {
+    const request: CreateLocationRequest = {
+      userId,
+      location: new LocationAdapter().toInterchangeFormat(location),
+    };
+    return this.organizerService.createLocation(request).pipe(map((loc) => new LocationAdapter().toEntity(loc)));
   }
 }
