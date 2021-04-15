@@ -171,8 +171,6 @@ export class OrganizerService implements OnModuleInit {
       userId,
       location: new LocationAdapter().toInterchangeFormat(location),
     };
-    return this.organizerService.createLocation(request).pipe(
-      map((loc) => new LocationAdapter().toEntity(loc))
-     );
+    return this.organizerService.createLocation(request).pipe(map((loc) => new LocationAdapter().toEntity(loc)));
   }
 }

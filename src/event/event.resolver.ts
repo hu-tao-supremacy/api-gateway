@@ -146,7 +146,7 @@ export class EventResolver {
           this.fileService.upload(`events/${encode(`${createdEvent.id}`)}/covers/${nanoid()}`, input.coverImage),
           location
             ? this.organizerService.setEventLocation(currentUser.id, location).pipe(map((loc) => loc.id))
-            : of<number>(null)
+            : of<number>(null),
         ]);
       }),
       switchMap(([createdEvent, _, posterImageURI, coverImageURI, locationId]) => {
