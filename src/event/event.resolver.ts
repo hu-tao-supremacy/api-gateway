@@ -14,7 +14,7 @@ import {
   SetEventQuestionsInput,
   UpdateEventInput,
 } from '@onepass/inputs/event.input';
-import { merge } from 'lodash';
+import { flatMap, merge } from 'lodash';
 import { UserEvent_Status } from '@onepass/graphql/common/common';
 import { forkJoin, of } from 'rxjs';
 import { catchGrpcException } from 'src/operators/catch-exceptions.operator';
@@ -36,6 +36,14 @@ export class EventResolver {
     return this.participantService.getUpcomingEvents(
       DateTime.now().startOf('day').toISO(),
       DateTime.now().plus({ days: 14 }).endOf('day').toISO(),
+    );
+  }
+
+  @Query((_) => [Event])
+  async featuredEvents() {
+    const organizationIds = [1501, 1502, 1503];
+    return forkJoin(organizationIds.map((id) => this.participantService.getEventsByOrganizationId(id))).pipe(
+      switchMap(([A, B, C]) => [...A, ...B, ...C]),
     );
   }
 
