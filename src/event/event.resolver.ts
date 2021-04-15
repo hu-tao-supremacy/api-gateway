@@ -127,6 +127,7 @@ export class EventResolver {
   @UseGuards(AuthGuard)
   @Mutation(() => Event)
   createEvent(@CurrentUser() currentUser: User, @Args('input') input: CreateEventInput) {
+    const location = input.location;
     const tags = input.tags?.map((tag) => tag.id);
     return this.organizerService.createEvent(currentUser.id, merge(new Event(), input)).pipe(
       catchGrpcException(),
@@ -138,11 +139,15 @@ export class EventResolver {
             : this.organizerService.setEventTags(currentUser.id, createdEvent.id, tags).pipe(catchGrpcException()),
           this.fileService.upload(`events/${encode(`${createdEvent.id}`)}/posters/${nanoid()}`, input.posterImage),
           this.fileService.upload(`events/${encode(`${createdEvent.id}`)}/covers/${nanoid()}`, input.coverImage),
+          location
+            ? of<number>(null)
+            : this.organizerService.setEventLocation(currentUser.id, location).pipe(map((loc) => loc.id)),
         ]);
       }),
-      switchMap(([createdEvent, _, posterImageURI, coverImageURI]) => {
+      switchMap(([createdEvent, _, posterImageURI, coverImageURI, locationId]) => {
         createdEvent.posterImageUrl = posterImageURI;
         createdEvent.coverImageUrl = coverImageURI;
+        createdEvent.locationId = locationId;
         return this.organizerService.updateEvent(currentUser.id, createdEvent).pipe(catchGrpcException());
       }),
     );
@@ -151,19 +156,28 @@ export class EventResolver {
   @UseGuards(AuthGuard)
   @Mutation(() => Event)
   updateEvent(@CurrentUser() currentUser: User, @Args('input') input: UpdateEventInput) {
+    const location = input.location;
+    const tags = input.tags?.map((tag) => tag.id);
     return this.organizerService.updateEvent(currentUser.id, merge(new Event(), input)).pipe(
       catchGrpcException(),
-      switchMap((updatedEvent) => {
+      switchMap((createdEvent) => {
         return forkJoin([
-          of(updatedEvent),
-          this.fileService.upload(`events/${encode(`${updatedEvent.id}`)}/posters/${nanoid()}`, input.posterImage),
-          this.fileService.upload(`events/${encode(`${updatedEvent.id}`)}/covers/${nanoid()}`, input.coverImage),
+          of(createdEvent),
+          tags
+            ? of<number[]>([])
+            : this.organizerService.setEventTags(currentUser.id, createdEvent.id, tags).pipe(catchGrpcException()),
+          this.fileService.upload(`events/${encode(`${createdEvent.id}`)}/posters/${nanoid()}`, input.posterImage),
+          this.fileService.upload(`events/${encode(`${createdEvent.id}`)}/covers/${nanoid()}`, input.coverImage),
+          location
+            ? of<number>(null)
+            : this.organizerService.setEventLocation(currentUser.id, location).pipe(map((loc) => loc.id)),
         ]);
       }),
-      switchMap(([updatedEvent, posterImageURI, coverImageURI]) => {
+      switchMap(([updatedEvent, _, posterImageURI, coverImageURI, locationId]) => {
         if (posterImageURI || coverImageURI) {
           updatedEvent.posterImageUrl = posterImageURI;
           updatedEvent.coverImageUrl = coverImageURI;
+          updatedEvent.locationId = locationId;
           return this.organizerService.updateEvent(currentUser.id, updatedEvent);
         }
 
