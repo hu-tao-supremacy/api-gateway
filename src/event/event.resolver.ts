@@ -43,7 +43,7 @@ export class EventResolver {
   async featuredEvents() {
     const organizationIds = [1501, 1502, 1503];
     return forkJoin(organizationIds.map((id) => this.participantService.getEventsByOrganizationId(id))).pipe(
-      switchMap(([A, B, C]) => [...A, ...B, ...C]),
+      switchMap((A) => A.reduce((previousValue, currentValue) => [...previousValue, ...currentValue], [])),
     );
   }
 
