@@ -16,6 +16,18 @@ export class FileService {
     credentials: JSON.parse(process.env.GCP_CREDENTIALS),
   }).bucket(process.env.GCP_BUCKET_NAME);
 
+  // async encode(buffer: ReadStream) {
+  //   const concatStream = concat(async (buf: Buffer) => {
+  //     const s = sharp(buf);
+  //     const metadata = await s.metadata();
+  //     const w = metadata.width!;
+  //     const h = metadata.height!;
+  //     const resized = await s.raw().ensureAlpha().resize(w, h, { fit: 'inside' }).toBuffer();
+  //     console.log(encodeImage(new Uint8ClampedArray(resized), w, h, 4, 4));
+  //   });
+  //   buffer.pipe(concatStream);
+  // }
+
   upload(objectPath: string, fileUpload?: Promise<FileUpload>): Observable<{ fileURI: string; hash: string } | null> {
     return fileUpload
       ? from(fileUpload).pipe(
