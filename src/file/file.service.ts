@@ -28,7 +28,7 @@ export class FileService {
   //   buffer.pipe(concatStream);
   // }
 
-  upload(objectPath: string, fileUpload?: Promise<FileUpload>): Observable<string | null> {
+  upload(objectPath: string, fileUpload?: Promise<FileUpload>): Observable<{ fileURI: string; hash: string } | null> {
     return fileUpload
       ? from(fileUpload).pipe(
           switchMap(({ createReadStream }) => {
@@ -75,7 +75,10 @@ export class FileService {
             });
 
             return forkJoin([from(pipeline$), from(sampling$)]).pipe(
-              map((_) => `gs://${process.env.GCP_BUCKET_NAME}/${path}`),
+              map((_) => ({
+                fileURI: `gs://${process.env.GCP_BUCKET_NAME}/${path}`,
+                hash,
+              })),
             );
           }),
         )
