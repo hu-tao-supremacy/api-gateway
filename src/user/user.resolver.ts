@@ -76,8 +76,11 @@ export class UserResolver {
     }
   }
 
+  @UseGuards(AuthGuard)
   @ResolveField()
-  organizations(@Parent() user: User) {
+  organizations(@CurrentUser() currentUser: User, @Parent() user: User) {
+    if (currentUser.id !== user.id) return [];
+
     return this.accountService.getUserOrganizationsByUserId(user.id);
   }
 
