@@ -15,16 +15,18 @@ import {
   UpdateEventInput,
 } from '@onepass/inputs/event.input';
 import { merge, flatten } from 'lodash';
-import { UserEvent_Status } from '@onepass/graphql/common/common';
+import { Permission, UserEvent_Status } from '@onepass/graphql/common/common';
 import { forkJoin, Observable, of } from 'rxjs';
 import { catchGrpcException } from 'src/operators/catch-exceptions.operator';
 import { FileService } from 'src/file/file.service';
 import { encode } from 'js-base64';
 import { nanoid } from 'nanoid';
+import { AccountService } from '@onepass/account/account.service';
 
 @Resolver((_) => Event)
 export class EventResolver {
   constructor(
+    private readonly accountService: AccountService,
     private readonly participantService: ParticipantService,
     private readonly organizerService: OrganizerService,
     private readonly eventService: EventService,
@@ -109,7 +111,9 @@ export class EventResolver {
   @UseGuards(AuthGuard)
   @ResolveField(() => [UserEvent])
   attendees(@CurrentUser() currentUser: User, @Parent() event: Event) {
-    return this.participantService.getUserEventsByEventId(event.id);
+    return this.accountService
+      .hasPermission(currentUser.id, event.organizationId, Permission.EVENT_UPDATE)
+      .pipe(switchMap((_) => this.participantService.getUserEventsByEventId(event.id)));
   }
 
   @ResolveField()
