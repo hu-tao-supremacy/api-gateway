@@ -158,9 +158,11 @@ export class EventResolver {
             : of<number>(null),
         ]);
       }),
-      switchMap(([createdEvent, _, posterImageURI, coverImageURI, locationId]) => {
-        createdEvent.posterImageUrl = posterImageURI;
-        createdEvent.coverImageUrl = coverImageURI;
+      switchMap(([createdEvent, _, posterImage, coverImage, locationId]) => {
+        createdEvent.posterImageUrl = posterImage?.fileURI;
+        createdEvent.posterImageHash = posterImage?.hash;
+        createdEvent.coverImageUrl = coverImage?.fileURI;
+        createdEvent.coverImageHash = coverImage?.hash;
         createdEvent.locationId = locationId;
         return this.organizerService.updateEvent(currentUser.id, createdEvent).pipe(catchGrpcException());
       }),
@@ -191,10 +193,12 @@ export class EventResolver {
             : this.organizerService.setEventLocation(currentUser.id, location).pipe(map((loc) => loc.id)),
         ]);
       }),
-      switchMap(([updatedEvent, _, posterImageURI, coverImageURI, locationId]) => {
-        if (posterImageURI || coverImageURI) {
-          updatedEvent.posterImageUrl = posterImageURI;
-          updatedEvent.coverImageUrl = coverImageURI;
+      switchMap(([updatedEvent, _, posterImage, coverImage, locationId]) => {
+        if (posterImage || coverImage) {
+          updatedEvent.posterImageUrl = posterImage?.fileURI;
+          updatedEvent.posterImageHash = posterImage?.hash;
+          updatedEvent.coverImageUrl = coverImage?.fileURI;
+          updatedEvent.coverImageHash = coverImage?.hash;
           updatedEvent.locationId = locationId;
           return this.organizerService.updateEvent(currentUser.id, updatedEvent);
         }
