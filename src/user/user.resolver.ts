@@ -28,6 +28,12 @@ export class UserResolver {
   }
 
   @UseGuards(AuthGuard)
+  @Query(() => [User])
+  searchUser(@Args('keyword') keyword: string) {
+    return this.accountService.searchUser(keyword);
+  }
+
+  @UseGuards(AuthGuard)
   @Mutation((_) => User)
   updateUser(@CurrentUser() currentUser: User, @Args('input') input: UpdateUserInput) {
     const previousProfilePictureUrl = currentUser.profilePictureUrl;
