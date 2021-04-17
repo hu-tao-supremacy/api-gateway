@@ -35,13 +35,12 @@ export class FileService {
             const stream = createReadStream();
             const extension = 'jpg';
             const path = `${objectPath}.${extension}`;
+            const pipeline = sharp().resize().jpeg({ quality: 80 }).pipe(this.createWriteStream(path));
+            const sampling = sharp().resize().jpeg({ quality: 20 });
+            stream.pipe(pipeline).pipe(sampling);
             return from(
               new Promise<boolean>((resolve, reject) => {
-                stream
-                  .pipe(sharp().resize().jpeg({ quality: 80 }))
-                  .pipe(this.createWriteStream(path))
-                  .on('finish', () => resolve(true))
-                  .on('error', () => reject(false));
+                pipeline.on('finish', () => resolve(true)).on('error', () => reject(false));
               }),
             ).pipe(map((_) => `gs://${process.env.GCP_BUCKET_NAME}/${path}`));
           }),
