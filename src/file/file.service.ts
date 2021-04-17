@@ -33,11 +33,12 @@ export class FileService {
       ? from(fileUpload).pipe(
           switchMap(({ filename, createReadStream }) => {
             const stream = createReadStream();
-            const extension = filename.split('.').reverse()[0];
+            const extension = 'jpg';
             const path = `${objectPath}.${extension}`;
             return from(
               new Promise<boolean>((resolve, reject) => {
                 stream
+                  .pipe(sharp().resize().jpeg({ quality: 80 }))
                   .pipe(this.createWriteStream(path))
                   .on('finish', () => resolve(true))
                   .on('error', () => reject(false));
