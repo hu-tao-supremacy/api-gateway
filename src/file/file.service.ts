@@ -2,13 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { Storage } from '@google-cloud/storage';
 import { Readable, Writable } from 'stream';
 import { DateTime } from 'luxon';
-import { from, Observable, of } from 'rxjs';
+import { from, Observable, forkJoin, of } from 'rxjs';
 import { map, tap, switchMap, catchError } from 'rxjs/operators';
 import { FileUpload } from 'graphql-upload';
 import * as sharp from 'sharp';
 import { encode as encodeImage } from 'blurhash';
 import { ReadStream } from 'node:fs';
-// const concat = require('concat-stream');
+const concat = require('concat-stream');
 
 @Injectable()
 export class FileService {
@@ -31,18 +31,52 @@ export class FileService {
   upload(objectPath: string, fileUpload?: Promise<FileUpload>): Observable<string | null> {
     return fileUpload
       ? from(fileUpload).pipe(
-          switchMap(({ filename, createReadStream }) => {
+          switchMap(({ createReadStream }) => {
             const stream = createReadStream();
-            const extension = 'jpg';
-            const path = `${objectPath}.${extension}`;
-            const pipeline = sharp().resize().jpeg({ quality: 80 }).pipe(this.createWriteStream(path));
-            const sampling = sharp().resize().jpeg({ quality: 20 });
-            stream.pipe(pipeline).pipe(sampling);
-            return from(
-              new Promise<boolean>((resolve, reject) => {
-                pipeline.on('finish', () => resolve(true)).on('error', () => reject(false));
-              }),
-            ).pipe(map((_) => `gs://${process.env.GCP_BUCKET_NAME}/${path}`));
+            const path = objectPath + '.jpg';
+
+            // BlurHash representation.
+            let hash = new String();
+
+            const compression = sharp()
+              .ensureAlpha()
+              .resize(null, 1200, { withoutEnlargement: true })
+              .toFormat('jpg', { quality: 75 });
+
+            const sampling = sharp()
+              .raw()
+              .ensureAlpha()
+              .resize(null, 100, { withoutEnlargement: true })
+              .toFormat('jpg', { quality: 50 });
+
+            const buffer = concat(async (buf: Buffer) => {
+              const s = sharp(buf);
+              const metadata = await s.metadata();
+              const w = metadata.width!;
+              const h = metadata.height!;
+              const resized = await s.raw().ensureAlpha().resize(w, h, { fit: 'contain' }).toBuffer();
+              hash = encodeImage(new Uint8ClampedArray(resized), w, h, 4, 4);
+            });
+
+            const sampling$ = new Promise<boolean>((resolve, reject) => {
+              stream
+                .pipe(sampling)
+                .pipe(buffer)
+                .on('finish', () => resolve(true))
+                .on('error', () => reject(false));
+            });
+
+            const pipeline$ = new Promise<boolean>((resolve, reject) => {
+              stream
+                .pipe(compression)
+                .pipe(this.createWriteStream(path))
+                .on('finish', () => resolve(true))
+                .on('error', () => reject(false));
+            });
+
+            return forkJoin([from(pipeline$), from(sampling$)]).pipe(
+              map((_) => `gs://${process.env.GCP_BUCKET_NAME}/${path}`),
+            );
           }),
         )
       : of(null);
