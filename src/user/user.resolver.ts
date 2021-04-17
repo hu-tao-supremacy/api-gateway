@@ -63,10 +63,8 @@ export class UserResolver {
 
   @UseGuards(AuthGuard)
   @ResolveField()
-  events(@CurrentUser() currentUser: User, @Parent() user: User) {
-    if (currentUser.id !== user.id) {
-      throw new UnauthorizedException();
-    }
+  history(@CurrentUser() currentUser: User, @Parent() user: User) {
+    if (currentUser.id !== user.id) throw new UnauthorizedException();
 
     return this.participantService.getEventsByUserId(currentUser.id);
   }

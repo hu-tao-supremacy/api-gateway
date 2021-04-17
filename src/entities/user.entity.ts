@@ -7,6 +7,7 @@ import { Organization } from './organization.entity';
 import { Tag } from './tag.entity';
 import { UserPermission } from './user-permission.entity';
 import { UserOrganization } from './user-organization.entity';
+import { UserEvent } from './user-event.entity';
 
 const PickedGender = pick(Gender, ['M', 'F', 'NS']);
 registerEnumType(PickedGender, { name: 'Gender' });
@@ -83,10 +84,8 @@ export class User {
   @Field((_) => [UserOrganization])
   organizations: UserOrganization[];
 
-  permissions: UserPermission[];
-
   @Field((_) => [Event])
-  events: Event[];
+  history: Event[];
 
   @Field((_) => [Tag])
   interests: Tag[];
