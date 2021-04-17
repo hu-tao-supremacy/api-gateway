@@ -86,9 +86,10 @@ export class EventResolver {
     return this.participantService.getLocationById(locationId);
   }
 
-  @UseGuards(AuthGuard)
   @ResolveField(() => UserEvent, { nullable: true })
   async attendance(@CurrentUser() currentUser: User, @Parent() event: Event) {
+    if (!currentUser) return null;
+
     const eventId = event.id;
     const userId = currentUser.id;
     try {
