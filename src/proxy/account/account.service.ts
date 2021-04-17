@@ -48,6 +48,13 @@ export class AccountService implements OnModuleInit {
     return this.accountService.isAuthenticated({ accessToken }).pipe(map((project) => project.value));
   }
 
+  searchUser(keyword: string) {
+    return this.accountService.searchUser({ keyword }).pipe(
+      map((projectedValue) => projectedValue.users),
+      map((users) => users.map((user) => new UserAdapter().toEntity(user))),
+    );
+  }
+
   createUser(
     firstName: string,
     lastName: string,
