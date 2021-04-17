@@ -68,8 +68,8 @@ export class OrganizationResolver {
           of(createdOrg),
         ]);
       }),
-      switchMap(([_, fileURI, createdOrg]) => {
-        createdOrg.profilePictureUrl = fileURI;
+      switchMap(([_, profilePicture, createdOrg]) => {
+        createdOrg.profilePictureUrl = profilePicture?.fileURI;
         return this.organizerService.updateOrganization(currentUser.id, createdOrg).pipe(catchGrpcException());
       }),
     );
@@ -89,9 +89,9 @@ export class OrganizationResolver {
           this.fileService.upload(`orgs/${encode(`${updatedOrg.id}`)}/${nanoid()}`, input.profilePicture),
         ]);
       }),
-      switchMap(([updatedOrg, profilePictureURI]) => {
-        if (profilePictureURI) {
-          updatedOrg.profilePictureUrl = profilePictureURI;
+      switchMap(([updatedOrg, profilePicture]) => {
+        if (profilePicture) {
+          updatedOrg.profilePictureUrl = profilePicture.fileURI;
           return this.organizerService.updateOrganization(currentUser.id, updatedOrg).pipe(catchGrpcException());
         }
 
