@@ -34,11 +34,11 @@ export class UserResolver {
     return this.fileService
       .upload(`users/${encode(`${currentUser.id}`)}/${nanoid()}`, input.profilePicture)
       .pipe(
-        switchMap((uri) => {
+        switchMap((profilePicture) => {
           const user = new User();
           merge(user, input);
           user.id = currentUser.id;
-          user.profilePictureUrl = uri;
+          user.profilePictureUrl = profilePicture?.fileURI;
           return this.accountService.updateAccountInfo(user);
         }),
       )
