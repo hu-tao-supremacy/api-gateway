@@ -4,4 +4,5 @@ import { Location } from '@onepass/entities';
 
 export class LocationAdapter extends BaseAdapter<LocationIF, Location> {
   optionalFields = ['description', 'travelInformationImageUrl', 'travelInformationImageHash'];
+  booleanFields = ['isOnline'];
 }
