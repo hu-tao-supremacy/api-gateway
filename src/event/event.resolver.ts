@@ -11,6 +11,7 @@ import { CurrentUser } from 'src/decorators/user.decorator';
 import {
   CreateEventInput,
   ReviewJoinRequestInput,
+  SetEventDurationsInput,
   SetEventQuestionsInput,
   UpdateEventInput,
 } from '@onepass/inputs/event.input';
@@ -145,9 +146,16 @@ export class EventResolver {
   }
 
   @UseGuards(AuthGuard)
+  @Mutation(() => Boolean)
+  setEventDurations(@CurrentUser() currentUser: User, @Args('input') input: SetEventDurationsInput) {
+    return this.organizerService.setEventDurations(currentUser.id, input.eventId, input.durations);
+  }
+
+  @UseGuards(AuthGuard)
   @Mutation(() => Event)
   createEvent(@CurrentUser() currentUser: User, @Args('input') input: CreateEventInput) {
     const location = input.location;
+    const durations = input.durations;
     const tags = input.tags?.map((tag) => tag.id);
     return this.organizerService.createEvent(currentUser.id, merge(new Event(), input)).pipe(
       catchGrpcException(),
@@ -162,6 +170,7 @@ export class EventResolver {
           location
             ? this.organizerService.setEventLocation(currentUser.id, location).pipe(map((loc) => loc.id))
             : of<number>(null),
+          durations ? this.setEventDurations(currentUser, { eventId: createdEvent.id, durations }) : of<number[]>([]),
         ]);
       }),
       switchMap(([createdEvent, _, posterImage, coverImage, locationId]) => {
@@ -179,6 +188,7 @@ export class EventResolver {
   @Mutation(() => Event)
   updateEvent(@CurrentUser() currentUser: User, @Args('input') input: UpdateEventInput) {
     const location = input.location;
+    const durations = input.durations;
     const tags = input.tags?.map((tag) => tag.id);
 
     return this.participantService.getEventById(input.id).pipe(
@@ -197,6 +207,7 @@ export class EventResolver {
           location
             ? of<number>(null)
             : this.organizerService.setEventLocation(currentUser.id, location).pipe(map((loc) => loc.id)),
+          durations ? this.setEventDurations(currentUser, { eventId: createdEvent.id, durations }) : of<number[]>([]),
         ]);
       }),
       switchMap(([updatedEvent, _, posterImage, coverImage, locationId]) => {
