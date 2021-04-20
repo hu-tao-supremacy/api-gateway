@@ -132,7 +132,11 @@ export class ParticipantService implements OnModuleInit {
       .pipe(map((userEvent) => new UserEventAdapter().toEntity(userEvent)));
   }
 
-  submitAnswers(userEventId: number, answers: Omit<Answer, 'userEvent' | 'question'>[]): Observable<Answer[]> {
+  submitAnswers(
+    userEventId: number,
+    answers: Omit<Answer, 'userEvent' | 'question'>[],
+    type: QuestionGroupType,
+  ): Observable<Answer[]> {
     console.log(userEventId, answers, type);
     return this.participantService.submitAnswersForEventQuestion({ userEventId, answers, type }).pipe(
       map((project) => project.answers ?? []),
