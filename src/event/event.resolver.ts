@@ -15,7 +15,7 @@ import {
   SetEventQuestionsInput,
   UpdateEventInput,
 } from '@onepass/inputs/event.input';
-import { merge, flatten, sampleSize } from 'lodash';
+import { merge, flatten, sampleSize, take } from 'lodash';
 import { Permission, UserEvent_Status } from '@onepass/graphql/common/common';
 import { forkJoin, Observable, of } from 'rxjs';
 import { catchGrpcException } from 'src/operators/catch-exceptions.operator';
@@ -62,11 +62,8 @@ export class EventResolver {
 
   @UseGuards(AuthGuard)
   @Query(() => [Event])
-  async onlineEvents(@CurrentUser() user: User) {
-    return this.participantService.getUpcomingEvents(
-      DateTime.now().startOf('day').toISO(),
-      DateTime.now().plus({ days: 14 }).endOf('day').toISO(),
-    );
+  async onlineEvents(@CurrentUser() user: User, @Args('n', { type: () => Int }) n: number) {
+    return this.participantService.getOnlineEvents().pipe(map((events) => take(events, n)));
   }
 
   @ResolveField()
