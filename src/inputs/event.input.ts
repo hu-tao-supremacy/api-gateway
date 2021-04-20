@@ -1,4 +1,4 @@
-import { Event, Location, Question, QuestionGroup, Tag, UserEvent } from '@onepass/entities';
+import { Event, EventDuration, Location, Question, QuestionGroup, Tag, UserEvent } from '@onepass/entities';
 import { InputType, Field, OmitType, PartialType, Int, IntersectionType, PickType } from '@nestjs/graphql';
 import { FileUpload, GraphQLUpload } from 'graphql-upload';
 
@@ -22,6 +22,9 @@ export class SetEventQuestionsInput {
 
 @InputType()
 class SetEventTagsTagInput extends OmitType(Tag, ['name', 'events'] as const) {}
+
+@InputType()
+class SetEventDurationsDurationInput extends OmitType(EventDuration, ['eventId', 'event', 'id'] as const) {}
 
 @InputType()
 export class SetEventTagsInput {
@@ -63,6 +66,9 @@ export class CreateEventInput extends OmitType(Event, [
 
   @Field(() => [SetEventTagsTagInput], { nullable: true })
   tags?: Tag[];
+
+  @Field(() => [SetEventDurationsDurationInput], { nullable: true })
+  durations?: EventDuration[];
 }
 
 @InputType()
