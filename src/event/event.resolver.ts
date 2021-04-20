@@ -57,6 +57,16 @@ export class EventResolver {
   async recommendedEvents(@CurrentUser() user: User) {
     return this.participantService.getRecommendedEvents(user.id);
   }
+
+  @UseGuards(AuthGuard)
+  @Query(() => [Event])
+  async onlineEvents(@CurrentUser() user: User) {
+    return this.participantService.getUpcomingEvents(
+      DateTime.now().startOf('day').toISO(),
+      DateTime.now().plus({ days: 14 }).endOf('day').toISO(),
+    );
+  }
+
   @ResolveField()
   coverImageUrl(@Parent() event: Event) {
     if (event.coverImageUrl) {
