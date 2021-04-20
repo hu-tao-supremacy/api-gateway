@@ -9,7 +9,7 @@ import {
 } from '@onepass/inputs/organization.input';
 import { BadRequestException, HttpException, UseGuards } from '@nestjs/common';
 import { Args, Int, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
-import { merge } from 'lodash';
+import { merge, take } from 'lodash';
 import { from, forkJoin, of, Observable } from 'rxjs';
 import { catchError, map, tap, switchMap } from 'rxjs/operators';
 import { CurrentUser } from 'src/decorators/user.decorator';
@@ -37,8 +37,8 @@ export class OrganizationResolver {
   }
 
   @Query(() => [Organization])
-  featuredOrganizations(): Observable<Organization[]> {
-    return this.organizerService.getOrganizations();
+  featuredOrganizations(@Args('n', { type: () => Int }) n: number): Observable<Organization[]> {
+    return this.organizerService.getOrganizations().pipe(map((organizations) => take(organizations, n)));
   }
 
   @Query((_) => Organization)
