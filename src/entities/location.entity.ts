@@ -28,4 +28,7 @@ export class Location {
   @Field({ nullable: true })
   @Column({ nullable: true })
   travelInformationImageHash?: string;
+
+  @Field(() => Boolean)
+  isOnline: boolean;
 }
