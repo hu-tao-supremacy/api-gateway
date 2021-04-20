@@ -74,4 +74,7 @@ export class Event {
 
   @Field((_) => [Tag])
   tags: Tag[];
+
+  @Field()
+  registrationDueDate: string;
 }
