@@ -132,11 +132,7 @@ export class ParticipantService implements OnModuleInit {
       .pipe(map((userEvent) => new UserEventAdapter().toEntity(userEvent)));
   }
 
-  submitAnswers(
-    userEventId: number,
-    answers: Omit<Answer, 'userEvent' | 'question'>[],
-    type: QuestionGroupType,
-  ): Observable<Answer[]> {
+  submitAnswers(userEventId: number, answers: Omit<Answer, 'userEvent' | 'question'>[]): Observable<Answer[]> {
     console.log(userEventId, answers, type);
     return this.participantService.submitAnswersForEventQuestion({ userEventId, answers, type }).pipe(
       map((project) => project.answers ?? []),
@@ -207,6 +203,13 @@ export class ParticipantService implements OnModuleInit {
   getRecommendedEvents(userId: number): Observable<Event[]> {
     return this.participantService.getSuggestedEvents({}).pipe(
       map((projectedValue) => projectedValue.event ?? []),
+      map((events) => events.map((event) => new EventAdapter().toEntity(event))),
+    );
+  }
+
+  getOnlineEvents(): Observable<Event[]> {
+    return this.participantService.getOnlineEvents({}).pipe(
+      map((projectedValue) => projectedValue.event),
       map((events) => events.map((event) => new EventAdapter().toEntity(event))),
     );
   }
