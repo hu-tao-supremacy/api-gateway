@@ -33,7 +33,7 @@ export class SetEventDurationsInput {
 class SetEventTagsTagInput extends OmitType(Tag, ['name', 'events'] as const) {}
 
 @InputType()
-export class SetEventDurationsDurationInput extends OmitType(EventDuration, ['eventId', 'event', 'id'] as const) {}
+class SetEventDurationsDurationInput extends OmitType(EventDuration, ['eventId', 'event', 'id'] as const) {}
 
 @InputType()
 export class SetEventTagsInput {
