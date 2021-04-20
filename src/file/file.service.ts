@@ -33,7 +33,8 @@ export class FileService {
       ? from(fileUpload).pipe(
           switchMap(({ createReadStream }) => {
             const stream = createReadStream();
-            const path = objectPath + '.jpg';
+            const env = process.env.NODE_ENV ?? 'prod';
+            const path = env + '/' + objectPath + '.jpg';
 
             // BlurHash representation.
             let hash = new String();
