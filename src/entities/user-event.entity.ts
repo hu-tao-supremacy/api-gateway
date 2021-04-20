@@ -5,7 +5,7 @@ import { Event } from './event.entity';
 import { User } from './user.entity';
 import { pick } from 'lodash';
 
-export const PickedUserEventStatus = pick(Status, ['APPROVED', 'REJECTED', 'PENDING']);
+export const PickedUserEventStatus = pick(Status, ['APPROVED', 'REJECTED', 'PENDING', 'ATTENDED']);
 registerEnumType(PickedUserEventStatus, { name: 'UserEventStatus' });
 
 @InputType('UserEventInput')
