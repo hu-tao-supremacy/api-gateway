@@ -75,6 +75,6 @@ export class Event {
   @Field((_) => [Tag])
   tags: Tag[];
 
-  @Field()
-  registrationDueDate: string;
+  @Field({ nullable: true })
+  registrationDueDate?: string;
 }
