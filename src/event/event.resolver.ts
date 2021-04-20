@@ -15,7 +15,7 @@ import {
   SetEventQuestionsInput,
   UpdateEventInput,
 } from '@onepass/inputs/event.input';
-import { merge, flatten } from 'lodash';
+import { merge, flatten, sampleSize } from 'lodash';
 import { Permission, UserEvent_Status } from '@onepass/graphql/common/common';
 import { forkJoin, Observable, of } from 'rxjs';
 import { catchGrpcException } from 'src/operators/catch-exceptions.operator';
@@ -44,11 +44,13 @@ export class EventResolver {
 
   @Query((_) => [Event])
   featuredEvents(): Observable<Event[]> {
-    const organizationIds = [1501, 1502, 1503, 1504, 1505];
-    return forkJoin(organizationIds.map((id) => this.participantService.getEventsByOrganizationId(id))).pipe(
-      switchMap((A) => {
-        return of(flatten(A));
-      }),
+    return this.organizerService.getOrganizations().pipe(
+      map((organizations) => sampleSize(organizations, 5)),
+      switchMap((sampledOrgs) =>
+        forkJoin(sampledOrgs.map((org) => this.participantService.getEventsByOrganizationId(org.id))),
+      ),
+      map((events) => flatten(events)),
+      map((events) => sampleSize(events, 15)),
     );
   }
 
