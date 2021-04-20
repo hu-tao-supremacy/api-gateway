@@ -60,9 +60,8 @@ export class EventResolver {
     return this.participantService.getRecommendedEvents(user.id);
   }
 
-  @UseGuards(AuthGuard)
   @Query(() => [Event])
-  async onlineEvents(@CurrentUser() user: User, @Args('n', { type: () => Int }) n: number) {
+  async onlineEvents(@Args('n', { type: () => Int }) n: number) {
     return this.participantService.getOnlineEvents().pipe(map((events) => take(events, n)));
   }
 
