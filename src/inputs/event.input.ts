@@ -21,6 +21,15 @@ export class SetEventQuestionsInput {
 }
 
 @InputType()
+export class SetEventDurationsInput {
+  @Field(() => Int)
+  eventId: number;
+
+  @Field(() => [SetEventDurationsDurationInput])
+  durations: EventDuration[];
+}
+
+@InputType()
 class SetEventTagsTagInput extends OmitType(Tag, ['name', 'events'] as const) {}
 
 @InputType()
