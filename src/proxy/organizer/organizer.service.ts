@@ -9,6 +9,7 @@ import {
   UpdateEventRequest,
   UpdateRegistrationRequestRequest,
   CreateLocationRequest,
+  UpdateEventDurationRequest,
 } from '@onepass/api/organizer/service';
 import { ClientGrpc } from '@nestjs/microservices';
 import { forkJoin, from, Observable } from 'rxjs';
@@ -21,6 +22,7 @@ import {
   PickedUserEventStatus,
   UserEvent,
   Location,
+  EventDuration,
 } from '@onepass/entities';
 import {
   EventAdapter,
@@ -31,6 +33,7 @@ import {
   UserEventAdapter,
 } from '@onepass/adapters';
 import { UserEvent_Status } from '@onepass/graphql/common/common';
+import { DateTime } from 'luxon';
 
 @Injectable()
 export class OrganizerService implements OnModuleInit {
@@ -129,6 +132,27 @@ export class OrganizerService implements OnModuleInit {
       map((projectedValue) => projectedValue.eventTags ?? []),
       map((eventTags) => eventTags.map((eventTag) => eventTag.tagId)),
     );
+  }
+
+  setEventDurations(userId: number, eventId: number, durations: EventDuration[]) {
+    const request: UpdateEventDurationRequest = {
+      userId: userId,
+      eventId: eventId,
+      duration: durations.map((d) => {
+        return {
+          start: {
+            seconds: DateTime.fromISO(d.start).toSeconds(),
+            nanos: 0,
+          },
+          finish: {
+            seconds: DateTime.fromISO(d.finish).toSeconds(),
+            nanos: 0,
+          },
+        };
+      }),
+    };
+
+    return this.organizerService.updateEventDurations(request);
   }
 
   createEvent(userId: number, event: Event): Observable<Event> {
