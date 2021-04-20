@@ -13,5 +13,6 @@ declare namespace NodeJS {
     GCP_BUCKET_NAME: string;
     CHULA_SSO_APP_ID: string;
     CHULA_SSO_APP_SECRET: string;
+    NODE_ENV: string;
   }
 }
