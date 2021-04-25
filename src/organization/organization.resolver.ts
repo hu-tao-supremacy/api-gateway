@@ -60,25 +60,22 @@ export class OrganizationResolver {
 
   @UseGuards(AuthGuard)
   @Mutation((_) => Organization)
-  createOrganization(@CurrentUser() currentUser: User, @Args('input') input: CreateOrganizationInput) {
+  async createOrganization(@CurrentUser() currentUser: User, @Args('input') input: CreateOrganizationInput) {
     const org = new Organization();
     merge(org, input);
-    return this.organizerService.createOrganization(currentUser.id, org).pipe(
-      catchGrpcException(),
-      switchMap((createdOrg) => {
-        return forkJoin([
-          this.accountService
-            .assignRole(currentUser.id, createdOrg.id, Role.ORGANIZATION_OWNER)
-            .pipe(catchGrpcException()),
-          this.fileService.upload(`orgs/${encode(`${createdOrg.id}`)}/${nanoid()}`, input.profilePicture),
-          of(createdOrg),
-        ]);
-      }),
-      switchMap(([_, profilePicture, createdOrg]) => {
-        createdOrg.profilePictureUrl = profilePicture?.fileURI;
-        return this.organizerService.updateOrganization(currentUser.id, createdOrg).pipe(catchGrpcException());
-      }),
-    );
+
+    const createdOrg = await this.organizerService.createOrganization(currentUser.id, org).toPromise();
+    await this.accountService.assignRole(currentUser.id, createdOrg.id, Role.ORGANIZATION_OWNER).toPromise();
+    const profilePicture = await this.fileService
+      .upload(`orgs/${encode(`${createdOrg.id}`)}/${nanoid()}`, input.profilePicture)
+      .toPromise();
+
+    createdOrg.profilePictureUrl = profilePicture?.fileURI;
+    createdOrg.profilePictureHash = profilePicture?.hash;
+
+    const updatedOrg = await this.organizerService.updateOrganization(currentUser.id, createdOrg).toPromise();
+
+    return updatedOrg;
   }
 
   @UseGuards(AuthGuard)
