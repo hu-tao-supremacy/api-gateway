@@ -136,4 +136,9 @@ export class OrganizationResolver {
       ),
     );
   }
+
+  @ResolveField()
+  userOrganizations(@Parent() org: Organization) {
+    return this.accountService.getUserOrganizationsByOrganizationId(org.id);
+  }
 }
