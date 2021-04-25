@@ -1,6 +1,7 @@
 import { Field, InputType, Int, ObjectType } from '@nestjs/graphql';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { Event } from './event.entity';
+import { UserOrganization } from './user-organization.entity';
 
 @InputType('OrganizationInput')
 @ObjectType()
@@ -74,6 +75,9 @@ export class Organization {
   @Column({ nullable: true })
   profilePictureHash?: string;
 
-  @Field((_) => [Event])
+  @Field(() => [Event])
   events: Event[];
+
+  @Field(() => [UserOrganization])
+  userOrganizations: UserOrganization[];
 }
