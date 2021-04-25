@@ -19,6 +19,6 @@ export class UserOrganizationResolver {
 
   @ResolveField(() => User)
   user(@Parent() userOrg: UserOrganization) {
-    return this.accountService.getUserById(userOrg.id);
+    return this.accountService.getUserById(userOrg.userId);
   }
 }
