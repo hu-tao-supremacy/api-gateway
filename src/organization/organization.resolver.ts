@@ -104,8 +104,11 @@ export class OrganizationResolver {
   }
 
   @UseGuards(AuthGuard)
-  @Mutation((_) => Organization)
-  addMembersToOrganization(@CurrentUser() currentUser: User, @Args('input') input: UpdateMembersInOrganizationInput) {
+  @Mutation((_) => Boolean)
+  async addMembersToOrganization(
+    @CurrentUser() currentUser: User,
+    @Args('input') input: UpdateMembersInOrganizationInput,
+  ) {
     return forkJoin(input.emails.map((email) => this.accountService.getUserByEmail(email))).pipe(
       catchGrpcException(),
       map((users) => users.map((user) => user.id)),
@@ -125,7 +128,7 @@ export class OrganizationResolver {
   }
 
   @UseGuards(AuthGuard)
-  @Mutation((_) => Organization)
+  @Mutation((_) => Boolean)
   removeMembersFromOrganization(
     @CurrentUser() currentUser: User,
     @Args('input') input: UpdateMembersInOrganizationInput,
