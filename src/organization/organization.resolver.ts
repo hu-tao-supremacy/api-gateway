@@ -112,8 +112,13 @@ export class OrganizationResolver {
     return forkJoin(input.emails.map((email) => this.accountService.getUserByEmail(email))).pipe(
       catchGrpcException(),
       map((users) => users.map((user) => user.id)),
-      tap((ids) => this.organizerService.addMembersToOrganization(currentUser.id, input.organizationId, ids)),
       switchMap((ids) => {
+        return forkJoin([
+          this.organizerService.addMembersToOrganization(currentUser.id, input.organizationId, ids),
+          of(ids),
+        ]);
+      }),
+      switchMap(([_, ids]) => {
         return forkJoin(
           ids.map((id) => this.accountService.assignRole(id, input.organizationId, Role.ORGANIZATION_MEMBER)),
         );
