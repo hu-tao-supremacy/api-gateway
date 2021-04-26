@@ -79,6 +79,13 @@ import { HTS_PERSONALIZATION_PACKAGE_NAME } from '@onepass/api/personalization/s
     ]),
   ],
   providers: [AccountService, FacilityService, OrganizerService, ParticipantService, PersonalizationService],
-  exports: [ClientsModule, AccountService, FacilityService, OrganizerService, ParticipantService],
+  exports: [
+    ClientsModule,
+    AccountService,
+    FacilityService,
+    OrganizerService,
+    ParticipantService,
+    PersonalizationService,
+  ],
 })
 export class ProxyModule {}
