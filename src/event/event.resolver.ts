@@ -169,7 +169,6 @@ export class EventResolver {
     const tags = input.tags?.map((tag) => tag.id);
     return this.organizerService.createEvent(currentUser.id, merge(new Event(), input)).pipe(
       catchGrpcException(),
-      tap((createdEvent) => console.log(createdEvent)),
       switchMap((createdEvent) => {
         return forkJoin([
           of(createdEvent),
