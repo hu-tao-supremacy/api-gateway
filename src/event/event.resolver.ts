@@ -1,12 +1,5 @@
 import { Args, Int, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
-import {
-  UserEvent,
-  Event,
-  PickedQuestionGroupType,
-  PickedUserEventStatus,
-  User,
-  EventLocation,
-} from '@onepass/entities';
+import { UserEvent, Event, PickedQuestionGroupType, PickedUserEventStatus, User, Location } from '@onepass/entities';
 import { EventService } from './event.service';
 import { OrganizerService } from '@onepass/organizer/organizer.service';
 import { ParticipantService } from '@onepass/participant/participant.service';
@@ -185,7 +178,7 @@ export class EventResolver {
           this.fileService.upload(`events/${encode(`${createdEvent.id}`)}/covers/${nanoid()}`, input.coverImage),
           location
             ? this.organizerService
-                .setEventLocation(currentUser.id, merge(new EventLocation(), location))
+                .setEventLocation(currentUser.id, merge(new Location(), location))
                 .pipe(map((loc) => loc.id))
             : of<number>(null),
           durations ? this.setEventDurations(currentUser, { eventId: createdEvent.id, durations }) : of<number[]>([]),
