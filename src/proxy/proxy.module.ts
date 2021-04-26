@@ -68,9 +68,9 @@ import { HTS_PERSONALIZATION_PACKAGE_NAME } from '@onepass/api/personalization/s
         name: HTS_PERSONALIZATION_PACKAGE_NAME,
         transport: Transport.GRPC,
         options: {
-          url: process.env.HTS_SVC_FACILITY,
-          package: HTS_FACILITY_PACKAGE_NAME,
-          protoPath: join(__dirname, '../../../apis/proto/hts/facility/service.proto'),
+          url: process.env.HTS_SVC_PERSONALIZATION,
+          package: HTS_PERSONALIZATION_PACKAGE_NAME,
+          protoPath: join(__dirname, '../../../apis/proto/hts/personalization/service.proto'),
           loader: {
             includeDirs: [join(__dirname, '../../../apis/proto')],
           },
