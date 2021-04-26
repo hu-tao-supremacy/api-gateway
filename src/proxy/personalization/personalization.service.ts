@@ -1,4 +1,5 @@
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
+import { ClientGrpc } from '@nestjs/microservices';
 import {
   HTS_PERSONALIZATION_PACKAGE_NAME,
   PersonalizationServiceClient,
