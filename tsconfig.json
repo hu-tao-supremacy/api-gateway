@@ -30,6 +30,9 @@
       "@onepass/participant/*": [
         "src/proxy/participant/*"
       ],
+      "@onepass/personalization/*": [
+        "src/proxy/personalization/*"
+      ],
       "@onepass/graphql/*": [
         "src/graphql/hts/*"
       ],
