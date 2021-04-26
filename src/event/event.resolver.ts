@@ -23,6 +23,7 @@ import { FileService } from 'src/file/file.service';
 import { encode } from 'js-base64';
 import { nanoid } from 'nanoid';
 import { AccountService } from '@onepass/account/account.service';
+import { PersonalizationService } from '@onepass/personalization/personalization.service';
 
 @Resolver((_) => Event)
 export class EventResolver {
@@ -32,6 +33,7 @@ export class EventResolver {
     private readonly organizerService: OrganizerService,
     private readonly eventService: EventService,
     private readonly fileService: FileService,
+    private readonly personalizationService: PersonalizationService,
   ) {}
 
   @Query((_) => [Event])
@@ -57,7 +59,7 @@ export class EventResolver {
   @UseGuards(AuthGuard)
   @Query(() => [Event])
   async recommendedEvents(@CurrentUser() user: User) {
-    return this.participantService.getRecommendedEvents(user.id);
+    return this.personalizationService.getRecommendedEvents(user.id);
   }
 
   @Query(() => [Event])
