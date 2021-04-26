@@ -10,6 +10,7 @@ import { HTS_PARTICIPANT_PACKAGE_NAME } from '@onepass/api/participant/service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { join } from 'path';
 import { PersonalizationService } from './personalization/personalization.service';
+import { HTS_PERSONALIZATION_PACKAGE_NAME } from '@onepass/api/personalization/service';
 
 @Global()
 @Module({
@@ -53,6 +54,18 @@ import { PersonalizationService } from './personalization/personalization.servic
       },
       {
         name: HTS_FACILITY_PACKAGE_NAME,
+        transport: Transport.GRPC,
+        options: {
+          url: process.env.HTS_SVC_FACILITY,
+          package: HTS_FACILITY_PACKAGE_NAME,
+          protoPath: join(__dirname, '../../../apis/proto/hts/facility/service.proto'),
+          loader: {
+            includeDirs: [join(__dirname, '../../../apis/proto')],
+          },
+        },
+      },
+      {
+        name: HTS_PERSONALIZATION_PACKAGE_NAME,
         transport: Transport.GRPC,
         options: {
           url: process.env.HTS_SVC_FACILITY,
