@@ -20,7 +20,7 @@ export class AuthResolver {
     return this.service.signInWithServiceAccount(serviceAccount);
   }
 
-  @If(process.env.NODE_ENV === 'dev', Mutation(() => AuthenticateOutput))
+  // @If(process.env.NODE_ENV === 'dev', Mutation(() => AuthenticateOutput))
   async generateAccessToken(@Args('userId') userId: number) {
     return { accessToken: await this.service.generateAccessToken(userId).toPromise() };
   }
