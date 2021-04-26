@@ -22,7 +22,7 @@ export class PersonalizationService implements OnModuleInit {
 
   getRecommendedEvents(userId: number): Observable<Event[]> {
     return this.service.getRecommendedEvents({ userId }).pipe(
-      map((projectedValue) => projectedValue.eventCollection),
+      map((projectedValue) => projectedValue.eventCollection ?? []),
       map((events) => events.map((event) => new EventAdapter().toEntity(event))),
     );
   }
