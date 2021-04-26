@@ -11,6 +11,7 @@ export class EventAdapter extends BaseAdapter<EventIF, Event> {
     'posterImageHash',
     'profileImageUrl',
     'profileImageHash',
+    'registrationDueDate',
   ];
 
   numericFields = ['attendeeLimit'];
