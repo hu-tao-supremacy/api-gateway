@@ -4,7 +4,7 @@ import { EventService } from './event.service';
 import { OrganizerService } from '@onepass/organizer/organizer.service';
 import { ParticipantService } from '@onepass/participant/participant.service';
 import { DateTime } from 'luxon';
-import { map, switchMap } from 'rxjs/operators';
+import { tap, map, switchMap } from 'rxjs/operators';
 import { UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { CurrentUser } from 'src/decorators/user.decorator';
@@ -167,6 +167,7 @@ export class EventResolver {
     const tags = input.tags?.map((tag) => tag.id);
     return this.organizerService.createEvent(currentUser.id, merge(new Event(), input)).pipe(
       catchGrpcException(),
+      tap((createdEvent) => console.log(createdEvent)),
       switchMap((createdEvent) => {
         return forkJoin([
           of(createdEvent),
