@@ -161,6 +161,8 @@ export class OrganizerService implements OnModuleInit {
       event: new EventAdapter().toInterchangeFormat(event),
     };
 
+    console.log(request);
+
     return this.organizerService.createEvent(request).pipe(map((event) => new EventAdapter().toEntity(event)));
   }
 
