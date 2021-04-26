@@ -21,6 +21,7 @@ export class AuthResolver {
   }
 
   // @If(process.env.NODE_ENV === 'dev', Mutation(() => AuthenticateOutput))
+  @Mutation(() => AuthenticateOutput)
   async generateAccessToken(@Args('userId') userId: number) {
     return { accessToken: await this.service.generateAccessToken(userId).toPromise() };
   }
