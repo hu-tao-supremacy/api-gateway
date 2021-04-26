@@ -9,6 +9,7 @@ import { HTS_ORGANIZER_PACKAGE_NAME } from '@onepass/api/organizer/service';
 import { HTS_PARTICIPANT_PACKAGE_NAME } from '@onepass/api/participant/service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { join } from 'path';
+import { PersonalizationService } from './personalization/personalization.service';
 
 @Global()
 @Module({
@@ -64,7 +65,7 @@ import { join } from 'path';
       },
     ]),
   ],
-  providers: [AccountService, FacilityService, OrganizerService, ParticipantService],
+  providers: [AccountService, FacilityService, OrganizerService, ParticipantService, PersonalizationService],
   exports: [ClientsModule, AccountService, FacilityService, OrganizerService, ParticipantService],
 })
 export class ProxyModule {}
