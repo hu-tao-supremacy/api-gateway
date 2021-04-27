@@ -9,6 +9,7 @@ import { UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { CurrentUser } from 'src/decorators/user.decorator';
 import {
+  CheckInInput,
   CreateEventInput,
   ReviewJoinRequestInput,
   SetEventDurationsInput,
@@ -241,5 +242,11 @@ export class EventResolver {
   @Mutation(() => Boolean)
   reviewJoinRequest(@CurrentUser() currentUser: User, @Args('input') input: ReviewJoinRequestInput) {
     return this.organizerService.reviewJoinRequest(currentUser.id, input.userId, input.eventId, input.status);
+  }
+
+  @UseGuards(AuthGuard)
+  @Mutation(() => UserEvent)
+  checkIn(@CurrentUser() currentUser: User, @Args('input') input: CheckInInput) {
+    return this.organizerService.checkIn(currentUser.id, input.userId, input.eventId);
   }
 }
