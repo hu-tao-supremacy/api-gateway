@@ -239,7 +239,7 @@ export class EventResolver {
   }
 
   @UseGuards(AuthGuard)
-  @Mutation(() => Boolean)
+  @Mutation(() => UserEvent)
   reviewJoinRequest(@CurrentUser() currentUser: User, @Args('input') input: ReviewJoinRequestInput) {
     return this.organizerService.reviewJoinRequest(currentUser.id, input.userId, input.eventId, input.status);
   }
