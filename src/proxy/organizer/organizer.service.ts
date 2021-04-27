@@ -202,4 +202,10 @@ export class OrganizerService implements OnModuleInit {
 
     return this.organizerService.createLocation(request).pipe(map((loc) => new LocationAdapter().toEntity(loc)));
   }
+
+  checkIn(currentUserId: number, userId: number, eventId: number) {
+    return this.organizerService
+      .checkIn({ userId, eventId })
+      .pipe(map((userEvent) => new UserEventAdapter().toEntity(userEvent)));
+  }
 }
