@@ -4,6 +4,7 @@ import {
   HTS_ORGANIZER_PACKAGE_NAME,
   ORGANIZER_SERVICE_NAME,
   UpdateUsersInOrganizationRequest,
+  CreateTagRequest,
   UpdateTagRequest,
   CreateEventRequest,
   UpdateEventRequest,
@@ -23,6 +24,7 @@ import {
   UserEvent,
   Location,
   EventDuration,
+  Tag,
 } from '@onepass/entities';
 import {
   EventAdapter,
@@ -30,10 +32,12 @@ import {
   OrganizationAdapter,
   QuestionAdapter,
   QuestionGroupAdapter,
+  TagAdapter,
   UserEventAdapter,
 } from '@onepass/adapters';
 import { UserEvent_Status } from '@onepass/graphql/common/common';
 import { DateTime } from 'luxon';
+import { merge } from 'lodash';
 
 @Injectable()
 export class OrganizerService implements OnModuleInit {
@@ -207,5 +211,14 @@ export class OrganizerService implements OnModuleInit {
     return this.organizerService
       .checkIn({ userId, eventId })
       .pipe(map((userEvent) => new UserEventAdapter().toEntity(userEvent)));
+  }
+
+  createTag(userId: number, organizationId: number, name: string) {
+    const request: CreateTagRequest = {
+      userId,
+      organizationId,
+      tag: merge(new Tag(), { name }),
+    };
+    return this.organizerService.createTag(request).pipe(map((tag) => new TagAdapter().toEntity(tag)));
   }
 }
