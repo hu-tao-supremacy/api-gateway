@@ -87,7 +87,14 @@ export class UpdateEventInput extends IntersectionType(
 ) {}
 
 @InputType()
-export class ReviewJoinRequestInput extends OmitType(UserEvent, ['id', 'event', 'ticket', 'ticket']) {}
+export class ReviewJoinRequestInput extends OmitType(UserEvent, [
+  'id',
+  'event',
+  'ticket',
+  'rating',
+  'answers',
+  'user',
+]) {}
 
 @InputType()
 export class CheckInInput extends OmitType(UserEvent, [
