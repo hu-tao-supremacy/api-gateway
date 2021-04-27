@@ -1,5 +1,5 @@
 import { Event, EventDuration, Location, Question, QuestionGroup, Tag, UserEvent } from '@onepass/entities';
-import { InputType, Field, OmitType, PartialType, Int, IntersectionType, PickType } from '@nestjs/graphql';
+import { InputType, Field, OmitType, PartialType, Int, IntersectionType, PickType, InputType } from '@nestjs/graphql';
 import { FileUpload, GraphQLUpload } from 'graphql-upload';
 
 @InputType()
@@ -88,3 +88,14 @@ export class UpdateEventInput extends IntersectionType(
 
 @InputType()
 export class ReviewJoinRequestInput extends OmitType(UserEvent, ['id', 'event', 'ticket', 'ticket']) {}
+
+@InputType()
+export class CheckInInput extends OmitType(UserEvent, [
+  'id',
+  'ticket',
+  'event',
+  'user',
+  'rating',
+  'status',
+  'answers',
+]) {}
