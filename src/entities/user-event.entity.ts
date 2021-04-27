@@ -4,6 +4,7 @@ import { Column, Entity, Index, ManyToOne, PrimaryGeneratedColumn } from 'typeor
 import { Event } from './event.entity';
 import { User } from './user.entity';
 import { pick } from 'lodash';
+import { Answer } from './answer.entity';
 
 export const PickedUserEventStatus = pick(Status, ['APPROVED', 'REJECTED', 'PENDING', 'ATTENDED']);
 registerEnumType(PickedUserEventStatus, { name: 'UserEventStatus' });
@@ -45,4 +46,7 @@ export class UserEvent {
   @Field((_) => PickedUserEventStatus)
   @Column('enum', { enum: ['PENDING', 'APPROVED', 'REJECTED'] })
   status: Status;
+
+  @Field(() => [Answer])
+  answers: Answer[];
 }
