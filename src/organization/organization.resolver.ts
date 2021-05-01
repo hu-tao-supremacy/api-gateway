@@ -65,17 +65,27 @@ export class OrganizationResolver {
     merge(org, input);
 
     const createdOrg = await this.organizerService.createOrganization(currentUser.id, org).toPromise();
-    await this.accountService.assignRole(currentUser.id, createdOrg.id, Role.ORGANIZATION_OWNER).toPromise();
-    const profilePicture = await this.fileService
-      .upload(`orgs/${encode(`${createdOrg.id}`)}/${nanoid()}`, input.profilePicture)
+    const assigned = await this.accountService
+      .assignRole(currentUser.id, createdOrg.id, Role.ORGANIZATION_OWNER)
       .toPromise();
 
-    createdOrg.profilePictureUrl = profilePicture?.fileURI;
-    createdOrg.profilePictureHash = profilePicture?.hash;
+    if (assigned) {
+      const profilePicture = await this.fileService
+        .upload(`orgs/${encode(`${createdOrg.id}`)}/${nanoid()}`, input.profilePicture)
+        .toPromise();
 
-    const updatedOrg = await this.organizerService.updateOrganization(currentUser.id, createdOrg).toPromise();
+      console.log(profilePicture);
+      console.log(createdOrg);
 
-    return updatedOrg;
+      createdOrg.profilePictureUrl = profilePicture?.fileURI;
+      createdOrg.profilePictureHash = profilePicture?.hash;
+
+      const updatedOrg = await this.organizerService.updateOrganization(currentUser.id, createdOrg).toPromise();
+
+      return updatedOrg;
+    }
+
+    return createdOrg;
   }
 
   @UseGuards(AuthGuard)
