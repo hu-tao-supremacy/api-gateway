@@ -20,8 +20,8 @@ export class PersonalizationService implements OnModuleInit {
     this.service = this.client.getService<PersonalizationServiceClient>(PERSONALIZATION_SERVICE_NAME);
   }
 
-  getRecommendedEvents(userId: number): Observable<Event[]> {
-    return this.service.getRecommendedEvents({ userId }).pipe(
+  getRecommendedEvents(userId: number, n: number): Observable<Event[]> {
+    return this.service.getRecommendedEvents({ userId, kEvents: n }).pipe(
       map((projectedValue) => projectedValue.eventCollection ?? []),
       map((events) => events.map((event) => new EventAdapter().toEntity(event))),
     );
