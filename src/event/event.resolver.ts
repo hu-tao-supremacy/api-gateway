@@ -59,8 +59,8 @@ export class EventResolver {
 
   @UseGuards(AuthGuard)
   @Query(() => [Event])
-  async recommendedEvents(@CurrentUser() user: User) {
-    return this.personalizationService.getRecommendedEvents(user.id);
+  async recommendedEvents(@CurrentUser() user: User, @Args('n', { type: () => Int }) n: number) {
+    return this.personalizationService.getRecommendedEvents(user.id, n);
   }
 
   @Query(() => [Event])
