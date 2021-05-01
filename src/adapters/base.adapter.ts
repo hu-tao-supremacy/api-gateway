@@ -29,13 +29,11 @@ export class BaseAdapter<IF extends object, E extends object> {
       }
 
       // google.protobuf.Timestamp
-      if (has(a, 'seconds') && has(a, 'nanos') && keys(a).length === 2) {
+      if (has(a, 'seconds')) {
         // @ts-ignore
         a.seconds = isLong(a.seconds) ? Number(a.seconds.toString()) : a.seconds;
         // @ts-ignore
-        a.nanos = isLong(a.nanos) ? Number(a.nanos.toString()) : a.nanos;
-        // @ts-ignore
-        a = DateTime.fromJSDate(new Date(a.seconds * 1000 + a.nanos / 1000)).toISO();
+        a = DateTime.fromJSDate(new Date(a.seconds * 1000)).toISO();
       }
 
       return a;
