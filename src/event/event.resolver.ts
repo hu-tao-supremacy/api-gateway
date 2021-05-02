@@ -204,6 +204,8 @@ export class EventResolver {
     const durations = input.durations;
     const tags = input.tags?.map((tag) => tag.id);
 
+    console.log(location);
+
     return this.participantService.getEventById(input.id).pipe(
       catchGrpcException(),
       switchMap((event) => {
