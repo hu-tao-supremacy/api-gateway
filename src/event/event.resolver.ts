@@ -68,6 +68,11 @@ export class EventResolver {
     return this.participantService.getOnlineEvents().pipe(map((events) => take(events, n)));
   }
 
+  @Query(() => [Event])
+  async pastEvents(@Args('tagIds', { type: () => [Int] }) tagIds: number[], @Args('n', { type: () => Int }) n: number) {
+    return this.participantService.getPastEventsFromTags(tagIds, n);
+  }
+
   @ResolveField()
   coverImageUrl(@Parent() event: Event) {
     if (event.coverImageUrl) {
