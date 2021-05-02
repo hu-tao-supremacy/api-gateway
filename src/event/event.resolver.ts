@@ -38,11 +38,10 @@ export class EventResolver {
   ) {}
 
   @Query((_) => [Event])
-  async upcomingEvents() {
-    return this.participantService.getUpcomingEvents(
-      DateTime.now().startOf('day').toISO(),
-      DateTime.now().plus({ days: 14 }).endOf('day').toISO(),
-    );
+  async upcomingEvents(@Args('n', { type: () => Int }) n: number) {
+    return this.participantService
+      .getUpcomingEvents(DateTime.now().startOf('day').toISO(), DateTime.now().plus({ days: 14 }).endOf('day').toISO())
+      .pipe(map((events) => sampleSize(events, n)));
   }
 
   @Query((_) => [Event])
