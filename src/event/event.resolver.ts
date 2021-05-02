@@ -258,4 +258,10 @@ export class EventResolver {
   checkIn(@CurrentUser() currentUser: User, @Args('input') input: CheckInInput) {
     return this.organizerService.checkIn(currentUser.id, input.userId, input.eventId);
   }
+
+  @Mutation(() => Boolean)
+  generateVectorRepresentation(@Args('eventId', { type: () => Int }) eventId: number) {
+    this.googleService.generateVectorRepresentation(eventId);
+    return true;
+  }
 }
