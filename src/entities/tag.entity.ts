@@ -14,6 +14,14 @@ export class Tag {
   @Column({ unique: true })
   name: string;
 
+  @Field()
+  @Column()
+  imageUrl: string;
+
+  @Field()
+  @Column()
+  imageHash: string;
+
   @Field(() => [Event])
   events: Event[];
 }
