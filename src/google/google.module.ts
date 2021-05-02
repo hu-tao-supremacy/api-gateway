@@ -4,5 +4,6 @@ import { GoogleService } from './google.service';
 @Global()
 @Module({
   providers: [GoogleService],
+  exports: [GoogleService],
 })
 export class GoogleModule {}
