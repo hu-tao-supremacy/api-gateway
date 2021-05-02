@@ -19,4 +19,6 @@ export class OrganizationAdapter extends BaseAdapter<OrganizationIF, Organizatio
     'profilePictureUrl',
     'profilePictureHash',
   ];
+
+  booleanFields = ['isVerified'];
 }
