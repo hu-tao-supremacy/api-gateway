@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@apollo/gateway": "^0.25.0",
+    "@google-cloud/pubsub": "^2.11.0",
     "@google-cloud/storage": "^5.8.1",
     "@grpc/proto-loader": "^0.5.6",
     "@nestjs/common": "^7.5.1",
