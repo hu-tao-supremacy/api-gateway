@@ -46,14 +46,14 @@ export class EventResolver {
   }
 
   @Query((_) => [Event])
-  featuredEvents(): Observable<Event[]> {
+  featuredEvents(@Args('n', { type: () => Int }) n: number): Observable<Event[]> {
     return this.organizerService.getOrganizations().pipe(
       map((organizations) => sampleSize(organizations, 5)),
       switchMap((sampledOrgs) =>
         forkJoin(sampledOrgs.map((org) => this.participantService.getEventsByOrganizationId(org.id))),
       ),
       map((events) => flatten(events)),
-      map((events) => sampleSize(events, 15)),
+      map((events) => sampleSize(events, n)),
     );
   }
 
