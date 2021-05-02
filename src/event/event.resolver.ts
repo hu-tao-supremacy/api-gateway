@@ -25,6 +25,7 @@ import { encode } from 'js-base64';
 import { nanoid } from 'nanoid';
 import { AccountService } from '@onepass/account/account.service';
 import { PersonalizationService } from '@onepass/personalization/personalization.service';
+import { GoogleService } from 'src/google/google.service';
 
 @Resolver((_) => Event)
 export class EventResolver {
@@ -32,7 +33,7 @@ export class EventResolver {
     private readonly accountService: AccountService,
     private readonly participantService: ParticipantService,
     private readonly organizerService: OrganizerService,
-    private readonly eventService: EventService,
+    private readonly googleService: GoogleService,
     private readonly fileService: FileService,
     private readonly personalizationService: PersonalizationService,
   ) {}
@@ -198,6 +199,7 @@ export class EventResolver {
         createdEvent.locationId = locationId;
         return this.organizerService.updateEvent(currentUser.id, createdEvent).pipe(catchGrpcException());
       }),
+      tap((createdEvent) => this.googleService.generateVectorRepresentation(createdEvent.id)),
     );
   }
 
@@ -241,6 +243,7 @@ export class EventResolver {
 
         return of(updatedEvent);
       }),
+      tap((updatedEvent) => this.googleService.generateVectorRepresentation(updatedEvent.id)),
     );
   }
 
