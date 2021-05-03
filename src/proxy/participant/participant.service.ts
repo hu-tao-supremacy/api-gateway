@@ -211,8 +211,15 @@ export class ParticipantService implements OnModuleInit {
     );
   }
 
-  getOnlineEvents(): Observable<Event[]> {
-    return this.participantService.getOnlineEvents({}).pipe(
+  getOnlineEvents(n: number): Observable<Event[]> {
+    return this.participantService.getOnlineEvents({ n }).pipe(
+      map((projectedValue) => projectedValue.event ?? []),
+      map((events) => events.map((event) => new EventAdapter().toEntity(event))),
+    );
+  }
+
+  getOnSiteEvents(n: number): Observable<Event[]> {
+    return this.participantService.getOnSiteEvents({ n }).pipe(
       map((projectedValue) => projectedValue.event ?? []),
       map((events) => events.map((event) => new EventAdapter().toEntity(event))),
     );
