@@ -27,3 +27,15 @@ export class DeleteJoinRequestInput {
   @Field((_) => Int)
   eventId: number;
 }
+
+@InputType()
+export class SubmitFeedbackInput {
+  @Field((_) => Int)
+  eventId: number;
+
+  @Field((_) => [CreateJoinRequestAnswerInput])
+  answers: Omit<Answer, 'userEvent' | 'question'>[];
+
+  @Field(() => Int)
+  rating: number;
+}
