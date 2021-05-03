@@ -10,7 +10,7 @@ import {
   UpdateEventRequest,
   UpdateRegistrationRequestRequest,
   CreateLocationRequest,
-  UpdateEventDurationRequest,
+  UpdateEventDurationsRequest,
 } from '@onepass/api/organizer/service';
 import { ClientGrpc } from '@nestjs/microservices';
 import { forkJoin, from, Observable } from 'rxjs';
@@ -139,7 +139,7 @@ export class OrganizerService implements OnModuleInit {
   }
 
   setEventDurations(userId: number, eventId: number, durations: EventDuration[]) {
-    const request: UpdateEventDurationRequest = {
+    const request: UpdateEventDurationsRequest = {
       userId: userId,
       eventId: eventId,
       duration: durations.map((d) => {
