@@ -1,10 +1,15 @@
 import { Args, Mutation, Query, Resolver, ResolveField, Parent, Int } from '@nestjs/graphql';
-import { PickedQuestionGroupType, User } from '@onepass/entities';
+import { PickedQuestionGroupType, User, UserEvent } from '@onepass/entities';
 import { UnauthorizedException, UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { CurrentUser } from 'src/decorators/user.decorator';
 import { AccountService } from '@onepass/account/account.service';
-import { CreateJoinRequestInput, DeleteJoinRequestInput, UpdateUserInput } from '@onepass/inputs/user.input';
+import {
+  CreateJoinRequestInput,
+  DeleteJoinRequestInput,
+  SubmitFeedbackInput,
+  UpdateUserInput,
+} from '@onepass/inputs/user.input';
 import { merge } from 'lodash';
 import { ParticipantService } from '@onepass/participant/participant.service';
 import { FileService } from 'src/file/file.service';
@@ -12,6 +17,8 @@ import { encode } from 'js-base64';
 import { nanoid } from 'nanoid';
 import { catchError, switchMap, tap, map } from 'rxjs/operators';
 import { GrpcException } from 'src/exceptions/grpc.exception';
+import { catchGrpcException } from 'src/operators/catch-exceptions.operator';
+import { forkJoin } from 'rxjs';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -111,6 +118,22 @@ export class UserResolver {
         ),
       ),
       map((_) => true),
+    );
+  }
+
+  @UseGuards(AuthGuard)
+  @Mutation(() => UserEvent)
+  submitFeedback(@CurrentUser() currentUser: User, @Args('input') input: SubmitFeedbackInput) {
+    return this.participantService.getUserEvent(currentUser.id, input.eventId).pipe(
+      catchGrpcException(),
+      map((userEvent) => userEvent.id),
+      switchMap((userEventId) => {
+        return forkJoin([
+          this.participantService.setEventRating(userEventId, input.rating),
+          this.participantService.submitAnswers(userEventId, input.answers, PickedQuestionGroupType.POST_EVENT),
+        ]);
+      }),
+      map(([userEvent, _]) => userEvent),
     );
   }
 
