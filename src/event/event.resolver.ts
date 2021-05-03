@@ -256,7 +256,7 @@ export class EventResolver {
   @UseGuards(AuthGuard)
   @Mutation(() => UserEvent)
   checkIn(@CurrentUser() currentUser: User, @Args('input') input: CheckInInput) {
-    return this.organizerService.checkIn(currentUser.id, input.userId, input.eventId);
+    return this.organizerService.checkIn(currentUser.id, input.ticket, input.eventId);
   }
 
   @Mutation(() => Boolean)
