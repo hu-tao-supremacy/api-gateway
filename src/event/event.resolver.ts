@@ -65,7 +65,12 @@ export class EventResolver {
 
   @Query(() => [Event])
   async onlineEvents(@Args('n', { type: () => Int }) n: number) {
-    return this.participantService.getOnlineEvents().pipe(map((events) => take(events, n)));
+    return this.participantService.getOnlineEvents(n).pipe(map((events) => take(events, n)));
+  }
+
+  @Query(() => [Event])
+  async onSiteEvents(@Args('n', { type: () => Int }) n: number) {
+    return this.participantService.getOnSiteEvents(n).pipe(map((events) => take(events, n)));
   }
 
   @Query(() => [Event])
