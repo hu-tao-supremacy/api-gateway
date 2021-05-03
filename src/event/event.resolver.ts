@@ -69,7 +69,7 @@ export class EventResolver {
   }
 
   @Query(() => [Event])
-  async searchEvents(
+  async searchEvent(
     @Args('keyword') keyword: string,
     @Args('n', { type: () => Int, nullable: true, defaultValue: 25 }) n: number = 25,
   ) {
