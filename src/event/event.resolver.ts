@@ -69,6 +69,14 @@ export class EventResolver {
   }
 
   @Query(() => [Event])
+  async searchEvents(
+    @Args('keyword') keyword: string,
+    @Args('n', { type: () => Int, nullable: true, defaultValue: 25 }) n: number = 25,
+  ) {
+    return this.participantService.searchEvents(keyword).pipe(map((events) => sampleSize(events, n)));
+  }
+
+  @Query(() => [Event])
   async pastEvents(@Args('tagIds', { type: () => [Int] }) tagIds: number[], @Args('n', { type: () => Int }) n: number) {
     return this.participantService.getPastEventsFromTags(tagIds, n);
   }
