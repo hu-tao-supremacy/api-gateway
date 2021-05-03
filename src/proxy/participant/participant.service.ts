@@ -224,4 +224,11 @@ export class ParticipantService implements OnModuleInit {
       map((events) => events.map((event) => new EventAdapter().toEntity(event))),
     );
   }
+
+  searchEvents(keyword: string): Observable<Event[]> {
+    return this.participantService.getEventsByStringOfName({ text: keyword }).pipe(
+      map((projectedValue) => projectedValue.event ?? []),
+      map((events) => events.map((event) => new EventAdapter().toEntity(event))),
+    );
+  }
 }
