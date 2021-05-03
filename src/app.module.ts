@@ -24,6 +24,7 @@ import { GoogleModule } from './google/google.module';
       autoSchemaFile: true,
       debug: process.env.NODE_ENV === 'dev',
       playground: true,
+      cors: true,
       uploads: false, // Disable built-in graphql-upload
     }),
     EventModule,
