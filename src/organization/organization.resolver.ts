@@ -130,7 +130,7 @@ export class OrganizationResolver {
       }),
       switchMap(([_, ids]) => {
         return forkJoin(
-          ids.map((id) => this.accountService.assignRole(id, input.organizationId, Role.ORGANIZATION_MEMBER)),
+          ids.map((id) => this.accountService.assignRole(id, input.organizationId, Role.ORGANIZATION_EDITOR)),
         );
       }),
       map((_) => true),
