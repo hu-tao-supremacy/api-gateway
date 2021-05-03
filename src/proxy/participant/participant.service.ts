@@ -231,4 +231,10 @@ export class ParticipantService implements OnModuleInit {
       map((events) => events.map((event) => new EventAdapter().toEntity(event))),
     );
   }
+
+  setEventRating(userEventId: number, rating: number): Observable<UserEvent> {
+    return this.participantService
+      .setRatingByUserEventId({ userEventId, rating })
+      .pipe(map((projectedValue) => new UserEventAdapter().toEntity(projectedValue)));
+  }
 }
