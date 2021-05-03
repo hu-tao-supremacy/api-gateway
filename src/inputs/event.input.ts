@@ -99,7 +99,7 @@ export class ReviewJoinRequestInput extends OmitType(UserEvent, [
 @InputType()
 export class CheckInInput extends OmitType(UserEvent, [
   'id',
-  'ticket',
+  'userId',
   'event',
   'user',
   'rating',
