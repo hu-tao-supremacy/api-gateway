@@ -41,8 +41,8 @@ export class FileService {
 
             const compression = sharp()
               .ensureAlpha()
-              .resize(null, 1200, { withoutEnlargement: true })
-              .toFormat('jpg', { quality: 75 });
+              .resize(null, 600, { withoutEnlargement: true })
+              .toFormat('jpg', { quality: 50 });
 
             const sampling = sharp()
               .raw()
