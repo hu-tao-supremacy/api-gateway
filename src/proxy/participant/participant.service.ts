@@ -244,4 +244,10 @@ export class ParticipantService implements OnModuleInit {
       .setRatingByUserEventId({ userEventId, rating })
       .pipe(map((projectedValue) => new UserEventAdapter().toEntity(projectedValue)));
   }
+
+  getQuestionById(id: number): Observable<Question> {
+    return this.participantService
+      .getQuestionById({ id })
+      .pipe(map((projectedValue) => new QuestionAdapter().toEntity(projectedValue)));
+  }
 }
