@@ -239,11 +239,11 @@ export class EventResolver {
           this.fileService.upload(`events/${encode(`${createdEvent.id}`)}/posters/${nanoid()}`, input.posterImage),
           this.fileService.upload(`events/${encode(`${createdEvent.id}`)}/covers/${nanoid()}`, input.coverImage),
           location
-            ? of<number>(null)
-            : this.organizerService.setEventLocation(currentUser.id, merge(new Location(), location)).pipe(
+            ? this.organizerService.setEventLocation(currentUser.id, merge(new Location(), location)).pipe(
                 tap((loc) => console.log(loc)),
                 map((loc) => loc.id),
-              ),
+              )
+            : of<number>(null),
           durations ? this.setEventDurations(currentUser, { eventId: createdEvent.id, durations }) : of<number[]>([]),
         ]);
       }),
