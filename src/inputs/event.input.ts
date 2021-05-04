@@ -84,7 +84,10 @@ export class CreateEventInput extends OmitType(Event, [
 export class UpdateEventInput extends IntersectionType(
   PartialType(CreateEventInput),
   PickType(Event, ['id', 'organizationId'] as const),
-) {}
+) {
+  @Field(() => CreateEventLocationInput, { nullable: true })
+  location?: Location;
+}
 
 @InputType()
 export class ReviewJoinRequestInput extends OmitType(UserEvent, [
