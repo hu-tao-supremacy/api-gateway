@@ -51,7 +51,11 @@ export class UserResolver {
           const user = new User();
           merge(user, input);
           user.id = currentUser.id;
-          user.profilePictureUrl = profilePicture?.fileURI;
+
+          if (input.profilePicture) {
+            user.profilePictureUrl = profilePicture?.fileURI;
+          }
+
           return this.accountService.updateAccountInfo(user);
         }),
       )
