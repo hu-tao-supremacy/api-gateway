@@ -16,6 +16,7 @@ import { TagModule } from './tag/tag.module';
 import { AttendanceModule } from './attendance/attendance.module';
 import { UserOrganizationModule } from './user-organization/user-organization.module';
 import { GoogleModule } from './google/google.module';
+import { AnswerModule } from './answer/answer.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { GoogleModule } from './google/google.module';
     AttendanceModule,
     UserOrganizationModule,
     GoogleModule,
+    AnswerModule,
   ],
   controllers: [AppController],
   providers: [AppService],
