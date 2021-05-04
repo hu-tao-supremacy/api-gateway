@@ -47,14 +47,9 @@ export class EventResolver {
 
   @Query((_) => [Event])
   featuredEvents(@Args('n', { type: () => Int }) n: number): Observable<Event[]> {
-    return this.organizerService.getOrganizations().pipe(
-      map((organizations) => sampleSize(organizations, 5)),
-      switchMap((sampledOrgs) =>
-        forkJoin(sampledOrgs.map((org) => this.participantService.getEventsByOrganizationId(org.id))),
-      ),
-      map((events) => flatten(events)),
-      map((events) => sampleSize(events, n)),
-    );
+    return this.participantService
+      .getUpcomingEvents(DateTime.now().startOf('day').toISO(), DateTime.now().plus({ days: 30 }).endOf('day').toISO())
+      .pipe(map((events) => sampleSize(events, n)));
   }
 
   @UseGuards(AuthGuard)
