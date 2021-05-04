@@ -240,7 +240,9 @@ export class EventResolver {
           this.fileService.upload(`events/${encode(`${createdEvent.id}`)}/covers/${nanoid()}`, input.coverImage),
           location
             ? of<number>(null)
-            : this.organizerService.setEventLocation(currentUser.id, location).pipe(map((loc) => loc.id)),
+            : this.organizerService
+                .setEventLocation(currentUser.id, merge(new Location(), location))
+                .pipe(map((loc) => loc.id)),
           durations ? this.setEventDurations(currentUser, { eventId: createdEvent.id, durations }) : of<number[]>([]),
         ]);
       }),
