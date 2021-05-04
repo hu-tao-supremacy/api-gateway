@@ -248,7 +248,6 @@ export class EventResolver {
         ]);
       }),
       switchMap(([updatedEvent, _, posterImage, coverImage, locationId]) => {
-        console.log(locationId);
         if (posterImage || coverImage || location) {
           updatedEvent.posterImageUrl = posterImage?.fileURI;
           updatedEvent.posterImageHash = posterImage?.hash;
